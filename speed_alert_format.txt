@@ -1,0 +1,1 @@
+%(name)s, %(unit_name)s was going %(speed)s kph at <a href="https://maps.google.com/maps?q=%(location)s">click here to see the location!</a>
