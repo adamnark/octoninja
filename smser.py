@@ -43,6 +43,7 @@ class TextMessage:
     def disconnectPhone(self):
         self.ser.close()
 
+print 'does this even work?!?'
 smser = TextMessage(recipient='0545949562', message='kaki matok\n from python w/ love')
 smser.connectPhone()
 smser.sendMessage()
