@@ -77,7 +77,7 @@ def send_alert(alert,row):
                 mail_args = {"nickname":recipient['nickname'], 
                              "unit_name":str(unit_name), 
                              "speed":row['speed'], 
-                             "location":str(row['utm_lat']) + "%20" + str(row['utm_lat']),
+                             "location":str(row['utm_lat']) + "%20" + str(row['utm_long']),
                              "format": str(fmt),
                              "timestamp":row['timestamp'],
                              "to":recipient['email']}
