@@ -1,5 +1,17 @@
 <?php 
-require_once 'sql.php';
+
+/*
+ * we assume this page is loaded with a specific user_id in mind. for now, 
+ * we use user_id = 1
+ * 
+ */
+
+$default_user_id = '1';
+require_once 'DataFetcher.php';
+
+$datafetcher = new DataFetcher();
+$units_to_print = $datafetcher->get_user_units($default_user_id);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,8 +25,8 @@ require_once 'sql.php';
     <script type="text/javascript">
       function initialize() {
         var mapOptions = {
-          center: new google.maps.LatLng(32.194209,34.859619),
-          zoom: 14,
+          center: new google.maps.LatLng(<?php echo $units_to_print[0]['lat'] ?>, <?php echo $units_to_print[0]['long'] ?>),
+          zoom: 17,
           mapTypeId: google.maps.MapTypeId.HYBRID 
         };
         var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
@@ -31,23 +43,20 @@ require_once 'sql.php';
 	  </script>
   </head>
   <body onload="loadScript()">
-    <div id="map_canvas" style="width:50%; height:100%; float:left;"></div>
-    <div style="width:50%; height:100%; float:right;">
+    <div id="map_canvas" style="width:60%; height:100%; float:left;"></div>
+    <div style="width:40%; height:100%; float:right;">
         <div style="height:70%; float: top; background-color:#ffccff"> 
         <?php 
-         $conn = new SQLHandler();
-         $conn->connect();
-         $user_units = $conn->get_units('1');   
-         echo '<br><ul>';
-         while ($row = mysql_fetch_array($user_units))
-         {
-             $last_location = mysql_fetch_array($conn->get_unit_last_location($row['unit_id']));
-             $lat_long = $conn->parse_sql_point($last_location['utm_text']);
+        
+        echo '<br><ul>';
+        foreach ($units_to_print as $unit)
+        {
+            echo '<li>' . $unit['name'] . ' was last seen at: ' . $unit['lat'] . ' ' . $unit['long'] . '</li>';
              
-             echo '<li>' . $row['name'] . ': ' . $lat_long[0] . ' '. $lat_long[1] . '</li>' ; 
-         }
-         echo '</ul>';
-         $conn->close();           
+        }
+        echo '</ul>';
+        fclose($f); 
+        
         ?>
 
         </div>

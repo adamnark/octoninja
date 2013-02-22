@@ -21,10 +21,9 @@ class SQLHandler
         
     }
     
-    function tester()
+    function close()
     {
-        if ($this->link)
-            echo '<h1>ok!</h1>';
+        mysql_close($this->link);        
     }
     
     function get_units($user_id)
@@ -53,18 +52,6 @@ class SQLHandler
         
         return explode(' ', $result);
         
-    }
-    
-/*    function get_unit_details($unit_id)
-    {
-        $query = 'SELECT * FROM `unit` WHERE `unit_id`=' . $unit_id; 
-        $result = mysql_query($query);
-        return $result;
-    }
- */  
-    function close()
-    {
-        mysql_close($this->link);        
     }
 }
 
