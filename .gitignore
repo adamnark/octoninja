@@ -1,3 +1,5 @@
 #compiled python files#
 #######################
 *.pyc
+/web/nbproject/private/
+/website/gps/nbproject/private/

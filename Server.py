@@ -38,7 +38,7 @@ def mybind(serversocket):
         sys.exit()
 
 def cleanup_socket(s):
-    print 'closing connection with ' + s.getpeername()
+    #print 'closing connection with ' + s.getpeername()
     if s in outputs:
         outputs.remove(s)
     inputs.remove(s)
