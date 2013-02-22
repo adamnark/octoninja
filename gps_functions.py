@@ -2,12 +2,6 @@ import socket
 import signal
 import sys
 import MySQLdb 
-
-def is_in_time_slot(timestamp,value):
-    print ('*'*10) + ' gps_functions.is_in_time_slot() not implemented! ' + ('*'*10)
-def is_in_area(utm,value):
-    print ('*'*10) + ' gps_functions.is_in_area() not implemented! ' + ('*'*10)
-
             
 def get_imei(data):#only for A message
     type = get_msg_type(data)
@@ -69,17 +63,24 @@ def get_utm(data):
     
 def get_utm_helper(a, b, c):
     cord = float(a)
-    #print "get_utm_helper.cord = ", cord
     num = float(int(cord)/100)
-    #print "get_utm_helper.num = ", num
     num += ((cord - (num * 100)) /60)
-    #print "num += (cord - (num * 100) /60) = ", num
-    if b == c :
-        num *= (-1)
+    if b == c : num *= (-1)
+    
     return num
     
 
+def is_in_time_slot(timestamp,value):
+    print ('*'*10) + ' gps_functions.is_in_time_slot() not implemented! ' + ('*'*10)
+
+def is_in_area(utm,value):
+    print ('*'*10) + ' gps_functions.is_in_area() not implemented! ' + ('*'*10)
+    
+
 def main():
+    """
+    just for unit testing
+    """
     signal_types = ["tracker", "help me", "low battery"]
     packets = [#"012345678912345",
             #"##,imei:012345678912345,A;",
@@ -91,6 +92,8 @@ def main():
             "imei:012345678912345,tracker,000000000,13554900601,L,;",
             "imei:863070011991451,tracker,1301111556,,F,075604.000,A,3205.4805,N,03447.3385,E,0.00,,;863070011991451;"]
 
+    print 'analyzing %s packets:' % str(len(packets))
+    print '~' * 15
     for packet in packets:
         print packet
         type = get_msg_type(packet)
@@ -100,7 +103,8 @@ def main():
         if type in signal_types:
             if is_valid_gps_signal(packet):
                 utm = get_utm(packet)
-                print "utm ", utm,'\n*****************************'
+                print "utm ", utm
+        print '*' * 15
 
 if __name__ == '__main__':
     main()
