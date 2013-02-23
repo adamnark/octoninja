@@ -3,7 +3,6 @@
 /*
  * we assume this page is loaded with a specific user_id in mind. for now, 
  * we use user_id = 1
- * 
  */
 
 $default_user_id = '1';
@@ -11,6 +10,16 @@ require_once 'DataFetcher.php';
 
 $datafetcher = new DataFetcher();
 $units_to_print = $datafetcher->get_user_units($default_user_id);
+$user_details = $datafetcher->get_user_details($default_user_id);
+$default_center_point[0] = '32.047818';
+$default_center_point[1] = '34.761265';
+
+if (count($units_to_print) > 0)
+{
+    $default_center_point[0] = $units_to_print[0]['lat'];
+    $default_center_point[1] = $units_to_print[0]['long'];
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -22,45 +31,66 @@ $units_to_print = $datafetcher->get_user_units($default_user_id);
       body { height: 100%; margin: 0; padding: 0 }
       #map_canvas { height: 100% }
     </style>
+    <script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U" type="text/javascript"></script>
     <script type="text/javascript">
-      function initialize() {
-        var mapOptions = {
-          center: new google.maps.LatLng(<?php echo $units_to_print[0]['lat'] ?>, <?php echo $units_to_print[0]['long'] ?>),
-          zoom: 17,
-          mapTypeId: google.maps.MapTypeId.HYBRID 
-        };
-        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-      }
+         //<![CDATA[
+           var map;
+           function load() {
+              if (GBrowserIsCompatible()) {
+                map = new GMap2(
+                document.getElementById("map_canvas"));
+                map.addControl(new GSmallMapControl());
+                map.setCenter(
+                new GLatLng(<?php echo $default_center_point[0] ?>, <?php echo $default_center_point[1] ?>), 15);
+                
+                function createMarker(point, text, title) {
+                  var marker =
+                  new GMarker(point,{title:title});
+                  GEvent.addListener(
+                  marker, "click", function() {
+                    marker.openInfoWindowHtml(text);
+                  });
+                  return marker;
+                }
+                
+                <?php
+                foreach ($units_to_print as $unit) {
+                ?>
+                var marker = createMarker(
+                new GLatLng(<?php echo $unit['lat'] ?>, <?php echo $unit['long'] ?>),
+                '<?php echo $unit['timestamp']?> <br> <?php echo $unit['speed']?> kph',
+                '<?php echo $unit['name'] ?>');
+                map.addOverlay(marker);
+                <?php } ?>
+              }
+            }
+            
+            function changeView(lat, lng)
+            {
+                map.panTo(new GLatLng(lat,lng));
+            }
+            //]]>   
 
-	  function loadScript() {
-		  var script = document.createElement("script");
-		  script.type = "text/javascript";
-		  script.src = "http://maps.googleapis.com/maps/api/js?key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U&sensor=false&callback=initialize";
-		  document.body.appendChild(script);
-		}
-
-		window.onload = loadScript;
 	  </script>
   </head>
-  <body onload="loadScript()">
+  <body onload="load()" onunload="GUnload()" >
     <div id="map_canvas" style="width:60%; height:100%; float:left;"></div>
     <div style="width:40%; height:100%; float:right;">
-        <div style="height:70%; float: top; background-color:#ffccff"> 
+        <div style="height:70%; float: top; background-color:#ffffa0; padding-top: 15px; padding-left: 15px;"> 
         <?php 
-        
-        echo '<br><ul>';
+        $user_name = $user_details['first_name'] .' '.$user_details['last_name'];
+        echo '<h2>'.$user_name.'\'s Vehicles:</h1>';
+        echo '<ul>';
         foreach ($units_to_print as $unit)
         {
-            echo '<li>' . $unit['name'] . ' was last seen at: ' . $unit['lat'] . ' ' . $unit['long'] . '</li>';
+            echo '<li><a href=# onclick="changeView(' .$unit['lat'] .', '. $unit['long']. ')">' . $unit['name'] . '</a></li>';
              
         }
         echo '</ul>';
-        fclose($f); 
-        
         ?>
 
         </div>
-        <div style="height:30%; float: bottom; background-color:#9999ff;">  </div>
+        <div style="height:30%; float: bottom; background-color:#ffffaf;">  </div>
     </div>
   </body>
 </html>

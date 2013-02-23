@@ -22,7 +22,7 @@ class server:
     def  __init__(self):
         self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.serversocket.setblocking(0)
-        self.mybind(self.serversocket)    
+        self.mybind()    
         
     def mysendall(self, clientsocket, data):
         clientsocket.sendall(data)
@@ -38,7 +38,7 @@ class server:
         print 'C: ' + data
         return data
 
-    def mybind(self, serversocket):
+    def mybind(self):
         print 'binding server...'
         try:
                 self.serversocket.bind((socket.gethostname(), 9000))
@@ -68,9 +68,7 @@ class server:
         sys.exit()
     
     def start(self):
-        print 'Press ctrl+c to escape'
         signal.signal(signal.SIGINT, server.signal_handler)
-
         self.serversocket.listen(5)
         self.inputs.append(self.serversocket)
 
@@ -90,7 +88,7 @@ class server:
                     self.message_queue[clientsocket] = Queue.Queue()
                     
                 else: # s is an established connection, we can recv 
-                    data = myrecv(s)
+                    data = self.myrecv(s)
                     if data:
                         message_type = gps_functions.get_msg_type(data)
 
@@ -98,17 +96,17 @@ class server:
                             self.imei[s] = gps_functions.get_imei(data)
 
                         if message_type in self.answer:
-                            self.queue_message(s, answer[message_type])
+                            self.queue_message(s, self.answer[message_type])
                         elif message_type == "help me" or message_type == "low battery": # SOS: SOMETHING HAPPEND TO A PERSON!
                             self.queue_message(s, "**,imei:%s,E" % self.imei[s])
                             
                         if not self.setup_repeat[s]:
                             self.setup_repeat[s] = True
-                            self.queue_message(s, '**,imei:' + imei[s] +',C,20s')
+                            self.queue_message(s, '**,imei:' + self.imei[s] +',C,20s')
                             
                         if message_type in self.signal_types:
                             if gps_functions.is_valid_gps_signal(data):
-                                row = sql_functions.write_location_to_log(imei[s] , data)
+                                row = sql_functions.write_location_to_log(self.imei[s] , data)
                                 sql_functions.check_alerts(row)
                                 
                     else: # readable socket without data means the client disconnected 
@@ -118,14 +116,14 @@ class server:
                 try: 
                     next_msg = self.message_queue[s].get_nowait()
                 except Queue.Empty:
-                    print 'Queue.Empty exception: output queue for socket ' + s.getpeername() + ' is empty.'
+                    print 'Queue.Empty exception: output queue for socket ' , s.getpeername() , ' is empty. Removing socket from writeable queue.'
                     self.outputs.remove(s)
                     
                 else:
                     self.mysendall(s, next_msg)
             
             for s in exceptional:
-                print  s.getpeername() + ' is in an exceptional state. cleaning up.'
+                print  s.getpeername(), ' is in an exceptional state. cleaning up.'
                 cleanup_socket(s)
  
 def main():

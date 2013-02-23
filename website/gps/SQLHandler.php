@@ -53,6 +53,17 @@ class SQLHandler
         return explode(' ', $result);
         
     }
+    
+    function get_user_details($user_id)
+    {
+        $query = 'SELECT *  FROM user WHERE user_id=' . $user_id; 
+        //echo 'query: ' . $query . '<br>';
+        $result = mysql_query($query);
+        //echo 'result:' . $result . '<br>';
+        
+        return $result;
+    }
+
 }
 
 
