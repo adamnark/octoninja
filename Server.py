@@ -117,10 +117,11 @@ class server:
                     next_msg = self.message_queue[s].get_nowait()
                 except Queue.Empty:
                     print 'Queue.Empty exception: output queue for socket ' , s.getpeername() , ' is empty. Removing socket from writeable queue.'
-                    self.outputs.remove(s)
-                    
                 else:
                     self.mysendall(s, next_msg)
+                finally:
+                    self.outputs.remove(s)
+                    
             
             for s in exceptional:
                 print  s.getpeername(), ' is in an exceptional state. cleaning up.'
