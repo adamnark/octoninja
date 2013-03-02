@@ -1,2 +1,0 @@
-connection established!
-got units for user_id=1!
