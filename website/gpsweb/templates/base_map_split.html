@@ -4,3 +4,42 @@
 <div id="map_canvas"> {% block map %} map_canvas {% endblock %}</div>
 <div id="details"> {% block details %} details {% endblock %}</div>
 {% endblock content %}
+
+{% block head %}  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U" type="text/javascript"></script>
+<script type="text/javascript">
+ //<![CDATA[
+   var map;
+   function load() {
+	  if (GBrowserIsCompatible()) {
+		map = new GMap2(
+		document.getElementById("map_canvas"));
+		map.addControl(new GSmallMapControl());
+		map.setCenter(
+		new GLatLng({{ map_center_lat }}, {{ map_center_long }}), 15);
+		function createMarker(point, text, title,icon_path) {
+		  var Icon = new GIcon(G_DEFAULT_ICON);
+		  Icon.image = icon_path;
+		  var marker =
+		  new GMarker(point,{title:title,icon:Icon});
+		  GEvent.addListener(
+		  marker, "click", function() {
+			marker.openInfoWindowHtml(text);
+		  });
+		  return marker;
+		}
+		{% block load_functions_call %}  
+		{% endblock load_functions_call %}
+	  }
+	}
+	function changeView(lat, lng)
+	{
+		map.panTo(new GLatLng(lat,lng));
+	}
+	//]]>   
+
+</script>
+{% endblock %}
+
+{% block body_params %}  onload="load()" onunload="GUnload()"{% endblock %}

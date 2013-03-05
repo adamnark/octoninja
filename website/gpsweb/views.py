@@ -1,20 +1,81 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from gpsweb.models import Unit, LocationLog
+from gpsweb.forms import RegistrationForm, LoginForm
 
-def index(request, user_id):
+def UserRegistration(request):
+    if request.user.is_authenticated():
+            return HttpResponseRedirect('/main_map')
+    if request.method == 'POST':
+            form = RegistrationForm(request.POST)
+            if form.is_valid():
+                user = User.objects.create_user(username=form.cleaned_data['username'],
+                                                password=form.cleaned_data['password'],
+                                                email=form.cleaned_data['email'])
+                user.save()
+                user.first_name=form.cleaned_data['first_name']
+                user.last_name=form.cleaned_data['last_name']
+                user.save()
+                return HttpResponseRedirect('/main_map')
+            else:
+                return render_to_response('register.html', {'form':form}, context_instance=RequestContext(request))
+    else:
+            ''' user is not submitting the form, show them a blank registration form '''
+            form = RegistrationForm()
+            context = {'form': form}
+            return render_to_response('register.html', context, context_instance=RequestContext(request))
+
+def UserLogin(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/main_map')
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/main_map')
+            else:
+                return render_to_response('login.html', {'form':form}, context_instance=RequestContext(request))
+        else:
+            return render_to_response('login.html', {'form':form}, context_instance=RequestContext(request))
+    else:
+        ''' user is not submitting the form, show them the login form '''
+        form = LoginForm()
+        context = {'form':form}
+        return render_to_response('login.html', context, context_instance=RequestContext(request))
+
+def UserLogout(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+@login_required
+def main_map(request):
+    user = request.user
+    user_id = user.id
     units = Unit.objects.filter(owner_id=user_id)
-    user = User.objects.filter(pk=user_id)[0]
+
+    
+        
     list_of_locations = []
     for unit in units:
-        list_of_locations.append(LocationLog.objects.filter(unit_id=unit.id).order_by('-timestamp')[0])
+        try:
+            last_location = LocationLog.objects.filter(unit_id=unit.id).latest('timestamp')
+        except LocationLog.DoesNotExist:
+            pass
+        else:
+            list_of_locations.append(last_location)
 
-    if list_of_locations: 
+    if list_of_locations:
         map_center_lat = list_of_locations[0].lat
         map_center_long = list_of_locations[0].long
-    else: 
-        map_center_lat = '32.047818' 
+    else:
+        map_center_lat = '32.047818'
         map_center_long = '34.761265'
 
     context = {
@@ -24,4 +85,6 @@ def index(request, user_id):
         'map_center_long': map_center_long,
     }
 
-    return render(request, 'index.html', context)
+    return render(request, 'main_map.html', context)
+
+
