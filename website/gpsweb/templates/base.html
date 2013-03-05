@@ -1,0 +1,21 @@
+<html>
+
+<head>
+{% block head %}  head  {% endblock %}
+</head>
+<body  {% block body_params %}  {% endblock %}  >
+	<link rel="stylesheet" type="text/css" href="D:\GitHub\octoninja\website\gpsweb\templates\test1.css" />
+
+	<div id="heaer">
+		<div id="banner"> {% block banner %}  Banner 2 {% endblock %} </div>
+		<div id="menu"> {% block menu %}  menu  {% endblock %} </div>
+	</div>
+
+	<div id="content">
+		{% block content %}  content  {% endblock %}
+	</div>
+
+	<div id="footer"> {% block footer %}  footer  {% endblock %} </div>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+
+<html>
+
+<head>
+  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U" type="text/javascript"></script>
+    <script type="text/javascript">
+         //<![CDATA[
+           var map;
+           function load() {
+              if (GBrowserIsCompatible()) {
+                map = new GMap2(
+                document.getElementById("map_canvas"));
+                map.addControl(new GSmallMapControl());
+                map.setCenter(
+                new GLatLng(32.496205, 34.904835), 15);
+                
+                function createMarker(point, text, title) {
+                  var marker =
+                  new GMarker(point,{title:title});
+                  GEvent.addListener(
+                  marker, "click", function() {
+                    marker.openInfoWindowHtml(text);
+                  });
+                  return marker;
+                }
+                
+				
+					
+						var marker = createMarker(
+						new GLatLng(32.496205, 34.904835),
+						'March 2, 2013, 8:47 p.m. <br> 23 kph',
+						'amirs car');
+						map.addOverlay(marker);	
+					
+						var marker = createMarker(
+						new GLatLng(32.204345, 34.82109833),
+						'March 11, 2013, 7 a.m. <br> 60 kph',
+						'amirs korkinet');
+						map.addOverlay(marker);	
+					
+				
+              }
+            }
+
+            function changeView(lat, lng)
+            {
+                map.panTo(new GLatLng(lat,lng));
+            }
+            //]]>   
+
+	  </script>
+
+</head>
+<body    onload="load()" onunload="GUnload()"  >
+	<link rel="stylesheet" type="text/css" href="test1.css" />
+
+	<div id="heaer">
+		<div id="banner">   Banner 1  </div>
+		<div id="menu">   menu   </div>
+	</div>
+
+	<div id="content">
+		
+<div id="map_canvas">  Map </div>
+<div id="details">  
+<div style="height:70%; float: top; background-color:#ffffa0; padding-top: 15px; padding-left: 15px;"> 
+        
+		<h2> amir's Tracklings: </h2> 
+		
+		
+			<ul>
+			
+				<li><a href=# onclick="changeView(32.496205, 34.904835)">amirs car</a></li>
+			
+				<li><a href=# onclick="changeView(32.204345, 34.82109833)">amirs korkinet</a></li>
+			
+			</ul>
+		
+
+</div>
+
+	</div>
+
+	<div id="footer">   footer   </div>
+
+</body>
+</html>

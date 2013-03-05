@@ -1,0 +1,36 @@
+body{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+#heaer {
+	height:10%; 
+}
+#banner {
+	height:30%; 
+	background-color:#ff00ff;
+}
+#menu {
+	height:70%; 
+	background-color:#ffccee;
+}
+#content {
+	height:85%; 
+}
+#map_canvas {
+	width:60%;
+	height:100%;
+	float:left;
+background-color:#ff0000;
+}
+#details {
+	width:40%;
+	height:100%; 
+	float:right;
+	background-color:#00ff00;
+}
+#footer {
+	height:5%; 
+	background-color:#0000ff;
+}
+

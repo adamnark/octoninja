@@ -2,16 +2,14 @@
 
 
 {% block details %} 
-       
+        
 		<h2> {{ user.username }}'s Tracklings: </h2> 
 		
 		{% if list_of_locations %}
 			<ul>
 			{% for line in list_of_locations %}
 				
-				<li>
-				<img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png" alt="some_text">
-				<a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.unit.name }}</a></li>
+				<li><a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.unit.name }}</a></li>
 			{% endfor %}
 			</ul>
 		{% else %}

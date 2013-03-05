@@ -1,0 +1,64 @@
+{% extends "base_map_split.html" %}
+
+{% block head %}  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U" type="text/javascript"></script>
+    <script type="text/javascript">
+         //<![CDATA[
+           var map;
+           function load() {
+              if (GBrowserIsCompatible()) {
+                map = new GMap2(
+                document.getElementById("map_canvas"));
+                map.addControl(new GSmallMapControl());
+                map.setCenter(
+                new GLatLng({{ map_center_lat }}, {{ map_center_long }}), 15);
+                
+                function createMarker(point, text, title,color) {
+				  var Icons = [];
+				  Icons[0] = "http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png";
+				  Icons[1] = "http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png";
+				  var greenIcon = new GIcon(G_DEFAULT_ICON);
+				  greenIcon.image = Icons[color];
+                  var marker =
+                  new GMarker(point,{title:title,icon:greenIcon});
+                  GEvent.addListener(
+                  marker, "click", function() {
+                    marker.openInfoWindowHtml(text);
+                  });
+                  return marker;
+                }
+                var i = 0;
+				{% if list_of_locations %}
+					{% for line in list_of_locations %}
+						var marker = createMarker(
+						new GLatLng({{ line.lat }}, {{ line.long }}),
+						'{{ line.timestamp }} <br> {{ line.speed }} kph',
+						'{{ line.unit.name }}',
+						i);
+						i+=1;
+						map.addOverlay(marker);	
+					{% endfor %}
+				{% endif %}
+              }
+            }
+
+            function changeView(lat, lng)
+            {
+                map.panTo(new GLatLng(lat,lng));
+            }
+            //]]>   
+
+	  </script>
+{% endblock %}
+
+{% block body_params %}  onload="load()" onunload="GUnload()"{% endblock %}
+
+{% block map %} Map {% endblock %}
+
+
