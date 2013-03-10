@@ -5,7 +5,7 @@
 <div id="details"> {% block details %} details {% endblock %}</div>
 {% endblock content %}
 
-{% block head %}  
+{% block head %}
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U&sensor=true" type="text/javascript">
@@ -16,16 +16,16 @@
    var markerArray = [];
    var latlngbounds = new google.maps.LatLngBounds();
    var map;
-   function load() 
+   function load()
    {
-	  
+
 		var mapOptions = {
 		  mapTypeId: google.maps.MapTypeId.ROADMAP
 		  {% block mapOptions %}{% endblock  %}
 		};
 		map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-		
-		function createMarker(point, text, title,icon_path, markerId) 
+
+		function createMarker(point, text, title,icon_path, markerId)
 		{
 			var idx = markerId;
 			var marker = new google.maps.Marker({
@@ -37,7 +37,7 @@
 				//animation:google.maps.Animation.BOUNCE
 				animation:google.maps.Animation.DROP
 			});
-			
+
 			marker.info = new google.maps.InfoWindow({
 				content: text
 			});
@@ -48,24 +48,24 @@
 			});
 			var geocoder = new google.maps.Geocoder();
 			geocoder.geocode({'latLng': point}, function(results, status) {
-				if (status == google.maps.GeocoderStatus.OK) 
+				if (status == google.maps.GeocoderStatus.OK)
 				{
 					if (results[0])
 					{
 						address = results[0].formatted_address;
 						markerArray[idx].info.setContent(address+'<br>'+text);
-					} 
+					}
 				}
 				else
 				{
 					address = '';
 				}
-			});  
+			});
 			return marker;
 		}
-		{% block load_functions_call %}  
+		{% block load_functions_call %}
 		{% endblock load_functions_call %}
-  
+
 	}
 	function changeView(lat, lng)
 	{
@@ -81,21 +81,11 @@
 		markerArray[markerId].setVisible(true);
 		markerArray[markerId].setAnimation(google.maps.Animation.DROP);
 	}
-	function AddLine(markerId1, markerId2)
+	function AddLine()
 	{
-		var borderPlanCoordinates = [
-		//new google.maps.LatLng(markerArray[markerId2].getPosition().ib , markerArray[markerId2].getPosition().jb),
-		//new google.maps.LatLng(markerArray[3].getPosition().ib , markerArray[3].getPosition().jb),
-		//new google.maps.LatLng(markerArray[markerId1].getPosition().ib , markerArray[markerId1].getPosition().jb)
-		new google.maps.LatLng(37.772323, -122.214897),
-		
-		new google.maps.LatLng(-27.46758, 153.027892),
-		new google.maps.LatLng(21.291982, -157.821856),
-		new google.maps.LatLng(-18.142599, 178.431)
-        
-        
-		];
-
+		var borderPlanCoordinates = [];
+		for (x in markerArray)
+			borderPlanCoordinates.push(new google.maps.LatLng(markerArray[x].getPosition().ib , markerArray[x].getPosition().jb));
 		var borderPath = new google.maps.Polyline({
 		  path: borderPlanCoordinates,
 		  strokeColor: "blue",
@@ -105,11 +95,7 @@
 		});
 		borderPath.setMap(map);
 	}
-
-	
-	
-	//]]>   
-
+	//]]>
 </script>
 {% endblock %}
 

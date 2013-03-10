@@ -1,0 +1,39 @@
+{% extends "base_map_split.html" %}
+    context = {
+        'list_of_locations': list_of_locations,
+        'user' : user,
+        'unit': unit,
+    }
+{% block details %} 
+	<h2> {{ unit.name }}'s History: </h2> 
+	{% if list_of_locations %}
+		<p>ADD A FORM WITH DATE PICKERS</p>
+	{% else %}
+		<p>No history is available.</p>
+	{% endif %}
+{% endblock details %}
+
+{% block load_functions_call %}  
+	{% if list_of_locations %}
+		{% for line in list_of_locations %}
+			var marker = createMarker(
+			new google.maps.LatLng({{ line.lat }},{{ line.long }}),
+			'{{ line.timestamp }} <br> {{ line.speed }} kph',
+			'{{ line.timestamp }}',
+			"{{ STATIC_URL }}img/spot.png",
+			{{ forloop.counter }});
+			markerArray[{{forloop.counter}}] = marker;
+			latlngbounds.extend( marker.getPosition() );
+		{% endfor %}
+		map.fitBounds( latlngbounds );
+		AddLine();
+	{% endif %}
+{% endblock load_functions_call %}				
+
+{% if not list_of_locations %}
+	{% block mapOptions %}
+		,
+		center: new google.maps.LatLng({{ map_center_lat }}, {{ map_center_long }}),
+		zoom: 15,
+	{% endblock mapOptions %}
+{% endif %}

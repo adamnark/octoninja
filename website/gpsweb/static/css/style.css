@@ -25,13 +25,13 @@ body { height: 100%; margin: 0; padding: 0 }
 #map_canvas {
 	width:60%;
 	height:100%;
-	float:left;
+	float:right;
 background-color:#ff0000;
 }
 #details {
 	width:40%;
 	height:100%; 
-	float:right;
+	float:left;
 	background-color:#00ff00;
 }
 #footer {

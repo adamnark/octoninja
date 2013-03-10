@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^logout$',views.UserLogout),
     url(r'^register$', views.UserRegistration),
     url(r'^main_map$', views.main_map),
+    url(r'^unit_route/(\d+)$', views.unit_route),
 )

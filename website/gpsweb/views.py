@@ -87,4 +87,22 @@ def main_map(request):
 
     return render(request, 'main_map.html', context)
 
+@login_required 
+def unit_route(request, unit_id):
+    user = request.user
+    user_id = user.id
+    unit = Unit.objects.filter(owner_id=user_id).filter(id__in=unit_id)
+    if not unit:
+        return HttpResponseRedirect('/main_map')
+    list_of_locations = LocationLog.objects.filter(unit_id=unit_id).order_by('timestamp')[:20]
+    map_center_lat = '32.047818'
+    map_center_long = '34.761265'
+    context = {
+        'list_of_locations': list_of_locations,
+        'user' : user,
+        'unit': unit[0],
+        'map_center_long' : map_center_long,
+        'map_center_lat' : map_center_lat,
+    }
 
+    return render(request, 'unit_route.html', context) 
