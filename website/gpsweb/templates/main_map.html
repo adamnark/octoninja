@@ -6,13 +6,28 @@
 		<ul>
 		{% for line in list_of_locations %}
 			<li>
+			<input type = "checkbox" class = "unitCheckbox" id = "unit{{forloop.counter}}" checked = "checked" />
+			<script type = "text/javascript" src = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
+			<script type="text/javascript">
+				$("#unit{{forloop.counter}}").live("click", function () {
+					if ($("#unit{{forloop.counter}}").is(":checked")) {
+						unHideMarker({{ forloop.counter }});
+					} else {
+						hideMarker({{ forloop.counter }});
+					}
+				});
+			</script>
 			<img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png" alt="some_text">
-			<a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.unit.name }}</a></li>
+			<a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.unit.name }} </a>
 		{% endfor %}
 		</ul>
+		<button type="submit" onclick="AddLine(1,2)">Add line</button>
 	{% else %}
 		<p>No units are available.</p>
 	{% endif %}
+
+
+
 
 {% endblock details %}
 
@@ -20,12 +35,22 @@
 	{% if list_of_locations %}
 		{% for line in list_of_locations %}
 			var marker = createMarker(
-			new GLatLng({{ line.lat }}, {{ line.long }}),
+			new google.maps.LatLng({{ line.lat }},{{ line.long }}),
 			'{{ line.timestamp }} <br> {{ line.speed }} kph',
 			'{{ line.unit.name }}',
-			"http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png");
-			
-			map.addOverlay(marker);	
+			"http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png",
+			{{ forloop.counter }});
+			markerArray[{{forloop.counter}}] = marker;
+			latlngbounds.extend( marker.getPosition() );
 		{% endfor %}
+		map.fitBounds( latlngbounds );
 	{% endif %}
 {% endblock load_functions_call %}				
+
+{% if not list_of_locations %}
+	{% block mapOptions %}
+		,
+		center: new google.maps.LatLng({{ map_center_lat }}, {{ map_center_long }}),
+		zoom: 15,
+	{% endblock mapOptions %}
+{% endif %}

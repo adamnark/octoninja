@@ -7,39 +7,110 @@
 
 {% block head %}  
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U" type="text/javascript"></script>
+<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U&sensor=true" type="text/javascript">
+    </script>
+
 <script type="text/javascript">
  //<![CDATA[
+   var markerArray = [];
+   var latlngbounds = new google.maps.LatLngBounds();
    var map;
-   function load() {
-	  if (GBrowserIsCompatible()) {
-		map = new GMap2(
-		document.getElementById("map_canvas"));
-		map.addControl(new GSmallMapControl());
-		map.setCenter(
-		new GLatLng({{ map_center_lat }}, {{ map_center_long }}), 15);
-		function createMarker(point, text, title,icon_path) {
-		  var Icon = new GIcon(G_DEFAULT_ICON);
-		  Icon.image = icon_path;
-		  var marker =
-		  new GMarker(point,{title:title,icon:Icon});
-		  GEvent.addListener(
-		  marker, "click", function() {
-			marker.openInfoWindowHtml(text);
-		  });
-		  return marker;
+   function load() 
+   {
+	  
+		var mapOptions = {
+		  mapTypeId: google.maps.MapTypeId.ROADMAP
+		  {% block mapOptions %}{% endblock  %}
+		};
+		map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+		
+		function createMarker(point, text, title,icon_path, markerId) 
+		{
+			var idx = markerId;
+			var marker = new google.maps.Marker({
+				position: point,
+				map: map,
+				title: title,
+				clickable: true,
+				icon: icon_path,
+				//animation:google.maps.Animation.BOUNCE
+				animation:google.maps.Animation.DROP
+			});
+			
+			marker.info = new google.maps.InfoWindow({
+				content: text
+			});
+			google.maps.event.addListener(marker, 'click', function() {
+				for (var i in markerArray)
+					markerArray[i].info.close(map, markerArray[i]);
+				marker.info.open(map, marker);
+			});
+			var geocoder = new google.maps.Geocoder();
+			geocoder.geocode({'latLng': point}, function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) 
+				{
+					if (results[0])
+					{
+						address = results[0].formatted_address;
+						markerArray[idx].info.setContent(address+'<br>'+text);
+					} 
+				}
+				else
+				{
+					address = '';
+				}
+			});  
+			return marker;
 		}
 		{% block load_functions_call %}  
 		{% endblock load_functions_call %}
-	  }
+  
 	}
 	function changeView(lat, lng)
 	{
-		map.panTo(new GLatLng(lat,lng));
+		map.panTo(new google.maps.LatLng(lat,lng));
 	}
+	function hideMarker(markerId)
+	{
+		markerArray[markerId].setVisible(false);
+		markerArray[markerId].info.close();
+	}
+	function unHideMarker(markerId)
+	{
+		markerArray[markerId].setVisible(true);
+		markerArray[markerId].setAnimation(google.maps.Animation.DROP);
+	}
+	function AddLine(markerId1, markerId2)
+	{
+		var borderPlanCoordinates = [
+		//new google.maps.LatLng(markerArray[markerId2].getPosition().ib , markerArray[markerId2].getPosition().jb),
+		//new google.maps.LatLng(markerArray[3].getPosition().ib , markerArray[3].getPosition().jb),
+		//new google.maps.LatLng(markerArray[markerId1].getPosition().ib , markerArray[markerId1].getPosition().jb)
+		new google.maps.LatLng(37.772323, -122.214897),
+		
+		new google.maps.LatLng(-27.46758, 153.027892),
+		new google.maps.LatLng(21.291982, -157.821856),
+		new google.maps.LatLng(-18.142599, 178.431)
+        
+        
+		];
+
+		var borderPath = new google.maps.Polyline({
+		  path: borderPlanCoordinates,
+		  strokeColor: "blue",
+		  strokeOpacity: 1.0,
+		  strokeWeight: 2,
+		  map: map
+		});
+		borderPath.setMap(map);
+	}
+
+	
+	
 	//]]>   
 
 </script>
 {% endblock %}
 
-{% block body_params %}  onload="load()" onunload="GUnload()"{% endblock %}
+{% block body_params %}  onload="load()" {% endblock %}
