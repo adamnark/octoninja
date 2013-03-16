@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 #-#################-#
-#     OLD TABLES    # 
+#     OLD TABLES    #
 #-#################-#
-# alert_format      #  
+# alert_format      #
 # alert_log         #
 # alert             #
 # alert_recipient   #
@@ -24,7 +24,7 @@ class Unit(models.Model):
         return self.name
 
 class LocationLog(models.Model):
-    timestamp = models.DateTimeField()          
+    timestamp = models.DateTimeField()
     lat =       models.CharField(max_length=13) # 34.7888233333
     long =      models.CharField(max_length=13) # 32.0915033333
     speed =     models.IntegerField()           # 101
@@ -52,7 +52,7 @@ class SpeedAlert(AbstractAlert):
     max_speed = models.IntegerField()
     def __unicode__(self):
         return super(SpeedAlert, self).__unicode__() + ' @ ' + str(self.max_speed) + ' kph'
-        
+
 class AlertLog(models.Model):
     location_log = models.ForeignKey(LocationLog)
     alert = models.ForeignKey(AbstractAlert)
