@@ -60,7 +60,7 @@ class Server:
     def signal_handler(self, signal, frame):
         print 'Ctrl+C was pressed, cleaning up'
         for s in self.inputs:
-            cleanup_socket(s)
+            self.cleanup_socket(s)
         raw_input("Press Enter to Exit")
         sys.exit()
     
@@ -122,10 +122,10 @@ class Server:
             
             for s in exceptional:
                 print  s.getpeername(), ' is in an exceptional state. cleaning up.'
-                cleanup_socket(s)
+                self.cleanup_socket(s)
  
 def main():
-    serv = server()
+    serv = Server()
     serv.start()
 
  
