@@ -8,9 +8,16 @@
 	<h2> {{ unit.name }}'s History: </h2> 
 	{% if list_of_locations %}
 		<p>ADD A FORM WITH DATE PICKERS</p>
+		<select name="locations timestamps" size="5">
+		{% for line in list_of_locations %}
+			 <option onclick="openInfo({{forloop.counter}});">{{ line.timestamp }}</option>
+		{% endfor %}
+		</select>
 	{% else %}
 		<p>No history is available.</p>
 	{% endif %}
+	
+
 {% endblock details %}
 
 {% block load_functions_call %}  
@@ -34,6 +41,6 @@
 	{% block mapOptions %}
 		,
 		center: new google.maps.LatLng({{ map_center_lat }}, {{ map_center_long }}),
-		zoom: 15,
+		zoom: 15
 	{% endblock mapOptions %}
 {% endif %}

@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from gpsweb.models import Unit, LocationLog
+from gpsweb.models import Unit, LocationLog, AlertLog
 from gpsweb.forms import RegistrationForm, LoginForm
 
 def UserRegistration(request):
@@ -59,9 +59,7 @@ def main_map(request):
     user = request.user
     user_id = user.id
     units = Unit.objects.filter(owner_id=user_id)
-
-    
-        
+ 
     list_of_locations = []
     for unit in units:
         try:
@@ -106,3 +104,30 @@ def unit_route(request, unit_id):
     }
 
     return render(request, 'unit_route.html', context) 
+    
+@login_required 
+def user_unit_alerts(request):
+    user = request.user
+    user_id = user.id
+    units = Unit.objects.filter(owner_id=user_id)
+    latest_unit_alarms = []
+    list_of_alert_locations = []
+    for unit in units:
+        try:
+            latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).order_by('location_log__timestamp')[:20]
+        except AlertLog.DoesNotExist:
+            pass
+        else:
+            list_of_alert_locations.append(latest_unit_alarms)
+
+    map_center_lat = '32.047818'
+    map_center_long = '34.761265'
+
+    context = {
+        'list_of_alert_locations': list_of_alert_locations,
+        'user' : user,
+        'map_center_lat': map_center_lat,
+        'map_center_long': map_center_long,
+    }
+
+    return render(request, 'units_alerts.html', context)

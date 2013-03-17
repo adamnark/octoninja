@@ -21,7 +21,7 @@
 
 		var mapOptions = {
 		  mapTypeId: google.maps.MapTypeId.ROADMAP
-		  {% block mapOptions %}{% endblock  %}
+		  {% block mapOptions %}{% endblock  %}//Add options here only before block
 		};
 		map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
@@ -81,16 +81,31 @@
 		markerArray[markerId].setVisible(true);
 		markerArray[markerId].setAnimation(google.maps.Animation.DROP);
 	}
+	function openInfo(markerId)
+	{
+		for (var i in markerArray)
+		{
+			markerArray[i].info.close(map, markerArray[i]);
+		}
+		markerArray[markerId].info.open(map, markerArray[markerId]);
+	}
 	function AddLine()
 	{
+		var lineSymbol = {
+			path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW};
 		var borderPlanCoordinates = [];
 		for (x in markerArray)
-			borderPlanCoordinates.push(new google.maps.LatLng(markerArray[x].getPosition().ib , markerArray[x].getPosition().jb));
+			borderPlanCoordinates.push(new google.maps.LatLng(markerArray[x].position.mb , markerArray[x].position.nb));
+			//borderPlanCoordinates.push(new google.maps.LatLng(markerArray[x].getPosition().ib , markerArray[x].getPosition().jb));
 		var borderPath = new google.maps.Polyline({
 		  path: borderPlanCoordinates,
 		  strokeColor: "blue",
 		  strokeOpacity: 1.0,
 		  strokeWeight: 2,
+		  icons: [{
+			icon: lineSymbol,
+			offset: '100%'
+		  }],
 		  map: map
 		});
 		borderPath.setMap(map);

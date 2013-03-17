@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^register$', views.UserRegistration),
     url(r'^main_map$', views.main_map),
     url(r'^unit_route/(\d+)$', views.unit_route),
+    url(r'^units_alerts$', views.user_unit_alerts),
 )
