@@ -1,0 +1,60 @@
+{% extends "base_map_split.html" %}
+
+{% block details %} 
+	<h2> {{ user.first_name }}'s Tracklings: </h2> 
+	{% if list_of_alert_locations %}
+		<ul>
+		{% for user_alerts in list_of_alert_locations %}
+			{% for line in user_alerts %}
+				<li>
+				<input type = "checkbox" class = "unitCheckbox" id = "unit{{forloop.counter}}" checked = "checked" />
+				<script type = "text/javascript" src = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
+				<script type="text/javascript">
+					$("#unit{{forloop.counter}}").live("click", function () {
+						if ($("#unit{{forloop.counter}}").is(":checked")) {
+							unHideMarker({{ forloop.counter }});
+						} else {
+							hideMarker({{ forloop.counter }});
+						}
+					});
+				</script>
+				<img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png" alt="some_text">
+				<a href=# onclick="changeView({{ line.location_log.lat }}, {{ line.location_log.long }})">
+				{{ line.location_log.unit.name }}</a>
+			{% endfor %}
+		{% endfor %}
+		</ul>
+	{% else %}
+		<p>No units are available.</p>
+	{% endif %}
+
+
+
+
+{% endblock details %}
+
+{% block load_functions_call %}  
+	{% if list_of_alert_locations %}
+		{% for user_alerts in list_of_alert_locations %}
+			{% for line in user_alerts %}
+				var marker = createMarker(
+				new google.maps.LatLng({{ line.location_log.lat }},{{ line.location_log.long }}),
+				'{{ line.location_log.timestamp }} <br> {{ line.location_log.speed }} kph <br>{{ line.alert }}',
+				'{{ line.location_log.unit.name }}',
+				"http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png",
+				{{ forloop.counter }});
+				markerArray[{{forloop.counter}}] = marker;
+				latlngbounds.extend( marker.getPosition() );
+			{% endfor %}
+			map.fitBounds( latlngbounds );
+		{% endfor %}
+	{% endif %}
+{% endblock load_functions_call %}				
+
+{% if not list_of_locations %}
+	{% block mapOptions %}
+		,
+		center: new google.maps.LatLng({{ map_center_lat }}, {{ map_center_long }}),
+		zoom: 15
+	{% endblock mapOptions %}
+{% endif %}
