@@ -15,19 +15,20 @@ class Server:
     def  __init__(self, port=9000):
         self.answer = {"heartbeat":"ON", "init":"LOAD"}
         self.signal_types = ["tracker", "help me", "low battery"]
+
         self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.serversocket.setblocking(0)
-        self.mybind(port)    
-        
         self.inputs = []
         self.outputs = []
         self.message_queue = {}
         self.setup_repeat = {}
         self.imei = {}
         
+        self.serversocket.setblocking(0)
+        self.mybind(port)    
+        
     def mysendall(self, clientsocket, data):
         clientsocket.sendall(data)
-        print 'S: ' + data
+        print '>>> ' + data
 
     def queue_message(self, s, message):
         self.message_queue[s].put(message)
@@ -36,7 +37,7 @@ class Server:
        
     def myrecv(self, clientsocket):
         data = clientsocket.recv(1024)
-        print 'C: ' + data
+        print '<<< ' + data
         return data
 
     def mybind(self, port):
