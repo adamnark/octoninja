@@ -40,7 +40,7 @@ class Alert(models.Model):
         (SPEED_ALERT, 'Speed'),
         (GEOFENCE_ALERT, 'Geofence'),
         (SCHEDULE_ALERT, 'Schedule'))
-    alert_type =      models.CharField(max_length=1, choices=ALERTS_TYPE)
+    alert_type =      models.IntegerField(max_length=1, choices=ALERTS_TYPE)
     max_speed = models.IntegerField()
     schedule_bit_field = models.CharField(max_length=168)
     geo_top_left_lat =       models.CharField(max_length=13) # 34.7888233333
@@ -48,7 +48,15 @@ class Alert(models.Model):
     geo_bottom_right_lat =       models.CharField(max_length=13) # 34.7888233333
     geo_bottom_right_long =      models.CharField(max_length=13) # 32.0915033333
     def __unicode__(self):
-        return self.unit.__unicode__()
+        if self.type == str(self.SPEED_ALERT):
+            return 'Speed'
+#- Limit: ' + str(self.max_speed) + ' kph.'
+        elif self.type == str(self.GEOFENCE_ALERT):
+            return 'Geofence'
+        elif self.type == str(self.SCHEDULE_ALERT):
+            return 'Schedule'
+        else:
+            return ''
       
 
 

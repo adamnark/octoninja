@@ -5,7 +5,9 @@
         'unit': unit,
     }
 {% block details %} 
-	<h2> {{ unit.name }}'s History: </h2> 
+	<h2> {{ unit.name }}'s History: 
+	<img src="{{ STATIC_URL }}img/{{ unit.icon }}.png" alt="some_text"></h2>
+	
 	{% if list_of_locations %}
 		<p>ADD A FORM WITH DATE PICKERS</p>
 		<select name="locations timestamps" size="5">

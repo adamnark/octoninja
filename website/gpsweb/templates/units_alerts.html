@@ -18,7 +18,7 @@
 						}
 					});
 				</script>
-				<img src="http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png" alt="some_text">
+				<img src="{{ STATIC_URL }}img/{{ line.location_log.unit.icon }}.png" alt="some_text">
 				<a href=# onclick="changeView({{ line.location_log.lat }}, {{ line.location_log.long }})">
 				{{ line.location_log.unit.name }}</a>
 			{% endfor %}
@@ -41,7 +41,7 @@
 				new google.maps.LatLng({{ line.location_log.lat }},{{ line.location_log.long }}),
 				'{{ line.location_log.timestamp }} <br> {{ line.location_log.speed }} kph <br>{{ line.alert }}',
 				'{{ line.location_log.unit.name }}',
-				"http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png",
+				"{{ STATIC_URL }}img/{{ line.location_log.unit.icon }}alert.png",
 				{{ forloop.counter }});
 				markerArray[{{forloop.counter}}] = marker;
 				latlngbounds.extend( marker.getPosition() );
