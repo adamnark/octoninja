@@ -1,7 +1,4 @@
-import socket
-import signal
-import sys
-import MySQLdb 
+import socket, signal, sys
             
 def get_imei(data):#only for A message
     type = get_msg_type(data)
@@ -28,13 +25,13 @@ def parse(packet):
     
 def get_msg_type(data):
     valid_types = ["tracker","low battery","help me"]
-    spelt = data.split(',')
+    splitData = data.split(',')
     if data[0:2] == "##":
         return "init"
     elif is_imei(data):
         return "heartbeat"
-    elif spelt[1] in valid_types:
-        return spelt[1]
+    elif splitData[1] in valid_types:
+        return splitData[1]
     else:
         print 'get_msg_type: not valid message type'
         return None
@@ -68,7 +65,6 @@ def get_utm_helper(a, b, c):
     if b == c : num *= (-1)
     
     return num
-    
 
 def is_in_time_slot(timestamp,value):
     print ('*'*10) + ' gps_functions.is_in_time_slot() not implemented! ' + ('*'*10)
