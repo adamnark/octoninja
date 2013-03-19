@@ -40,7 +40,7 @@ class Alert(models.Model):
         (SPEED_ALERT, 'Speed'),
         (GEOFENCE_ALERT, 'Geofence'),
         (SCHEDULE_ALERT, 'Schedule'))
-    type =      models.CharField(max_length=1, choices=ALERTS_TYPE)
+    alert_type =      models.CharField(max_length=1, choices=ALERTS_TYPE)
     max_speed = models.IntegerField()
     schedule_bit_field = models.CharField(max_length=168)
     geo_top_left_lat =       models.CharField(max_length=13) # 34.7888233333

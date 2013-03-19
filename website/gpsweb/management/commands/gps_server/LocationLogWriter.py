@@ -1,12 +1,7 @@
-'''
-Created on Mar 17, 2013
-
-@author: Amir
-'''
-
 from gpsweb.models import LocationLog ,Unit
 from datetime import datetime  
 import PacketParser
+from AlertChecker import AlertChecker
 
 class LocationLogWriter():
     def __init__(self, imei, data):
@@ -16,8 +11,8 @@ class LocationLogWriter():
         
     def processRawData(self):   
         locationLog = self.makeNewLocationLog()
-        ##### make a new alert checker, and give it locationLog!
-        
+        alertChecker = AlertChecker(locationLog)
+        alertChecker.checkForAlarms()
     
     def makeNewLocationLog(self):
         unit_collection = Unit.objects.get(imei=self.imei)
@@ -37,3 +32,4 @@ class LocationLogWriter():
         logToWrite = LocationLog(**kwargs)
         logToWrite.save()
         return logToWrite
+    
