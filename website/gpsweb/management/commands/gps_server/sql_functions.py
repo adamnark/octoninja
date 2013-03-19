@@ -1,5 +1,5 @@
 import MySQLdb.cursors
-import gps_functions
+import PacketParser
 from datetime import datetime, timedelta
 from emailer import mail 
 debug = True
@@ -18,9 +18,9 @@ def write_location_to_log(imei , data):
     
     row = {}
     row['imei'] = imei
-    row['speed'] = gps_functions.get_speed(data)
-    row['heading'] = gps_functions.get_heading(data)
-    utm =  gps_functions.get_utm(data)
+    row['speed'] = PacketParser.get_speed(data)
+    row['heading'] = PacketParser.get_heading(data)
+    utm =  PacketParser.get_utm(data)
     row['utm_lat'] = utm[0]
     row['utm_long'] = utm[1]
     #Get unit id according to imei and add current locsation
@@ -45,11 +45,11 @@ def check_alerts(row):
                 msg_sent = send_alert(alert,row)
                 alert_exist = True
         elif alert['type'] == 'geo-fence':
-            if gps_functions.is_in_area(row['utm'],alert['values']):
+            if PacketParser.is_in_area(row['utm'],alert['values']):
                 print "geo-fence sendAlert(alert,row)  !?!?!?!?!?!"
                 alert_exist = True
         elif alert['type'] == 'schedule':
-            if gps_functions.is_in_time_slot(row['timestamp'],alert['values']):
+            if PacketParser.is_in_time_slot(row['timestamp'],alert['values']):
                 print "schedule sendAlert()  !?!?!?!?!?!"
                 alert_exist = True
         if alert_exist == True:

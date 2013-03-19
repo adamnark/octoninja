@@ -1,14 +1,14 @@
 import socket, signal, sys
             
 def get_imei(data):#only for A message
-    type = get_msg_type(data)
-    if (type == "tracker" or 
-        type == "low battery" or
-        type == "help me"):
+    msg_type = get_msg_type(data)
+    if (msg_type == "tracker" or 
+        msg_type == "low battery" or
+        msg_type == "help me"):
         return data[5:20]
-    elif (type == "heartbeat"):
+    elif (msg_type == "heartbeat"):
         return data
-    elif (type == "init"):
+    elif (msg_type == "init"):
         return data[8:23]
     
 def is_imei(data):
@@ -20,8 +20,8 @@ def is_imei(data):
     return False
 
 def parse(packet):
-	packet = packet.split(',')
-	return packet    
+    packet = packet.split(',')
+    return packet    
     
 def get_msg_type(data):
     valid_types = ["tracker","low battery","help me"]
@@ -92,11 +92,11 @@ def main():
     print '~' * 15
     for packet in packets:
         print packet
-        type = get_msg_type(packet)
-        print "type = " + type
+        msg_type = get_msg_type(packet)
+        print "type = " + msg_type
         imei = get_imei(packet)
         print "imei = " + imei
-        if type in signal_types:
+        if msg_type in signal_types:
             if is_valid_gps_signal(packet):
                 utm = get_utm(packet)
                 print "utm ", utm

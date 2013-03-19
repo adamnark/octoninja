@@ -1,7 +1,6 @@
 import socket, select, Queue, sys
 from signal import signal
-import PacketParser, sql_functions
-
+import PacketParser#, sql_functions
 
 
 def test_func(port):
@@ -23,7 +22,7 @@ class Server:
         self.setup_repeat = {}
         self.IMEIs = {}
         
-        signal.signal(signal.SIGINT, self.signalHandler)
+#        signal.signal(signal.SIGINT, self.signalHandler)
         self.serversocket.setblocking(0)
         self.mybind(port)    
         self.serversocket.listen(5)
@@ -81,6 +80,7 @@ class Server:
     def recvFromClientSocket(self, clientSocket):
         data = self.myrecv(clientSocket)
         if data:
+            123
             message_type = PacketParser.get_msg_type(data) # "tracker","low battery","help me", "heartbeat", "init"
 
             if message_type == 'init':
@@ -99,10 +99,10 @@ class Server:
                 
             if message_type in self.signal_types:
                 if PacketParser.is_valid_gps_signal(data):
+                    pass
                     #row = sql_functions.write_location_to_log(self.IMEIs[clientSocket], data)
                     #sql_functions.check_alerts(row)
-                    
-        else: # readable socket without data means the client disconnected 
+        else: # readable socket without data means the client disconnected
             self.cleanup_socket(clientSocket)
         
     def writeMessageFromSocketQueue(self, writeableSocket):
@@ -122,6 +122,7 @@ class Server:
     
     
     def start(self):
+        print 'starting server...'
         while self.inputs:
             readable, writable, exceptional = select.select(self.inputs, self.outputs, self.inputs)
             
@@ -141,7 +142,7 @@ class Server:
 
  
 def main():
-    serv = Server()
+    serv = Server(port=9000)
     serv.start()
 
  

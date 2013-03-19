@@ -22,7 +22,7 @@ class LocationLogWriter():
     def makeNewLocationLog(self):
         unit_collection = Unit.objects.get(imei=self.imei)
         if not unit_collection:
-            print 'we got a message from unit #%s, it said: "%s"' % self.imei, self.data  
+            print 'we got a message from unit we don\'t know, imei# %s, it said: "%s"' % self.imei, self.data  
             return
         unit = unit_collection[0] 
         utm =  PacketParser.get_utm(self.data)
