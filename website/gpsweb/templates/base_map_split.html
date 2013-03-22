@@ -95,8 +95,7 @@
 			path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW};
 		var borderPlanCoordinates = [];
 		for (x in markerArray)
-			borderPlanCoordinates.push(new google.maps.LatLng(markerArray[x].position.mb , markerArray[x].position.nb));
-			//borderPlanCoordinates.push(new google.maps.LatLng(markerArray[x].getPosition().ib , markerArray[x].getPosition().jb));
+			borderPlanCoordinates.push(new google.maps.LatLng(markerArray[x].position.lat() , markerArray[x].position.lng()));
 		var borderPath = new google.maps.Polyline({
 		  path: borderPlanCoordinates,
 		  strokeColor: "blue",
