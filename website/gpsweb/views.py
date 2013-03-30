@@ -118,7 +118,8 @@ def user_unit_alerts(request):
         except AlertLog.DoesNotExist:
             pass
         else:
-            list_of_alert_locations.append(latest_unit_alarms)
+            if latest_unit_alarms:
+                list_of_alert_locations.append(latest_unit_alarms)
 
     map_center_lat = '32.047818'
     map_center_long = '34.761265'
