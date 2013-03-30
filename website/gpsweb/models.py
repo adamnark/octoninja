@@ -48,12 +48,12 @@ class Alert(models.Model):
     geo_bottom_right_lat =       models.CharField(max_length=13) # 34.7888233333
     geo_bottom_right_long =      models.CharField(max_length=13) # 32.0915033333
     def __unicode__(self):
-        if self.type == str(self.SPEED_ALERT):
+        if self.alert_type == str(self.SPEED_ALERT):
             return 'Speed'
 #- Limit: ' + str(self.max_speed) + ' kph.'
-        elif self.type == str(self.GEOFENCE_ALERT):
+        elif self.alert_type == str(self.GEOFENCE_ALERT):
             return 'Geofence'
-        elif self.type == str(self.SCHEDULE_ALERT):
+        elif self.alert_type == str(self.SCHEDULE_ALERT):
             return 'Schedule'
         else:
             return ''
