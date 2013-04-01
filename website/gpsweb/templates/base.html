@@ -6,8 +6,29 @@
 </head>
 <body  {% block body_params %}  {% endblock %}  >
 	<div id="heaer">
-		<div id="banner" align="right"> <a href="/logout">  LOGOUT!!!  </a> {% block banner %} {% endblock %} </div>
-		<div id="menu"> {% block menu %}  MENU!     <a href="/unit_route/1">  unit_route  </a>      <a href="/">  main_map  </a>{% endblock %} </div>
+
+		<div id="banner" align="right">  {% block banner %} {% endblock %} </div>
+		<div id="menu"> 
+		{% block menu %}  
+		<nav>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a>  Unit Route  </a>
+					<ul>
+					{% block menuUnits %}  
+						<li><img src="{{ STATIC_URL }}img/1.png" alt="some_text"><a href="/unit_route/1">unit name</a></li>
+					{% endblock menuUnits %}
+					</ul>
+				</li>
+				<li><a href="/units_alerts">Units Alerts</a></li>
+				<li><a>  Settings  </a>
+				<li><a href="/logout">LogOut</a></li>
+				
+			</ul>
+		</nav>
+		          
+
+		{% endblock %} </div>
 	</div>
 
 	<div id="content">

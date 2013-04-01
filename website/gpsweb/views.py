@@ -77,6 +77,7 @@ def main_map(request):
         map_center_long = '34.761265'
 
     context = {
+        'units':units,
         'list_of_locations': list_of_locations,
         'user' : user,
         'map_center_lat': map_center_lat,
@@ -89,6 +90,7 @@ def main_map(request):
 def unit_route(request, unit_id):
     user = request.user
     user_id = user.id
+    units = Unit.objects.filter(owner_id=user_id)
     unit = Unit.objects.filter(owner_id=user_id).filter(id__in=unit_id)
     if not unit:
         return HttpResponseRedirect('/main_map')
@@ -96,6 +98,7 @@ def unit_route(request, unit_id):
     map_center_lat = '32.047818'
     map_center_long = '34.761265'
     context = {
+        'units':units,
         'list_of_locations': list_of_locations,
         'user' : user,
         'unit': unit[0],
@@ -125,6 +128,7 @@ def user_unit_alerts(request):
     map_center_long = '34.761265'
 
     context = {
+        'units':units,
         'list_of_alert_locations': list_of_alert_locations,
         'user' : user,
         'map_center_lat': map_center_lat,

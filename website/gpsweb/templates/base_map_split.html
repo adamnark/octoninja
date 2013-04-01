@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block menuUnits %} 
+	
+	{% for menuUnit in units %} 
+		<li><img src="{{ STATIC_URL }}img/{{menuUnit.icon}}.png" alt="some_text">
+		<a href="/unit_route/{{menuUnit.id}}">{{menuUnit.name}}</a></li>
+	{% endfor %}
+{% endblock menuUnits%}
+
 {% block content %}
 <div id="map_canvas"> {% block map %} map_canvas {% endblock %}</div>
 <div id="details"> {% block details %} details {% endblock %}</div>
