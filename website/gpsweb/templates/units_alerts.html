@@ -2,6 +2,24 @@
 
 {% block details %} 
 	<h2> {{ user.first_name }}'s Tracklings: 	</h2> 
+	
+	<label for="fromDate">From : </label><input id="fromDate" type="date" value="{{ fromDateStr }}"/><br>
+	<label for="toDate">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label><input id="toDate" type="date" value="{{ toDateStr }}"/><br>
+	<button id="submitDate" onClick="submitDate_click()">Submit</button><br><br>
+	<script type="text/javascript">
+	function submitDate_click()
+	{
+		var fromDate = document.getElementById('fromDate');
+		var toDate = document.getElementById('toDate');
+		if((fromDate.value != "")&&(toDate.value != ""))
+		{
+			var fromDateVal = fromDate.value.toString();
+			var toDateVal = toDate.value.toString();
+			window.location = "/units_alerts/" + fromDateVal.replace(/-/g,'') + "/" + toDateVal.replace(/-/g,'');
+		}
+	}
+	</script>
+	
 	{% if list_of_alert_locations %}
 		<ul>
 		{% for user_alerts in list_of_alert_locations %}

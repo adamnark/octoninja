@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from gpsweb.models import Unit, LocationLog, AlertLog
 from gpsweb.forms import RegistrationForm, LoginForm
+import datetime
 
 def UserRegistration(request):
     if request.user.is_authenticated():
@@ -87,17 +88,26 @@ def main_map(request):
     return render(request, 'main_map.html', context)
 
 @login_required 
-def unit_route(request, unit_id):
+def unit_route(request, unit_id, fromDate=None, toDate=None):
     user = request.user
     user_id = user.id
     units = Unit.objects.filter(owner_id=user_id)
     unit = Unit.objects.filter(owner_id=user_id).filter(id__in=unit_id)
     if not unit:
         return HttpResponseRedirect('/main_map')
-    list_of_locations = LocationLog.objects.filter(unit_id=unit_id).order_by('timestamp')[:20]
+    if not fromDate or not toDate:
+        list_of_locations = LocationLog.objects.filter(unit_id=unit_id).order_by('timestamp')[:20]
+        fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
+        toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
+    else:
+        fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
+        toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
+        list_of_locations = LocationLog.objects.filter(unit_id=unit_id).filter(timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"])
     map_center_lat = '32.047818'
     map_center_long = '34.761265'
     context = {
+        'fromDateStr' : fromDateStr,
+        'toDateStr' : toDateStr,
         'units':units,
         'list_of_locations': list_of_locations,
         'user' : user,
@@ -109,7 +119,7 @@ def unit_route(request, unit_id):
     return render(request, 'unit_route.html', context) 
     
 @login_required 
-def user_unit_alerts(request):
+def user_unit_alerts(request, fromDate=None, toDate=None):
     user = request.user
     user_id = user.id
     units = Unit.objects.filter(owner_id=user_id)
@@ -117,7 +127,15 @@ def user_unit_alerts(request):
     list_of_alert_locations = []
     for unit in units:
         try:
-            latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).order_by('location_log__timestamp')[:20]
+            if not fromDate or not toDate:
+                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).order_by('location_log__timestamp')[:20]
+                fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
+                toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
+            else:
+                fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
+                toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
+                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"])
+                
         except AlertLog.DoesNotExist:
             pass
         else:
@@ -128,6 +146,8 @@ def user_unit_alerts(request):
     map_center_long = '34.761265'
 
     context = {
+        'fromDateStr' : fromDateStr,
+        'toDateStr' : toDateStr,       
         'units':units,
         'list_of_alert_locations': list_of_alert_locations,
         'user' : user,

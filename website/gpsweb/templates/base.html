@@ -3,12 +3,13 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css" />
 	{% block head %}  head  {% endblock %}
+
 </head>
 <body  {% block body_params %}  {% endblock %}  >
 	<div id="heaer">
 
 		<div id="banner" align="right">  {% block banner %} {% endblock %} </div>
-		<div id="menu"> 
+		<div id="menu">
 		{% block menu %}  
 		<nav>
 			<ul>
@@ -21,21 +22,21 @@
 					</ul>
 				</li>
 				<li><a href="/units_alerts">Units Alerts</a></li>
-				<li><a>  Settings  </a>
+				<li><a>  Settings  </a></li>
 				<li><a href="/logout">LogOut</a></li>
 				
 			</ul>
 		</nav>
-		          
-
-		{% endblock %} </div>
+ 
+		{% endblock %} 
+		</div>
 	</div>
 
 	<div id="content">
 		{% block content %}  content  {% endblock %}
 	</div>
 
-	<div id="footer"> {% block footer %}  footer  {% endblock %} </div>
+	<div id="footer"> {% block footer %}  footer {% endblock %} </div>
 
 </body>
 </html>

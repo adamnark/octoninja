@@ -3,8 +3,8 @@
 {% block menuUnits %} 
 	
 	{% for menuUnit in units %} 
-		<li><img src="{{ STATIC_URL }}img/{{menuUnit.icon}}.png" alt="some_text">
-		<a href="/unit_route/{{menuUnit.id}}">{{menuUnit.name}}</a></li>
+		<li><a href="/unit_route/{{menuUnit.id}}">{{menuUnit.name}}</a>
+		<img src="{{ STATIC_URL }}img/{{menuUnit.icon}}.png" alt="some_text">
 	{% endfor %}
 {% endblock menuUnits%}
 

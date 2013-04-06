@@ -5,11 +5,27 @@
         'unit': unit,
     }
 {% block details %} 
+	
 	<h2> {{ unit.name }}'s History: 
 	<img src="{{ STATIC_URL }}img/{{ unit.icon }}.png" alt="some_text"></h2>
 	
+	<label for="fromDate">From : </label><input id="fromDate" type="date" value="{{ fromDateStr }}"/><br>
+	<label for="toDate">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label><input id="toDate" type="date" value="{{ toDateStr }}"/><br>
+	<button id="submitDate" onClick="submitDate_click()">Submit</button><br><br>
+	<script type="text/javascript">
+	function submitDate_click()
+	{
+		var fromDate = document.getElementById('fromDate');
+		var toDate = document.getElementById('toDate');
+		if((fromDate.value != "")&&(toDate.value != ""))
+		{
+			var fromDateVal = fromDate.value.toString();
+			var toDateVal = toDate.value.toString();
+			window.location = "/unit_route/"+{{ unit.id }}+"/" + fromDateVal.replace(/-/g,'') + "/" + toDateVal.replace(/-/g,'');
+		}
+	}
+	</script>
 	{% if list_of_locations %}
-		<p>ADD A FORM WITH DATE PICKERS</p>
 		<select name="locations timestamps" size="5">
 		{% for line in list_of_locations %}
 			 <option onclick="openInfo({{forloop.counter}});">{{ line.timestamp }}</option>
