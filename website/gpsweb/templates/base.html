@@ -8,22 +8,22 @@
 <body  {% block body_params %}  {% endblock %}  >
 	<div id="heaer">
 
-		<div id="banner" align="right">  {% block banner %} {% endblock %} </div>
+		<!-- <div id="banner" align="right">  {% block banner %} {% endblock %} </div> -->
 		<div id="menu">
 		{% block menu %}  
 		<nav>
 			<ul>
 				<li><a href="/">Home</a></li>
-				<li><a>  Unit Route  </a>
+				<li><a>  Routes  </a>
 					<ul>
 					{% block menuUnits %}  
 						<li><img src="{{ STATIC_URL }}img/1.png" alt="some_text"><a href="/unit_route/1">unit name</a></li>
 					{% endblock menuUnits %}
 					</ul>
 				</li>
-				<li><a href="/units_alerts">Units Alerts</a></li>
+				<li><a href="/units_alerts">Alerts</a></li>
 				<li><a>  Settings  </a></li>
-				<li><a href="/logout">LogOut</a></li>
+				<li><a href="/logout">Logout</a></li>
 				
 			</ul>
 		</nav>
@@ -36,7 +36,7 @@
 		{% block content %}  content  {% endblock %}
 	</div>
 
-	<div id="footer"> {% block footer %}  footer {% endblock %} </div>
+	<!-- <div id="footer"> {% block footer %}  footer {% endblock %} </div> -->
 
 </body>
 </html>

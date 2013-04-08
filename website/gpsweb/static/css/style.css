@@ -8,31 +8,27 @@ body { height: 100%; margin: 0; padding: 0 }
 
 #map_canvas { height: 100% }
 
-#heaer {
+#header {
 	height:10%; 
 }
-#banner {
-	height:30%; 
-	background-color:#ff00ff;
-}
 #menu {
-	height:70%; 
-	background-color:#ffccee;
+/* 	height:70%; */ 
+	background-color:#596877;
 }
 #content {
-	height:85%; 
+	height:100%; 
 }
 #map_canvas {
 	width:60%;
 	height:100%;
 	float:right;
-background-color:#ff0000;
+	background-color:#A5BFDD;
 }
 #details {
 	width:40%;
 	height:100%; 
 	float:left;
-	background-color:#00ff00;
+	background-color:#B1E572;
 	
 }
 #footer {
@@ -48,20 +44,17 @@ nav ul {
  
 nav ul ul {
     visibility: hidden;
-    opacity:1.0;
-    transition: opacity 0.3s linear, visibility 0.3s linear;
 }
  
 nav ul li:hover > ul {
     visibility: visible;
-    opacity: 1.0;
 }
  
 nav ul {
     list-style: none;
     position: relative;
     display: inline-block;
-    background: linear-gradient(to bottom, #64B739, #1A602C) !important;
+    /* background: linear-gradient(to bottom, #64B739, #1A602C) !important; */
 }
  
 nav ul li {
@@ -69,7 +62,7 @@ nav ul li {
 }
  
 nav ul li:hover {
-    background: linear-gradient(to bottom, #64B739, #1A602C);
+    /* background: linear-gradient(to bottom, #64B739, #1A602C); */
 }
  
 nav a {
@@ -77,8 +70,8 @@ nav a {
 }
  
 a:hover {
-    background: linear-gradient(to bottom, #64B739, #1A602C) !important;
-    box-shadow: 0px 0px 0px 1px #3E9808 inset, 0 0 12px #284E10 inset;
+    /* background: linear-gradient(to bottom, #64B739, #1A602C) !important; */
+    /* box-shadow: 0px 0px 0px 1px #3E9808 inset, 0 0 12px #284E10 inset; */
 }
  
 nav ul li a {
@@ -88,7 +81,8 @@ nav ul li a {
 }
  
 nav ul ul {
-    background: rgba(48, 151, 191, 0.4) !important;
+    /* background: rgba(48, 151, 191, 0.4) !important; */
+    background: #596877 !important;
     padding: 0;
     position: absolute;
     top: 100%;
@@ -96,7 +90,7 @@ nav ul ul {
  
 nav ul ul li {
     float: none;
-    border-bottom: 1px solid rgba(44, 135, 184, 0.72);
+    /* border-bottom: 1px solid rgba(44, 135, 184, 0.72); */
     position: relative;
 }
  
