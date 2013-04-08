@@ -13,4 +13,6 @@ class Command(BaseCommand):
             raise CommandError('too many arguments!')
         port = args[0] if args else default_port
 
+        # change this line to 
+        #Server.start() 
         Server.test_func(port)

@@ -1,6 +1,7 @@
 import socket, select, Queue, sys
 from signal import signal
-import PacketParser#, sql_functions
+import PacketParser
+import ModelWriter
 
 
 def test_func(port):
@@ -80,7 +81,6 @@ class Server:
     def recvFromClientSocket(self, clientSocket):
         data = self.myrecv(clientSocket)
         if data:
-            123
             message_type = PacketParser.get_msg_type(data) # "tracker","low battery","help me", "heartbeat", "init"
 
             if message_type == 'init':
@@ -99,10 +99,11 @@ class Server:
                 
             if message_type in self.signal_types:
                 if PacketParser.is_valid_gps_signal(data):
-                    pass
-                    #row = sql_functions.write_location_to_log(self.IMEIs[clientSocket], data)
-                    #sql_functions.check_alerts(row)
-        else: # readable socket without data means the client disconnected
+                    ModelWriter.writeLocationLog(self.IMEIs[clientSocket],data)
+                else: 
+                    print 'recvFromClientSocket: not valid gps signal \r\n imei=%s\r\ndata=%s' % (self.IMEIs[clientSocket],data)
+        else: 
+            # readable socket without data means the client disconnected
             self.cleanup_socket(clientSocket)
         
     def writeMessageFromSocketQueue(self, writeableSocket):

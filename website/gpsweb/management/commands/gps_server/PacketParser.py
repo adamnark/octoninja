@@ -1,6 +1,7 @@
-import socket, signal, sys
-            
-def get_imei(data):#only for A message
+#import socket, signal, sys
+
+def get_imei(data): 
+    #only for A message
     msg_type = get_msg_type(data)
     if (msg_type == "tracker" or 
         msg_type == "low battery" or
