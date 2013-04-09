@@ -14,5 +14,6 @@ class Command(BaseCommand):
         port = args[0] if args else default_port
 
         # change this line to 
-        #Server.start() 
-        Server.test_func(port)
+        serv = Server.Server()
+        serv.start() 
+        #Serversta.test_func(port)

@@ -120,8 +120,7 @@ class Server:
     def handleExceptionalSocket(self, exceptionalSocket):
         print  exceptionalSocket.getpeername(), ' is in an exceptional state. cleaning up.'
         self.cleanup_socket(exceptionalSocket)
-    
-    
+       
     def start(self):
         print 'starting server...'
         while self.inputs:

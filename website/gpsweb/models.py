@@ -19,7 +19,7 @@ class LocationLog(models.Model):
     heading =   models.IntegerField()           # 216
     unit =      models.ForeignKey(Unit)
     def __unicode__(self):
-        return str(self.timestamp) + ': (' +  self.lat + ' ' + self.long + ')'
+        return "%s -- %s: (%s %s)" % (str(self.id), str(self.timestamp),str(self.lat),str(self.long))
 
 class Recipient(models.Model):
     telephone = models.CharField(max_length=12)
@@ -29,6 +29,7 @@ class Recipient(models.Model):
         return self.nickname
 
 class Alert(models.Model):
+    name =      models.CharField(max_length=250)
     unit =      models.ForeignKey(Unit)
     state =     models.DateTimeField()
     cutoff =    models.IntegerField()
@@ -47,23 +48,14 @@ class Alert(models.Model):
     geo_top_left_long =      models.CharField(max_length=13) # 32.0915033333
     geo_bottom_right_lat =       models.CharField(max_length=13) # 34.7888233333
     geo_bottom_right_long =      models.CharField(max_length=13) # 32.0915033333
+    
     def __unicode__(self):
-        if self.type == str(self.SPEED_ALERT):
-            return 'Speed'
-#- Limit: ' + str(self.max_speed) + ' kph.'
-        elif self.type == str(self.GEOFENCE_ALERT):
-            return 'Geofence'
-        elif self.type == str(self.SCHEDULE_ALERT):
-            return 'Schedule'
-        else:
-            return ''
-      
-
+        return self.name
 
 class AlertLog(models.Model):
     location_log = models.ForeignKey(LocationLog)
     alert = models.ForeignKey(Alert)
     notification_sent = models.BooleanField()
     def __unicode__(self):
-        sent = 'sent' if self.notification_sent else 'not sent'
+        sent = ' was sent' if self.notification_sent else ' was not sent'
         return self.alert.__unicode__() + sent
