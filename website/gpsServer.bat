@@ -1,0 +1,2 @@
+python manage.py start_gps_server
+pause
