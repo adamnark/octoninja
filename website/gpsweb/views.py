@@ -96,13 +96,13 @@ def unit_route(request, unit_id, fromDate=None, toDate=None):
     if not unit:
         return HttpResponseRedirect('/main_map')
     if not fromDate or not toDate:
-        list_of_locations = LocationLog.objects.filter(unit_id=unit_id).order_by('timestamp')[:20]
+        list_of_locations = LocationLog.objects.filter(unit_id=unit_id).order_by('-timestamp')[:20]
         fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
         toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
     else:
         fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
         toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
-        list_of_locations = LocationLog.objects.filter(unit_id=unit_id).filter(timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"])
+        list_of_locations = LocationLog.objects.filter(unit_id=unit_id).filter(timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-timestamp')
     map_center_lat = '32.047818'
     map_center_long = '34.761265'
     context = {
@@ -128,13 +128,13 @@ def user_unit_alerts(request, fromDate=None, toDate=None):
     for unit in units:
         try:
             if not fromDate or not toDate:
-                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).order_by('location_log__timestamp')[:20]
+                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).order_by('-location_log__timestamp')[:20]
                 fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
                 toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
             else:
                 fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
                 toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
-                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"])
+                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-timestamp')
                 
         except AlertLog.DoesNotExist:
             pass

@@ -43,19 +43,15 @@ def is_valid_gps_signal(data):
 
 def get_speed(data):    
     data = data.split(',')
-    
-    print "\tget_speed:"
-    print '\tdata=%s ' % data
-    print '\tretval=%d' %  int(float(data[11])*1.85200)
-    
-    return  int(float(data[11])*1.85200)
+    num = data[11] if data[11] else '0.0' 
+    return  int(float(num)*1.85200)
     
 def get_heading(data):    
     data = data.split(',')
     if data[12] == '':
         return '0'
     else:
-        return data[12]
+        return int(float(data[12]))
 
 def get_utm(data):
     data = data.split(',')
