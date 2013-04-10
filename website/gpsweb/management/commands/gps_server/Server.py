@@ -4,12 +4,6 @@ import PacketParser
 import ModelWriter
 
 
-def test_func(port):
-    from time import sleep    
-    while True:
-        sleep(1)
-        print 'port = %d' % port
-
 class Server:
     
     def  __init__(self, port=9000):
@@ -23,15 +17,18 @@ class Server:
         self.setup_repeat = {}
         self.IMEIs = {}
         
-#        signal.signal(signal.SIGINT, self.signalHandler)
         self.serversocket.setblocking(0)
         self.mybind(port)    
         self.serversocket.listen(5)
         self.inputs.append(self.serversocket)
         
     def mysendall(self, clientsocket, data):
-        clientsocket.sendall(data)
-        print '>>> ' + data
+        try:
+            clientsocket.sendall(data)
+        except(socket.error):
+        self.cleanup_socket(clientsocket)    
+        else:
+            print '>>> ' + data
 
     def queue_message(self, s, message):
         self.message_queues[s].put(message)
@@ -39,9 +36,13 @@ class Server:
             self.outputs.append(s)
        
     def myrecv(self, clientsocket):
+        try:
         data = clientsocket.recv(1024)
-        print '<<< ' + data
-        return data
+        except(socket.error):
+            self.cleanup_socket(clientSocket)
+    else:
+            print '<<< ' + data
+            return data
 
     def mybind(self, port):
         print 'binding server...'
@@ -55,7 +56,8 @@ class Server:
         #print 'closing connection with ' + s.getpeername()
         if s in self.outputs:
             self.outputs.remove(s)
-        self.inputs.remove(s)
+        if s in self.inputs:
+            self.inputs.remove(s)
         self.message_queues.pop(s, 0)
         self.setup_repeat.pop(s, 0)
         self.IMEIs.pop(s, 0)
@@ -114,7 +116,8 @@ class Server:
         else:
             self.mysendall(writeableSocket, next_msg)
         finally:
-            self.outputs.remove(writeableSocket)
+            if writeableSocket in self.outputs:
+                self.outputs.remove(writeableSocket)
                         
    
     def handleExceptionalSocket(self, exceptionalSocket):
