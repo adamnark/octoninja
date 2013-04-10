@@ -26,7 +26,7 @@ class Server:
         try:
             clientsocket.sendall(data)
         except(socket.error):
-        self.cleanup_socket(clientsocket)    
+            self.cleanup_socket(clientsocket)    
         else:
             print '>>> ' + data
 
@@ -37,10 +37,10 @@ class Server:
        
     def myrecv(self, clientsocket):
         try:
-        data = clientsocket.recv(1024)
+            data = clientsocket.recv(1024)
         except(socket.error):
-            self.cleanup_socket(clientSocket)
-    else:
+            self.cleanup_socket(clientsocket)
+        else:
             print '<<< ' + data
             return data
 
