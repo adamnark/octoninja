@@ -134,7 +134,7 @@ def user_unit_alerts(request, fromDate=None, toDate=None):
             else:
                 fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
                 toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
-                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-timestamp')
+                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-location_log__timestamp')
                 
         except AlertLog.DoesNotExist:
             pass
