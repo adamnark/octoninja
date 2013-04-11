@@ -47,7 +47,7 @@ class Server:
     def mybind(self, port):
         print 'binding server...'
         try:
-                self.serversocket.bind((socket.gethostname(), port))
+            self.serversocket.bind((socket.gethostname(), port))
         except socket.error, msg:
             print 'Bind failed. Error Code : ' + str(msg[0]) + ' - ' + msg[1]
             sys.exit()
