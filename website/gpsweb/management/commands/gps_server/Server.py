@@ -92,7 +92,7 @@ class Server:
                 self.queue_message(clientSocket, self.answer[message_type])
                 
             elif message_type == "help me" or message_type == "low battery": 
-                self.queue_message(clientSocket, "**,IMEIs:%clientSocket,E" % self.IMEIs[clientSocket])
+                self.queue_message(clientSocket, "**,IMEIs:%s,E" % self.IMEIs[clientSocket])
                 # we should do something else, perhaps add database log.
                 
             if not self.setup_repeat[clientSocket]:
