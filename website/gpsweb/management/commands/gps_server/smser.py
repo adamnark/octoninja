@@ -22,7 +22,7 @@ class TextMessage:
         self.content = message
  
     def connectPhone(self):
-        win_port = 'COM3'
+        win_port = 'COM6'
         #linux_port = '/dev/ttyACM0'
         self.ser = serial.Serial(win_port, 9600, timeout=5)
         print 'connected!\n', self.ser
@@ -44,7 +44,7 @@ class TextMessage:
         self.ser.close()
 
 print 'does this even work?!?'
-smser = TextMessage(recipient='0545949562', message='kaki matok\n from python w/ love')
+smser = TextMessage(recipient='0545885272', message='kaki matok\n from python w/ love')
 smser.connectPhone()
 smser.sendMessage()
 smser.disconnectPhone()

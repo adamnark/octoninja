@@ -11,7 +11,8 @@
 	
 	<label for="fromDate">From : </label><input id="fromDate" type="date" value="{{ fromDateStr }}"/><br>
 	<label for="toDate">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label><input id="toDate" type="date" value="{{ toDateStr }}"/><br>
-	<button id="submitDate" onClick="submitDate_click()">Submit</button><br><br>
+	<button id="submitDate" onClick="submitDate_click()">Submit</button><br>
+	<label>Total Route Length : </label><input type="text" id="routeLength" size="8" readonly/><br><br>
 	<script type="text/javascript">
 	function submitDate_click()
 	{
