@@ -25,8 +25,8 @@
 		{% for user_alerts in list_of_alert_locations %}
 			<li>
 			{% if user_alerts %}
-			<img src="{{ STATIC_URL }}img/{{ user_alerts.0.location_log.unit.icon }}.png" alt="some_text">
-			<a>{{ user_alerts.0.location_log.unit.name }}</a><br>
+			<img src="{{ STATIC_URL }}img/{{ user_alerts.0.location_log.car.icon }}.png">
+			<a>{{ user_alerts.0.location_log.car.name }}</a><br>
 			<select name="locations timestamps" size="5">
 			{% endif %}
 			{% for line in user_alerts %}
@@ -50,8 +50,8 @@
 				var marker = createMarker(
 				new google.maps.LatLng({{ line.location_log.lat }},{{ line.location_log.long }}),
 				'{{ line.location_log.timestamp }} <br> {{ line.location_log.speed }} kph <br>{{ line.alert }}',
-				'{{ line.location_log.unit.name }}',
-				"{{ STATIC_URL }}img/{{ line.location_log.unit.icon }}alert.png",
+				'{{ line.location_log.car.name }}',
+				"{{ STATIC_URL }}img/alert.png",
 				{{line.location_log.id}});
 				markerArray[{{line.location_log.id}}] = marker;
 				latlngbounds.extend( marker.getPosition() );

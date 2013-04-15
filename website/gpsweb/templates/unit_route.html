@@ -6,8 +6,8 @@
     }
 {% block details %} 
 	
-	<h2> {{ unit.name }}'s History: 
-	<img src="{{ STATIC_URL }}img/{{ unit.icon }}.png" alt="some_text"></h2>
+	<h2> {{ car.name }}'s History: 
+	<img src="{{ STATIC_URL }}img/{{ car.icon }}.png" alt="some_text"></h2>
 	
 	<label for="fromDate">From : </label><input id="fromDate" type="date" value="{{ fromDateStr }}"/><br>
 	<label for="toDate">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label><input id="toDate" type="date" value="{{ toDateStr }}"/><br>
@@ -22,7 +22,7 @@
 		{
 			var fromDateVal = fromDate.value.toString();
 			var toDateVal = toDate.value.toString();
-			window.location = "/unit_route/"+{{ unit.id }}+"/" + fromDateVal.replace(/-/g,'') + "/" + toDateVal.replace(/-/g,'');
+			window.location = "/unit_route/"+{{ car.id }}+"/" + fromDateVal.replace(/-/g,'') + "/" + toDateVal.replace(/-/g,'');
 		}
 	}
 	</script>

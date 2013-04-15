@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from gpsweb.models import Unit, LocationLog, AlertLog
+from gpsweb.models import *
 from gpsweb.forms import RegistrationForm, LoginForm
 import datetime
 
@@ -59,12 +59,12 @@ def UserLogout(request):
 def main_map(request):
     user = request.user
     user_id = user.id
-    units = Unit.objects.filter(owner_id=user_id)
+    cars = Car.objects.filter(owner_id=user_id)
  
     list_of_locations = []
-    for unit in units:
+    for car in cars:
         try:
-            last_location = LocationLog.objects.filter(unit_id=unit.id).latest('timestamp')
+            last_location = LocationLog.objects.filter(car=car).latest('timestamp')
         except LocationLog.DoesNotExist:
             pass
         else:
@@ -78,7 +78,7 @@ def main_map(request):
         map_center_long = '34.761265'
 
     context = {
-        'units':units,
+        'cars':cars,
         'list_of_locations': list_of_locations,
         'user' : user,
         'map_center_lat': map_center_lat,
@@ -88,30 +88,30 @@ def main_map(request):
     return render(request, 'main_map.html', context)
 
 @login_required 
-def unit_route(request, unit_id, fromDate=None, toDate=None):
+def unit_route(request, car_id, fromDate=None, toDate=None):
     user = request.user
     user_id = user.id
-    units = Unit.objects.filter(owner_id=user_id)
-    unit = Unit.objects.filter(owner_id=user_id).filter(id__in=unit_id)
-    if not unit:
+    cars = Car.objects.filter(owner_id=user_id)
+    car = Car.objects.filter(owner_id=user_id).filter(id__in=car_id)
+    if not car:
         return HttpResponseRedirect('/main_map')
     if not fromDate or not toDate:
-        list_of_locations = LocationLog.objects.filter(unit_id=unit_id).order_by('-timestamp')[:20]
+        list_of_locations = LocationLog.objects.filter(car=car).order_by('-timestamp')[:20]
         fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
         toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
     else:
         fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
         toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
-        list_of_locations = LocationLog.objects.filter(unit_id=unit_id).filter(timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-timestamp')
+        list_of_locations = LocationLog.objects.filter(car=car).filter(timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-timestamp')
     map_center_lat = '32.047818'
     map_center_long = '34.761265'
     context = {
         'fromDateStr' : fromDateStr,
         'toDateStr' : toDateStr,
-        'units':units,
+        'cars':cars,
         'list_of_locations': list_of_locations,
         'user' : user,
-        'unit': unit[0],
+        'car': car[0],
         'map_center_long' : map_center_long,
         'map_center_lat' : map_center_lat,
     }
@@ -122,19 +122,20 @@ def unit_route(request, unit_id, fromDate=None, toDate=None):
 def user_unit_alerts(request, fromDate=None, toDate=None):
     user = request.user
     user_id = user.id
-    units = Unit.objects.filter(owner_id=user_id)
+    #units = Unit.objects.filter(owner_id=user_id)
+    cars = Car.objects.filter(owner_id=user_id)
     latest_unit_alarms = []
     list_of_alert_locations = []
-    for unit in units:
+    for car in cars:
         try:
             if not fromDate or not toDate:
-                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).order_by('-location_log__timestamp')[:20]
+                latest_unit_alarms = AlertLog.objects.filter(location_log__car=car).order_by('-location_log__timestamp')[:20]
                 fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
                 toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
             else:
                 fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
                 toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
-                latest_unit_alarms = AlertLog.objects.filter(location_log__unit_id=unit.id).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-location_log__timestamp')
+                latest_unit_alarms = AlertLog.objects.filter(location_log__car=car).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-location_log__timestamp')
                 
         except AlertLog.DoesNotExist:
             pass
@@ -148,7 +149,7 @@ def user_unit_alerts(request, fromDate=None, toDate=None):
     context = {
         'fromDateStr' : fromDateStr,
         'toDateStr' : toDateStr,       
-        'units':units,
+        'cars':cars,
         'list_of_alert_locations': list_of_alert_locations,
         'user' : user,
         'map_center_lat': map_center_lat,

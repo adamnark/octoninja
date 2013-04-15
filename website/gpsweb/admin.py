@@ -3,9 +3,12 @@ from django.contrib import admin
 from gpsweb.models import *
 
 
-#admin.site.register(User)
+#admin.site.register(GpsUser)
 admin.site.register(Unit)
-admin.site.register(Recipient)
+admin.site.register(Person)
+admin.site.register(Car)
+admin.site.register(Driver)
+admin.site.register(TemporaryDriver)
 admin.site.register(Alert)
 admin.site.register(LocationLog)
 admin.site.register(AlertLog)
