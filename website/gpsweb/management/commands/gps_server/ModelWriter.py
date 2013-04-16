@@ -1,17 +1,18 @@
 import PacketParser
-from gpsweb.models import Unit, LocationLog, Alert, AlertLog, Recipient
+from gpsweb.models import *
 from datetime import datetime, timedelta
 from emailer import mail 
 from django.utils import timezone
 
-def getUnitByImei(imei):
+def getCarByImei(imei):
     unit = Unit.objects.filter(imei=imei)
     if unit: 
         unit = unit[0]
+        car = unit.car
     else:
-        unit = None
+        car = None
         
-    return unit
+    return car
 
 def writeLocationLog(imei , data):
     #print "writeLocationLog"
@@ -26,7 +27,7 @@ def writeLocationLog(imei , data):
     locationLog.timestamp = timezone.now()
     locationLog.speed = PacketParser.get_speed(data)
     locationLog.heading = PacketParser.get_heading(data)
-    locationLog.unit = getUnitByImei(imei)
+    locationLog.car = getCarByImei(imei)
     
     locationLog.save() 
     
@@ -38,7 +39,7 @@ def resetAlertState(locationLog, alert):
     
     
 def checkAlerts(locationLog):
-    alerts = Alert.objects.filter(unit=locationLog.unit)
+    alerts = Alert.objects.filter(car=locationLog.car)
     #print 'checkAlerts:'
     #print "locationLog = " + str(locationLog)
     for alert in alerts:
@@ -103,7 +104,7 @@ def sendAlert(locationLog, alert):
     return True
 
 def getIterableRecipients(alert):
-    return alert.recipient.all()
+    return alert.recipients.all()
     
     
 def sendMail(locationLog, alert, recipient):
