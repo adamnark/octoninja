@@ -3,7 +3,7 @@ from gpsweb.models import *
 from datetime import datetime, timedelta
 from emailer import mail 
 from django.utils import timezone
-
+from Smser import sms
 def getCarByImei(imei):
     unit = Unit.objects.filter(imei=imei)
     if unit: 
@@ -36,8 +36,7 @@ def writeLocationLog(imei , data):
 def resetAlertState(locationLog, alert):
     alert.state = locationLog.timestamp
     alert.save()
-    
-    
+
 def checkAlerts(locationLog):
     alerts = Alert.objects.filter(car=locationLog.car)
     #print 'checkAlerts:'
@@ -76,9 +75,9 @@ def checkForTriggers(locationLog, alert):
 def getAlertFormat(alert, recipientType):
     if str(alert.type) == str(Alert.SPEED_ALERT):
         if recipientType == "email" : 
-            return """<html> <head></head> <body> <p>Hi %(nickname)s!<br>  %(unit_name)s was going %(speed)s kph at <a href="https://maps.google.com/maps?q=%(location)s">click here to see the location!</a><br> </p> </body> </html>"""
+            return """<html> <head></head> <body> <p>Hi %(nickname)s!<br>  %(driver_name)s was going %(speed)s kph with %(car_name)s.  <a href="https://maps.google.com/maps?q=%(location)s">Click here to see the location!</a><br> </p> </body> </html>"""
         elif recipientType == "sms" :
-            return ""
+            return """%(driver_name)s was going %(speed)s kph with %(car_name)s. \nLocation: https://maps.google.com/maps?q=%(location)s"""
     if str(alert.type) == str(Alert.GEOFENCE_ALERT):
         if recipientType == "email" : 
             return ""
@@ -105,15 +104,28 @@ def sendAlert(locationLog, alert):
 
 def getIterableRecipients(alert):
     return alert.recipients.all()
-    
-    
+
 def sendMail(locationLog, alert, recipient):
     mail_args = {    "nickname" : recipient.nickname, 
-                     "unit_name" : locationLog.unit.name, 
+                     "driver_name" : locationLog.car.primary_driver, 
+                     "car_name" : locationLog.car, 
                      "speed" : str(locationLog.speed), 
-                     "location" : "%f%%20%f" % (locationLog.lat,locationLog.long),
+                     "location" : "%s%%20%s" % (locationLog.lat,locationLog.long),
                      "format" : getAlertFormat(alert,"email"),
                      "timestamp" : str(locationLog.timestamp),
                      "to" : str(recipient.email)}
     mail(mail_args)
+    
+def sendSms(locationLog, alert, recipient):
+    sms_args = {     "nickname" : recipient.nickname, 
+                     "driver_name" : locationLog.car.primary_driver, 
+                     "car_name" : locationLog.car, 
+                     "speed" : str(locationLog.speed), 
+                     "location" : "%s%%20%s" % (locationLog.lat,locationLog.long),
+                     "format" : getAlertFormat(alert,"sms"),
+                     "timestamp" : str(locationLog.timestamp),}
+    
+    telephone = recipient.telephone
+    message = sms_args['format'] % sms_args
+    sms(telephone, message)
 

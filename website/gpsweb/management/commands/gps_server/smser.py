@@ -1,15 +1,15 @@
-'''
-Created on Jan 22, 2013
-
-@author: Adam Narkunski
-'''
-#!/usr/bin/env python
-"""
-sms.py - Used to send txt messages.
-"""
 import serial
 import time
 
+def sms(telephone, message):
+    try:
+        smser = TextMessage(recipient=telephone, message=message)
+        smser.connectPhone()
+        smser.sendMessage()
+        smser.disconnectPhone()
+    except:
+        pass
+        
 class TextMessage:
     def __init__(self, recipient="0123456789", message="TextMessage.content not set."):
         self.recipient = recipient
@@ -42,9 +42,4 @@ class TextMessage:
  
     def disconnectPhone(self):
         self.ser.close()
-
-print 'does this even work?!?'
-smser = TextMessage(recipient='0545885272', message='kaki matok\n from python w/ love')
-smser.connectPhone()
-smser.sendMessage()
-smser.disconnectPhone()
+        

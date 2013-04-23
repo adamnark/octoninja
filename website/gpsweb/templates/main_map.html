@@ -18,7 +18,7 @@
 				});
 			</script>
 			<img src="{{ STATIC_URL }}img/{{ line.car.icon }}.png" alt="some_text">
-			<a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.car.name }} </a>
+			<a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.car.primary_driver }} - {{ line.car.name }} </a>
 			</li>
 		{% endfor %}
 		</ul>
@@ -27,12 +27,13 @@
 	{% endif %}
 
 
-
-
 {% endblock details %}
 
-{% block load_functions_call %}  
+<!-- Extended Function call on load -->
+{% block extendedFunction %}
+function extendedFunction(){ 
 	{% if list_of_locations %}
+
 		{% for line in list_of_locations %}
 			var marker = createMarker(
 			new google.maps.LatLng({{ line.lat }},{{ line.long }}),
@@ -45,12 +46,5 @@
 		{% endfor %}
 		map.fitBounds( latlngbounds );
 	{% endif %}
-{% endblock load_functions_call %}				
-
-{% if not list_of_locations %}
-	{% block mapOptions %}
-		,
-		center: new google.maps.LatLng({{ map_center_lat }}, {{ map_center_long }}),
-		zoom: 15
-	{% endblock mapOptions %}
-{% endif %}
+}
+{% endblock extendedFunction%}				

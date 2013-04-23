@@ -25,6 +25,13 @@ class Car(models.Model):
     icon =              models.IntegerField()
     def __unicode__(self):
         return self.name
+    def getDriverByDate(date):
+        currDriver = self.primary_driver
+        tempDrivers = TemporaryDriver.objects.filter(car = self).filter(start<date).filter(end>date)
+        if tempDrivers:
+            currDriver = tempDrivers[0]
+        return currDriver
+        
 
 class Unit(models.Model):
     imei =      models.CharField(max_length=15)

@@ -60,7 +60,7 @@ def main_map(request):
     user = request.user
     user_id = user.id
     cars = Car.objects.filter(owner_id=user_id)
- 
+    drivers = Driver.objects.filter(owner_id=user_id)
     list_of_locations = []
     for car in cars:
         try:
@@ -79,6 +79,7 @@ def main_map(request):
 
     context = {
         'cars':cars,
+        'drivers':drivers,
         'list_of_locations': list_of_locations,
         'user' : user,
         'map_center_lat': map_center_lat,
@@ -92,23 +93,24 @@ def unit_route(request, car_id, fromDate=None, toDate=None):
     user = request.user
     user_id = user.id
     cars = Car.objects.filter(owner_id=user_id)
+    drivers = Driver.objects.filter(owner_id=user_id)
     car = Car.objects.filter(owner_id=user_id).filter(id__in=car_id)
     if not car:
         return HttpResponseRedirect('/main_map')
     if not fromDate or not toDate:
-        list_of_locations = LocationLog.objects.filter(car=car).order_by('-timestamp')[:20]
         fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
         toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
     else:
         fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
         toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
-        list_of_locations = LocationLog.objects.filter(car=car).filter(timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-timestamp')
+    list_of_locations = LocationLog.objects.filter(car=car).filter(timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-timestamp')
     map_center_lat = '32.047818'
     map_center_long = '34.761265'
     context = {
         'fromDateStr' : fromDateStr,
         'toDateStr' : toDateStr,
         'cars':cars,
+        'drivers':drivers,
         'list_of_locations': list_of_locations,
         'user' : user,
         'car': car[0],
@@ -122,20 +124,19 @@ def unit_route(request, car_id, fromDate=None, toDate=None):
 def user_unit_alerts(request, fromDate=None, toDate=None):
     user = request.user
     user_id = user.id
-    #units = Unit.objects.filter(owner_id=user_id)
     cars = Car.objects.filter(owner_id=user_id)
+    drivers = Driver.objects.filter(owner_id=user_id)
     latest_unit_alarms = []
     list_of_alert_locations = []
     for car in cars:
         try:
             if not fromDate or not toDate:
-                latest_unit_alarms = AlertLog.objects.filter(location_log__car=car).order_by('-location_log__timestamp')[:20]
                 fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
                 toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
             else:
                 fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
                 toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
-                latest_unit_alarms = AlertLog.objects.filter(location_log__car=car).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-location_log__timestamp')
+            latest_unit_alarms = AlertLog.objects.filter(location_log__car=car).filter(location_log__timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-location_log__timestamp')
                 
         except AlertLog.DoesNotExist:
             pass
@@ -150,6 +151,7 @@ def user_unit_alerts(request, fromDate=None, toDate=None):
         'fromDateStr' : fromDateStr,
         'toDateStr' : toDateStr,       
         'cars':cars,
+        'drivers':drivers,
         'list_of_alert_locations': list_of_alert_locations,
         'user' : user,
         'map_center_lat': map_center_lat,
@@ -157,3 +159,42 @@ def user_unit_alerts(request, fromDate=None, toDate=None):
     }
 
     return render(request, 'units_alerts.html', context)
+
+    
+    
+@login_required 
+def car_alerts(request, fromDate=None, toDate=None):
+    return render(request, 'units_alerts.html', context)
+@login_required 
+def car_history(request, car_id, fromDate=None, toDate=None):
+    user = request.user
+    user_id = user.id
+    cars = Car.objects.filter(owner_id=user_id)
+    drivers = Driver.objects.filter(owner_id=user_id)
+    car = Car.objects.filter(owner_id=user_id).filter(id__in=car_id)
+    if not car:
+        return HttpResponseRedirect('/main_map')
+    if not fromDate or not toDate:
+        fromDateStr = datetime.datetime.now().strftime("%Y-%m-%d")
+        toDateStr =  datetime.datetime.now().strftime("%Y-%m-%d")
+    else:
+        fromDateStr = fromDate[0:4]+"-"+fromDate[4:6]+"-"+fromDate[6:8]
+        toDateStr =   toDate[0:4]+"-"+toDate[4:6]+"-"+toDate[6:8]
+    list_of_locations = LocationLog.objects.filter(car=car).filter(timestamp__range=[fromDateStr+" 00:00:00",toDateStr+" 23:59:59"]).order_by('-timestamp')
+    map_center_lat = '32.047818'
+    map_center_long = '34.761265'
+    context = {
+        'fromDateStr' : fromDateStr,
+        'toDateStr' : toDateStr,
+        'cars':cars,
+        'drivers':drivers,
+        'list_of_locations': list_of_locations,
+        'user' : user,
+        'car': car[0],
+        'map_center_long' : map_center_long,
+        'map_center_lat' : map_center_lat,
+    }
+    return render(request, 'car_history.html', context) 
+@login_required 
+def driver_history(request, fromDate=None, toDate=None):
+    return render(request, 'units_alerts.html', context)    
