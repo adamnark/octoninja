@@ -18,4 +18,6 @@ urlpatterns = patterns('',
     url(r'^units_alerts/(\d+)/(\d+)$', views.user_unit_alerts),
     url(r'^alerts/$', views.car_alerts),
     url(r'^alerts/(\d+)/(\d+)$', views.car_alerts),
+	url(r'^pdf_cars_dist$', views.pdf_cars_dist),
+	url(r'^pdf_cars_dist/(\d+)/(\d+)$', views.pdf_cars_dist),
 )

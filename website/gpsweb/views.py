@@ -198,3 +198,19 @@ def car_history(request, car_id, fromDate=None, toDate=None):
 @login_required 
 def driver_history(request, fromDate=None, toDate=None):
     return render(request, 'units_alerts.html', context)    
+	
+	
+def pdf_cars_dist(request, fromDate=None, toDate=None): 
+	user = request.user
+    user_id = user.id
+	car_distance = []
+    cars = Car.objects.filter(owner_id=user_id)
+	for car in cars:
+		dist = car_dist(car__id, fromDate, toDate)#Need to change dates format like in car_history
+		car_distance.append([car , dist])
+	context = {
+		'car_distance' : car_distance,
+        'user' : user,   
+    }
+	return render(request, 'pdf_car_dist.html', context)
+		
