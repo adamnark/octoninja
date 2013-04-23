@@ -91,3 +91,10 @@ class AlertLog(models.Model):
     def __unicode__(self):
         sent = ' was sent' if self.notification_sent else ' was not sent'
         return self.alert.__unicode__() + sent
+
+class AlertFormat(model.Model):
+    alert_type = models.IntegerField(max_length=1, choices=Alert.ALERTS_TYPE)
+    format_sms = models.CharField(max_length=250)
+    format_email = models.CharField(max_length=1000)
+    def __unicode__(self):
+        fmt = '%d\nsms: %s\nemail: %s' % (alert_type, format_sms,format_email)
