@@ -49,13 +49,6 @@ class Simulator():
 	
 	def connect(self):
 		self.socket.connect(('192.168.1.17', PORT))
-		#connected = False
-		#while not connected:
-			#try:
-				#self.socket.connect(('gps.solav.net', 9000))
-				#connected = True
-			#except:
-				#print self.socket.error()
 	
 	def send(self, message):
 		if self.socket:
@@ -68,9 +61,11 @@ class Simulator():
 			print 'connection closed by server'
 
 		
+import sys
 def main():
-	sim = Simulator(r'garmin_route.uncut',0)
-	sim.start()
+	if len(sys.argv) == 2:
+		sim = Simulator(sys.argv[0],sys.argv[1])
+		sim.start()
 	
 if __name__ == '__main__': 
 	main()
