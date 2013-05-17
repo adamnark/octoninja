@@ -1,35 +1,46 @@
 {% extends "base_map_split.html" %}
 
 {% block details %} 
+ <div style="padding-left: 5%;">
+	<h2>Car2's History: </h2>
 	
-	<h2> {{ car.name }}'s History: 
-	<img src="{{ STATIC_URL }}img/{{ car.icon }}.png" alt="some_text"></h2>
+	<div>
+			<label for="fromDate">From: </label>
+			<input id="fromDate" type="date" value="{{ fromDateStr }}"/>
+
+			<label for="toDate">To: </label>
+			<input id="toDate" type="date" value="{{ toDateStr }}"/>
+	</div>
+	<div>
+		<button id="submitDate" class="btn" onClick="submitDate_click()">Change dates</button>
+	</div>
 	
-	<label for="fromDate">From : </label><input id="fromDate" type="date" value="{{ fromDateStr }}"/><br>
-	<label for="toDate">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label><input id="toDate" type="date" value="{{ toDateStr }}"/><br>
-	<button id="submitDate" onClick="submitDate_click()">Submit</button><br>
-	<p>Total Route Length : {{route_details.length}}  km</p>
-	<p>Avg Speed in route : {{route_details.avgSpeed}} kph</p>
-	<p>Max Speed in route : {{route_details.maxSpeed}} kph</p>
-	<b>Primary Drivers:</b>
-	{% for pd in primary_driver %}
-		<p>&nbsp;&nbsp;{{pd}} {{pd.start|date:"d/m/y"}} - 
-		{% if pd.end %} 
-			{{pd.end|date:"d/m/y"}}
-		{%else%}
-			Now</p>
-		{% endif %}
-	{%endfor%}
-	
-	{% if temporary_drivers %}
-		<b>Temporary Drivers:</b>
-		{% for td in temporary_drivers %}
-			<p>&nbsp;&nbsp;{{td}} {{td.start|date:"d/m/y"}} - {{td.end|date:"d/m/y"}}</p>
+	<div style="margin-top: 5%;">
+		<p><b>Total Route Length</b> : {{route_details.length}} km</p>
+		<p><b>Avg Speed in route</b> : {{route_details.avgSpeed}} kph</p>
+		<p><b>Max Speed in route</b> : {{route_details.maxSpeed}} kph</p>
+	</div>
+
+	<div>
+		<b>Primary Drivers:</b>
+		{% for pd in primary_driver %}
+			<p>&nbsp;&nbsp;{{pd}} {{pd.start|date:"d/m/y"}} - 
+			{% if pd.end %} 
+				{{pd.end|date:"d/m/y"}}
+			{%else%}
+				Now</p>
+			{% endif %}
 		{%endfor%}
-	{%else%}
-		<p "bold"=true>There was no temporary drivers in this dates</p>
-	{% endif %}
-	
+		
+		{% if temporary_drivers %}
+			<b>Temporary Drivers:</b>
+			{% for td in temporary_drivers %}
+				<p>&nbsp;&nbsp;{{td}} {{td.start|date:"d/m/y"}} - {{td.end|date:"d/m/y"}}</p>
+			{%endfor%}
+		{%else%}
+			<p "bold"=true>There was no temporary drivers in this dates</p>
+		{% endif %}
+	</div>
 	<script type="text/javascript">
 	function submitDate_click()
 	{
@@ -53,7 +64,7 @@
 		<p>No history is available for viewing.</p>
 	{% endif %}
 	
-
+</div>
 {% endblock details %}
 
 <!-- Extended Function call on load -->
