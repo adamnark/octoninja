@@ -1,7 +1,10 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div id="map_canvas"> {% block map %}  {% endblock %}</div>
-<div id="details"> {% block details %} {% endblock %}</div>
+        <div class="container-fluid wrapper">
+            <div class="row-fluid columns content">
+                <div class="span4 article-tree">{% block details %} {% endblock %}</div>
+                <div class="span8 content-area" id="map_canvas" >{% block map %}  {% endblock %}</div>
+            </div>
+        </div>
 {% endblock content %}
-{% block body_params %}  onload="load()" {% endblock %}
+{% block body_params %} onload="load()" {% endblock %}

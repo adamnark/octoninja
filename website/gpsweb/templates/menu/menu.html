@@ -1,24 +1,36 @@
+<div class="navbar">
+	<div class="navbar-inner">
+		<div class="container">
 
+			<!-- Be sure to leave the brand out there if you want it shown -->
+			<a class="brand" href="#">GPS-Tracker</a>
 
-		<nav>
-			<ul>
-				<li><a href="/">Home</a></li>
-				<li><a>  Car History  </a>
-					<ul>
-					{% for car in menuParams.cars %} 
-						<li><a href="/car_history/{{car.id}}"><img src="{{ STATIC_URL }}img/{{car.icon}}.png" alt="some_text">{{car.name}}</a>
-					{% endfor %}
-					</ul>
-				</li>
-				<li><a>  Driver History  </a>
-					<ul>
-					{% for driver in menuParams.drivers %} 
-						<li><a href="/driver_history/{{driver.id}}">{{ driver }}</a>
-					{% endfor %}
-					</ul>
-				</li>
-				<li><a href="/alerts">Alerts</a></li>
-				<li><a>  Settings  </a></li>
-				<li><a href="/logout">Logout</a></li>
-			</ul>
-		</nav>
+			<!-- Everything you want hidden at 940px or less, place within here -->
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li><a href="/">Home</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Car History<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+						{% for car in menuParams.cars %} 
+							<li><a href="/car_history/{{car.id}}"><img src="{{ STATIC_URL }}img/{{car.icon}}.png" alt="some_text">{{car.name}}</a>
+						{% endfor %}
+						</ul>
+					</li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Driver History<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+						{% for driver in menuParams.drivers %} 
+							<li><a href="/driver_history/{{driver.id}}">{{ driver }}</a>
+						{% endfor %}
+						</ul>
+					</li>
+					<li><a href="/alerts">Alerts</a></li>
+					<li><a>  Settings  </a></li>
+					<li><a href="/logout">Logout</a></li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,115 @@
+body{
+	font-family: "sans-serif","Helvetica","Arial";
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+html { height: 100% }
+
+
+#map_canvas { height: 100% }
+
+#menu {
+ 	height:5%;
+	background-color:#596877;
+}
+#content {
+	height:95%; 
+}
+#map_canvas {
+	width:60%;
+	height:100%;
+	float:right;
+	background-color:#A5BFDD;
+}
+#details {
+	width:40%;
+	height:100%; 
+	float:left;
+	background-color:#B1E572;
+	
+}
+#footer {
+	height:0%; 
+	background-color:#0000ff;
+}
+
+
+nav ul {
+    padding: 0;
+    white-space: nowrap;
+}
+ 
+nav ul ul {
+    visibility: hidden;
+}
+ 
+nav ul li:hover > ul {
+    visibility: visible;
+}
+ 
+nav ul {
+    list-style: none;
+    position: relative;
+    display: inline-block;
+    /* background: linear-gradient(to bottom, #64B739, #1A602C) !important; */
+}
+ 
+nav ul li {
+    float: left;
+}
+ 
+nav ul li:hover {
+    /* background: linear-gradient(to bottom, #64B739, #1A602C); */
+}
+ 
+nav a {
+    transition: box-shadow 0.3s;
+}
+ 
+a:hover {
+    /* background: linear-gradient(to bottom, #64B739, #1A602C) !important; */
+    /* box-shadow: 0px 0px 0px 1px #3E9808 inset, 0 0 12px #284E10 inset; */
+}
+ 
+nav ul li a {
+    display: block;
+    padding: 0.5% 20px;
+    color: inherit;
+}
+ 
+nav ul ul {
+    /* background: rgba(48, 151, 191, 0.4) !important; */
+    background: #596877 !important;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+}
+ 
+nav ul ul li {
+    float: none;
+    /* border-bottom: 1px solid rgba(44, 135, 184, 0.72); */
+    position: relative;
+}
+ 
+nav ul ul li a {
+    padding: 10px 20px;
+    color: inherit;
+}
+ 
+ 
+nav ul ul ul {
+    position: absolute;
+    left: 100%;
+    top: 0;
+}
+
+
+.hiddenRow {
+ display:none;
+ visibility:hidden;
+}
+.visibleRow {
+ display:;
+ visibility:visible;
+}

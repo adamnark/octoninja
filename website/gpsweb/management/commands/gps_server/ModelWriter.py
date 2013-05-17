@@ -110,7 +110,7 @@ def getIterableRecipients(alert):
 
 def sendMail(locationLog, alert, recipient):
     mail_args = {    "nickname" : recipient.nickname, 
-                     "driver_name" : locationLog.car.primary_driver, 
+                     "driver_name" : locationLog.driver, 
                      "car_name" : locationLog.car, 
                      "speed" : str(locationLog.speed), 
                      "location" : "%s%%20%s" % (locationLog.lat,locationLog.long),
@@ -121,7 +121,7 @@ def sendMail(locationLog, alert, recipient):
     
 def sendSms(locationLog, alert, recipient):
     sms_args = {     "nickname" : recipient.nickname, 
-                     "driver_name" : locationLog.car.primary_driver, 
+                     "driver_name" : locationLog.driver, 
                      "car_name" : locationLog.car, 
                      "speed" : str(locationLog.speed), 
                      "location" : "%s%%20%s" % (locationLog.lat,locationLog.long),

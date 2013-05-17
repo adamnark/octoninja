@@ -1,22 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>GPS-Tracker</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-<html>
-
-<head>
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css" />
-	{% include 'headScripts.html' %}
-	{% block extendedFunction %} function extendedFunction(){} {% endblock %}
-	</script>
-
-</head>
-<body  {% block body_params %}  {% endblock %}  >
-	<div id="header">
-		<div id="menu">
-			{% include 'menu/menu.html' %}
+        <!-- Le styles -->
+        <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
+		
+		{% include 'headScripts.html' %}
+		{% block extendedFunction %} function extendedFunction(){} {% endblock %}
+		
+		</script><!-- Close script tag from headScripts-->
+	</head>
+	<body  {% block body_params %}  {% endblock %}  >
+		<div id="header">
+			<div id="menu">
+				{% include 'menu/menu.html' %}
+			</div>
 		</div>
-	</div>
-	<div id="content">
-		{% block content %}  {% endblock %}
-	</div>
+		{% block content %}{% endblock %}
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+		<script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
+	</body>
 
-</body>
 </html>

@@ -7,7 +7,7 @@
 		{% for line in list_of_locations %}
 			<li>
 			<input type = "checkbox" class = "unitCheckbox" id = "car{{forloop.counter}}" checked = "checked" />
-			<script type = "text/javascript" src = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script>
+			<!-- <script type = "text/javascript" src = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.1.min.js"></script> -->
 			<script type="text/javascript">
 				$("#car{{forloop.counter}}").live("click", function () {
 					if ($("#car{{forloop.counter}}").is(":checked")) {
@@ -20,7 +20,7 @@
 			<img src="{{ STATIC_URL }}img/{{ line.car.icon }}.png" alt="some_text">
 			<a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.car.name }}</a></BR>
 			
-			<img id="Driver{{forloop.counter}}" src="{{ STATIC_URL }}img/expand.gif" valign="ABSBOTTOM" onClick="showHide('DriverHidden{{forloop.counter}}','Driver{{forloop.counter}}');" style="cursor:pointer;">
+			<img id="Driver{{forloop.counter}}" src="{{ STATIC_URL }}img/expand.gif" onClick="showHide('DriverHidden{{forloop.counter}}','Driver{{forloop.counter}}');" style="cursor:pointer;">
 			<span onClick="showHide('DriverHidden{{forloop.counter}}','Driver{{forloop.counter}}');">Driver: {{ line.driver }}</span>
 			<div id="DriverHidden{{forloop.counter}}" class="hiddenRow" >
 			<b>&nbsp;&nbsp;&nbsp;&nbsp;Phone: {{line.driver.person.telephone}}</b></BR>
@@ -29,7 +29,6 @@
 			</div>
 		
 			</li>
-			</BR>
 		{% endfor %}
 		
 		
