@@ -27,9 +27,9 @@ class Simulator():
 				self.route.append(match)		
 
 	def start(self):
-		print 'start connection'
+		print 'starting connection...'
 		self.connect()
-		print 'send handshake'
+		print 'sending handshake...'
 		handshake = '##,imei:%s,A;' % self.imei
 		self.send(handshake)
 		self.recv()
@@ -63,9 +63,10 @@ class Simulator():
 		
 import sys
 def main():
-	if len(sys.argv) == 2:
-		sim = Simulator(sys.argv[0],sys.argv[1])
-		sim.start()
+	filename = sys.argv[1]
+	imei = int(sys.argv[2])
+	sim = Simulator(filename, imei)
+	sim.start()
 	
 if __name__ == '__main__': 
 	main()
