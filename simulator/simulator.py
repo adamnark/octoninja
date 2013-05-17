@@ -3,7 +3,7 @@ import socket
 import random
 import time
 
-SLEEP_INTERVAL = 3
+SLEEP_INTERVAL = 1
 PORT = 9900
 
 imei_pool = [
