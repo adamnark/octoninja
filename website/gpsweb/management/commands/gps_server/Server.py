@@ -45,7 +45,7 @@ class Server:
             return data
 
     def mybind(self, port):
-        print 'binding server...'
+        print 'binding server on %s...' % port
         try:
             self.serversocket.bind((socket.gethostname(), port))
         except socket.error, msg:
@@ -101,7 +101,10 @@ class Server:
                 
             if message_type in self.signal_types:
                 if PacketParser.is_valid_gps_signal(data):
+                    #try:
                     ModelWriter.writeLocationLog(self.IMEIs[clientSocket],data)
+                    #except:
+                    #    print 'Error writing to Location Log'
                 else: 
                     print 'recvFromClientSocket: not valid gps signal \r\n imei=%s\r\ndata=%s' % (self.IMEIs[clientSocket],data)
         else: 
@@ -125,7 +128,7 @@ class Server:
         self.cleanup_socket(exceptionalSocket)
        
     def start(self):
-        print 'starting server...'
+        print 'starting server ...'
         while self.inputs:
             readable, writable, exceptional = select.select(self.inputs, self.outputs, self.inputs)
             
@@ -143,11 +146,3 @@ class Server:
             for s in exceptional:
                 self.handleExceptionalSocket(s)
 
- 
-def main():
-    serv = Server(port=9000)
-    serv.start()
-
- 
-if __name__=='__main__': 
-    main()

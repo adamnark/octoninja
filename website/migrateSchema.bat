@@ -1,5 +1,5 @@
 d:
-cd GitHub\octoninja\website
+cd \GitHub\octoninja\website
 
 python manage.py schemamigration gpsweb --auto
 

@@ -1,0 +1,62 @@
+{% extends "base_map_split.html" %}
+
+{% block details %}
+</br>
+</br>
+<label for="fromDate">From : </label><input id="fromDate" type="date" value="{{ fromDateStr }}"/><br>
+<label for="toDate">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label><input id="toDate" type="date" value="{{ toDateStr }}"/><br>
+<button id="submitDate" onClick="submitDate_click()">Submit</button><br>
+</br>
+</br>
+</br>
+{% if primaryPeriodsLocations %}
+		{% for line in primaryPeriodsLocations %}
+			driver: {{line.driverPeriod.driver}}</br>
+			start {{line.driverPeriod.start}}</br>
+			end {{line.driverPeriod.end}}</br>
+			##############################</br>
+			{% for location in line.locationList %}
+				lat {{location.lat}}</br>
+				long {{location.long}}</br>
+				time {{location.timestamp}}</br>
+				*******************</br>
+			{% endfor %}
+		{% endfor %}
+{% endif %}
+<script type="text/javascript">
+	function submitDate_click()
+	{
+		var fromDate = document.getElementById('fromDate');
+		var toDate = document.getElementById('toDate');
+		if((fromDate.value != "")&&(toDate.value != ""))
+		{
+			var fromDateVal = fromDate.value.toString();
+			var toDateVal = toDate.value.toString();
+			window.location = "/driver_history/"+{{ driver.id }}+"/" + fromDateVal.replace(/-/g,'') + "/" + toDateVal.replace(/-/g,'');
+		}
+	}
+</script>
+
+
+{% endblock details %}
+{% block extendedFunction %}
+function extendedFunction()
+{  
+	{% if primaryPeriodsLocations %}
+		{% for driversLocations in primaryPeriodsLocations %}
+			{% for location in driversLocations.locationList %}
+				var marker = createMarker(
+				new google.maps.LatLng({{ location.lat }},{{ location.long }}),
+				'{{ location.timestamp }} <br> {{ location.speed }} kph',
+				'{{ location.timestamp }}',
+				"{{ STATIC_URL }}img/spot.png",
+				{{ forloop.counter }},0);
+				markerArray[0][{{forloop.counter}}] = marker;
+				latlngbounds.extend( marker.getPosition() );
+			{% endfor %}
+		{% endfor %}
+		map.fitBounds( latlngbounds );
+		AddLine(0,1);//(lineNumber , reverse=true)
+	{% endif %}
+}
+{% endblock extendedFunction%}		

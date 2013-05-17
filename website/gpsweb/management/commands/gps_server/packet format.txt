@@ -1,0 +1,14 @@
+0> imei:863070011991451	imei
+1> tracker				msg type
+2> 1301020229			timestamp
+3>						reserved
+4> F					F=GPS signal \ L=no GPS signal		
+5> 182949.000			gmt HMS
+6> A					valid gps
+7> 3205.5019			lat
+8> N					lat
+9> 03447.3352			long
+10> E					long	
+11> 0.00				knots
+12>						headingDeg
+13> ;					end of packet

@@ -55,8 +55,12 @@ def get_heading(data):
 
 def get_utm(data):
     data = data.split(',')
-    lat = get_utm_helper(data[7],data[8], 'S')
-    long = get_utm_helper(data[9],data[10], 'W')
+    if data[3] == '@':
+        lat = data[7]
+        long = data[9]
+    else:
+        lat = get_utm_helper(data[7],data[8], 'S')
+        long = get_utm_helper(data[9],data[10], 'W')
        
     return (lat, long)
     

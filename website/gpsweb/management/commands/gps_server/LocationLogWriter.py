@@ -20,13 +20,17 @@ class LocationLogWriter():
             print 'we got a message from unit we don\'t know, imei# %s, it said: "%s"' % self.imei, self.data  
             return
         unit = unit_collection[0] 
+        car = unit.car
         utm =  PacketParser.get_utm(self.data)
+        driver = car ? car.getDriverByDate(datetime.now()) : None
+        
         kwargs = {  "timestamp" :  datetime.now(),
                     "lat" : utm[0],       
                     "long" : utm[1],      
                     "speed" : PacketParser.get_speed(self.data),
                     "heading" : PacketParser.get_heading(self.data)  ,               
-                    "unit" : unit ,               
+                    "car" : car ,
+                    "driver" : driver,
                   }
 
         logToWrite = LocationLog(**kwargs)

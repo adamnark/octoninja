@@ -1,0 +1,24 @@
+
+
+		<nav>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a>  Car History  </a>
+					<ul>
+					{% for car in menuParams.cars %} 
+						<li><a href="/car_history/{{car.id}}"><img src="{{ STATIC_URL }}img/{{car.icon}}.png" alt="some_text">{{car.name}}</a>
+					{% endfor %}
+					</ul>
+				</li>
+				<li><a>  Driver History  </a>
+					<ul>
+					{% for driver in menuParams.drivers %} 
+						<li><a href="/driver_history/{{driver.id}}">{{ driver }}</a>
+					{% endfor %}
+					</ul>
+				</li>
+				<li><a href="/alerts">Alerts</a></li>
+				<li><a>  Settings  </a></li>
+				<li><a href="/logout">Logout</a></li>
+			</ul>
+		</nav>

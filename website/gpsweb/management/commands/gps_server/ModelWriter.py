@@ -15,10 +15,7 @@ def getCarByImei(imei):
     return car
 
 def writeLocationLog(imei , data):
-    #print "writeLocationLog"
-    #print "imei=%s" % imei
-    #print "data=%s" % data
-    #print
+
     locationLog = LocationLog()
 
     utm = PacketParser.get_utm(data)
@@ -28,6 +25,12 @@ def writeLocationLog(imei , data):
     locationLog.speed = PacketParser.get_speed(data)
     locationLog.heading = PacketParser.get_heading(data)
     locationLog.car = getCarByImei(imei)
+    locationLog.driver = locationLog.car.getDriverByDate(locationLog.timestamp)
+    
+    print "writeLocationLog"
+    print "lat=%s" % locationLog.lat
+    print "long=%s" % locationLog.long
+    print
     
     locationLog.save() 
     

@@ -8,10 +8,14 @@
    var markerArray = [];
    var latlngbounds = new google.maps.LatLngBounds();
    var map;
-   var line;
+   var line = [];
+   var lineColors = ["blue","red","green","brown",,"yellow"]
    function load()
    {
-
+		for (var i=0 ; i < 100 ; i++){//100 number of lines
+			markerArray[i] = new Array();
+		}
+				
 		var mapOptions = {
 		  mapTypeId: google.maps.MapTypeId.ROADMAP,
 		  center: new google.maps.LatLng({{ map_center_lat }}, {{ map_center_long }}),
@@ -23,9 +27,10 @@
 		extendedFunction();
 
 	}
-	function createMarker(point, text, title,icon_path, markerId)
+	function createMarker(point, text, title,icon_path, markerId, lineId)
 	{
-		var idx = markerId;
+		var markerIdx = markerId;
+		var lineIdx = lineId;
 		var marker = new google.maps.Marker({
 			position: point,
 			map: map,
@@ -41,7 +46,8 @@
 		});
 		google.maps.event.addListener(marker, 'click', function() {
 			for (var i in markerArray)
-				markerArray[i].info.close(map, markerArray[i]);
+				for (var j in markerArray[i])
+					markerArray[i][j].info.close(map, markerArray[i][j]);
 			marker.info.open(map, marker);
 		});
 		var geocoder = new google.maps.Geocoder();
@@ -51,7 +57,7 @@
 				if (results[0])
 				{
 					address = results[0].formatted_address;
-					markerArray[idx].info.setContent(address+'<br>'+text);
+					markerArray[lineIdx][markerIdx].info.setContent(address+'<br>'+text);
 				}
 			}
 			else
@@ -65,72 +71,136 @@
 	{
 		map.panTo(new google.maps.LatLng(lat,lng));
 	}
-	function hideMarker(markerId)
+	function hideMarker(markerId, lineId)
 	{
-		markerArray[markerId].setVisible(false);
-		markerArray[markerId].info.close();
+		markerArray[lineId][markerId].setVisible(false);
+		markerArray[lineId][markerId].info.close();
 	}
-	function unHideMarker(markerId)
+	function unHideMarker(markerId, lineId)
 	{
-		markerArray[markerId].setVisible(true);
-		markerArray[markerId].setAnimation(google.maps.Animation.DROP);
+		markerArray[lineId][markerId].setVisible(true);
+		markerArray[lineId][markerId].setAnimation(google.maps.Animation.DROP);
 	}
-	function openInfo(markerId)
+	function openInfo(markerId, lineId)
 	{
 		for (var i in markerArray)
 		{
-			markerArray[i].info.close(map, markerArray[i]);
+			for (var j in markerArray[i])
+				markerArray[i][j].info.close(map, markerArray[i][j]);
 		}
-		markerArray[markerId].info.open(map, markerArray[markerId]);
+		markerArray[lineId][markerId].info.open(map, markerArray[lineId][markerId]);
 	}
-	function animateCircle() {
+	function animateCircle(lineId) {
 	    var count = 0;
 	    offsetId = window.setInterval(function() {
 	      count = (count + 1) % 200;
 
-	      var icons = line.get('icons');
+	      var icons = line[lineId].get('icons');
 	      icons[0].offset = (count / 2) + '%';
-	      line.set('icons', icons);
+	      line[lineId].set('icons', icons);
 	  }, 20);
 	}
-	function AddLine()
+	function AddLine(lineId, reverse)
 	{
 		var lineSymbol = {
 			path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW};
 		var borderPlanCoordinates = [];
-		for (x in markerArray)
-			borderPlanCoordinates.push(new google.maps.LatLng(markerArray[x].position.lat() , markerArray[x].position.lng()));
-		borderPlanCoordinates.reverse()
-		line = new google.maps.Polyline({
+		var tempArray = markerArray[lineId];
+		for (var x in tempArray)
+			borderPlanCoordinates.push(new google.maps.LatLng(tempArray[x].position.lat() , tempArray[x].position.lng()));
+		if (reverse)
+			borderPlanCoordinates.reverse();
+		line[lineId]= new google.maps.Polyline({
 		  path: borderPlanCoordinates,
-		  strokeColor: "blue",
+		  strokeColor: lineColors[lineId],
 		  strokeOpacity: 1.0,
 		  strokeWeight: 2,
 		  icons: [{
 			icon: lineSymbol,
 			offset: '100%'
 		  }],
-		  map: map
+		  map: map,
 		});
-		line.setMap(map);
-		animateCircle();
-		document.getElementById('routeLength').value = line.inKm().toFixed(2) + " km";
-	}
-	google.maps.LatLng.prototype.kmTo = function(a){ 
-	    var e = Math, ra = e.PI/180; 
-	    var b = this.lat() * ra, c = a.lat() * ra, d = b - c; 
-	    var g = this.lng() * ra - a.lng() * ra; 
-	    var f = 2 * e.asin(e.sqrt(e.pow(e.sin(d/2), 2) + e.cos(b) * e.cos 
-	    (c) * e.pow(e.sin(g/2), 2))); 
-	    return f * 6378.137; 
+		line[lineId].setMap(map);
+		animateCircle(lineId);
 	}
 
-	google.maps.Polyline.prototype.inKm = function(n){ 
-	    var a = this.getPath(n), len = a.getLength(), dist = 0; 
-	    for (var i=0; i < len-1; i++) { 
-	       dist += a.getAt(i).kmTo(a.getAt(i+1)); 
-	    }
-	    return dist; 
+	function showHide(HID,IMG) {
+        if (document.getElementById(IMG).src.indexOf('expand') != -1) {
+                document.getElementById(IMG).src='{{ STATIC_URL }}img/collapse.gif';
+                document.getElementById(HID).className='visibleRow';
+        } else {
+                document.getElementById(IMG).src='{{ STATIC_URL }}img/expand.gif';
+                document.getElementById(HID).className='hiddenRow';
+        }
 	}
 
+	function showHideRows(RowsClass ,IMG)
+	{
+		function getElementsByClassName(classname, node)  {
+			if(!node) node = document.getElementsByTagName("body")[0];
+			var a = [];
+			var re = new RegExp('\\b' + classname + '\\b');
+			var els = node.getElementsByTagName("*");
+			for(var i=0,j=els.length; i<j; i++)
+				if(re.test(els[i].className))a.push(els[i]);
+			return a;
+		}
+		
+		var elements = new Array();
+		elements = getElementsByClassName(RowsClass);
+
+		for(i in elements ){
+			if (elements[i].style.display == "none")
+			{
+				elements[i].style.display = "";
+				IMG.src='{{ STATIC_URL }}img/collapse.gif';
+			}
+			else
+			{
+				elements[i].style.display = "none";
+				IMG.src='{{ STATIC_URL }}img/expand.gif';
+			}
+		}
+	}
+	
+	function Expand(node)
+	{
+	// Change the image (if there is an image)
+		if (node.children.length > 0)
+		{
+			if (node.children.item(0).tagName == "IMG")
+			{
+				node.children.item(0).src = '{{ STATIC_URL }}img/collapse.gif';
+			}
+		}
+		node.nextSibling.style.display = '';
+	}
+	 
+	function Collapse(node)
+	{
+		// Change the image (if there is an image)
+		if (node.children.length > 0)
+		{
+			if (node.children.item(0).tagName == "IMG")
+			{
+				node.children.item(0).src = '{{ STATIC_URL }}img/expand.gif';
+			}
+		}
+		node.nextSibling.style.display = 'none';
+	}
+	 
+	function Toggle(node)
+	{
+		// Unfold the branch if it isn't visible
+		if (node.nextSibling.style.display == 'none')
+		{
+			Expand(node);
+		}
+		// Collapse the branch if it IS visible
+		else
+		{
+			Collapse(node);
+		}
+	}
 <!-- Do not close script tag, it's close in base.html -->

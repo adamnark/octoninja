@@ -105,11 +105,11 @@ nav ul ul ul {
 }
 
 
-
-
-
-
-
-
-
-
+.hiddenRow {
+ display:none;
+ visibility:hidden;
+}
+.visibleRow {
+ display:;
+ visibility:visible;
+}

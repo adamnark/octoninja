@@ -11,16 +11,29 @@
 			<script type="text/javascript">
 				$("#car{{forloop.counter}}").live("click", function () {
 					if ($("#car{{forloop.counter}}").is(":checked")) {
-						unHideMarker({{ forloop.counter }});
+						unHideMarker({{ forloop.counter }},0);
 					} else {
-						hideMarker({{ forloop.counter }});
+						hideMarker({{ forloop.counter }},0);
 					}
 				});
 			</script>
 			<img src="{{ STATIC_URL }}img/{{ line.car.icon }}.png" alt="some_text">
-			<a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.car.primary_driver }} - {{ line.car.name }} </a>
+			<a href=# onclick="changeView({{ line.lat }}, {{ line.long }})">{{ line.car.name }}</a></BR>
+			
+			<img id="Driver{{forloop.counter}}" src="{{ STATIC_URL }}img/expand.gif" valign="ABSBOTTOM" onClick="showHide('DriverHidden{{forloop.counter}}','Driver{{forloop.counter}}');" style="cursor:pointer;">
+			<span onClick="showHide('DriverHidden{{forloop.counter}}','Driver{{forloop.counter}}');">Driver: {{ line.driver }}</span>
+			<div id="DriverHidden{{forloop.counter}}" class="hiddenRow" >
+			<b>&nbsp;&nbsp;&nbsp;&nbsp;Phone: {{line.driver.person.telephone}}</b></BR>
+			<b>&nbsp;&nbsp;&nbsp;&nbsp;E-mail: {{line.driver.person.email}}</b>
+			<br clear="all">
+			</div>
+		
 			</li>
+			</BR>
 		{% endfor %}
+		
+		
+
 		</ul>
 	{% else %}
 		<p>No locations are available for viewing.</p>
@@ -40,8 +53,8 @@ function extendedFunction(){
 			'{{ line.timestamp }} <br> {{ line.speed }} kph',
 			'{{ line.car.name }}',
 			"{{ STATIC_URL }}img/{{ line.car.icon }}.png",
-			{{ forloop.counter }});
-			markerArray[{{forloop.counter}}] = marker;
+			{{ forloop.counter }},0);
+			markerArray[0][{{forloop.counter}}] = marker;
 			latlngbounds.extend( marker.getPosition() );
 		{% endfor %}
 		map.fitBounds( latlngbounds );

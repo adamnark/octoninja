@@ -1,9 +1,5 @@
 {% extends "base_map_split.html" %}
-    context = {
-        'list_of_locations': list_of_locations,
-        'user' : user,
-        'unit': unit,
-    }
+
 {% block details %} 
 	
 	<h2> {{ car.name }}'s History: 
@@ -12,7 +8,28 @@
 	<label for="fromDate">From : </label><input id="fromDate" type="date" value="{{ fromDateStr }}"/><br>
 	<label for="toDate">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label><input id="toDate" type="date" value="{{ toDateStr }}"/><br>
 	<button id="submitDate" onClick="submitDate_click()">Submit</button><br>
-	<label>Total Route Length : </label><input type="text" id="routeLength" size="8" readonly/><br><br>
+	<p>Total Route Length : {{route_details.length}}  km</p>
+	<p>Avg Speed in route : {{route_details.avgSpeed}} kph</p>
+	<p>Max Speed in route : {{route_details.maxSpeed}} kph</p>
+	<b>Primary Drivers:</b>
+	{% for pd in primary_driver %}
+		<p>&nbsp;&nbsp;{{pd}} {{pd.start|date:"d/m/y"}} - 
+		{% if pd.end %} 
+			{{pd.end|date:"d/m/y"}}
+		{%else%}
+			Now</p>
+		{% endif %}
+	{%endfor%}
+	
+	{% if temporary_drivers %}
+		<b>Temporary Drivers:</b>
+		{% for td in temporary_drivers %}
+			<p>&nbsp;&nbsp;{{td}} {{td.start|date:"d/m/y"}} - {{td.end|date:"d/m/y"}}</p>
+		{%endfor%}
+	{%else%}
+		<p "bold"=true>There was no temporary drivers in this dates</p>
+	{% endif %}
+	
 	<script type="text/javascript">
 	function submitDate_click()
 	{
@@ -22,14 +39,14 @@
 		{
 			var fromDateVal = fromDate.value.toString();
 			var toDateVal = toDate.value.toString();
-			window.location = "/unit_route/"+{{ car.id }}+"/" + fromDateVal.replace(/-/g,'') + "/" + toDateVal.replace(/-/g,'');
+			window.location = "/car_history/"+{{ car.id }}+"/" + fromDateVal.replace(/-/g,'') + "/" + toDateVal.replace(/-/g,'');
 		}
 	}
 	</script>
-	{% if list_of_locations %}
+	{% if route_details.locationList %}
 		<select name="locations timestamps" size="5">
-		{% for line in list_of_locations %}
-			 <option onclick="openInfo({{forloop.counter}});">{{ line.timestamp }}</option>
+		{% for line in route_details.locationList %}
+			 <option onclick="openInfo({{forloop.counter}},0);">{{ line.timestamp }}</option>
 		{% endfor %}
 		</select>
 	{% else %}
@@ -43,19 +60,19 @@
 {% block extendedFunction %}
 function extendedFunction()
 {  
-	{% if list_of_locations %}
-		{% for line in list_of_locations %}
+	{% if route_details.locationList %}
+		{% for line in route_details.locationList %}
 			var marker = createMarker(
 			new google.maps.LatLng({{ line.lat }},{{ line.long }}),
 			'{{ line.timestamp }} <br> {{ line.speed }} kph',
 			'{{ line.timestamp }}',
 			"{{ STATIC_URL }}img/spot.png",
-			{{ forloop.counter }});
-			markerArray[{{forloop.counter}}] = marker;
+			{{ forloop.counter }},0);
+			markerArray[0][{{forloop.counter}}] = marker;
 			latlngbounds.extend( marker.getPosition() );
 		{% endfor %}
 		map.fitBounds( latlngbounds );
-		AddLine();
+		AddLine(0,1);//(lineNumber , reverse=true)
 	{% endif %}
 }
 {% endblock extendedFunction%}				
