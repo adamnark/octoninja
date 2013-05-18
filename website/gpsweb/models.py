@@ -113,7 +113,7 @@ class Alert(models.Model):
     geo_bottom_right_long =      models.CharField(max_length=13) # 32.0915033333
 
     def __unicode__(self):
-        return "%s %s" % (self.car, self.name)
+        return self.name
 
 class AlertLog(models.Model):
     location_log = models.ForeignKey(LocationLog)

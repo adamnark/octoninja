@@ -1,17 +1,23 @@
 @import url('bootstrap.css');
 @import url('datepicker.css');
+
 html, body {
     margin: 0;
     padding: 0;
     height: 96%;
 }
+
+#brand {
+	font-weight:900;
+}
+
 .container-fluid {
     margin: 0 auto;
     height: 100%;
-    /*padding: 20px 0;*/
+    /*padding: 20px 0;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+    box-sizing: border-box;*/
 }
 .columns {
     /*background-color: magenta;*/

@@ -31,12 +31,16 @@ class RouteDetails:
         dist = 0
         if not self.locationList:
             return dist
-        prev_location = self.locationList[0]
+            
+        prevLat = self.locationList[0].lat
+        prevLong = self.locationList[0].long
         for curr_location in self.locationList:
-            dist += calc_dist(  prev_location.lat,
-                                prev_location.long,
+            dist += calc_dist(  prevLat,
+                                prevLong,
                                 curr_location.lat,
                                 curr_location.long)
+            prevLat = curr_location.lat
+            prevLong = curr_location.long
         return round(dist, 3)
         
     def avgSpeedFunc(self):

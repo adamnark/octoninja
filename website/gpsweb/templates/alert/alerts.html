@@ -7,23 +7,19 @@
                         <thead>
                             <tr>
 								<th></th>
+								<th><i class="icon-check"></i></th>
 								<th>Alert</th>
 								<th>Time</th>
-								<th>Read</th>
                             </tr>
                         </thead>
                         <tbody>
 {% for alertGroup in alertsArrays %}
-	{% for alertLog in alertGroup %}
-		{% if forloop.counter = 1 %}
 <tr>
-	<td><div id="color-{{ forloop.parentloop.counter }}">●</div></td>
-	<td>{{alertLog.alert}}</td>
-	<td>{{alertLog.location_log.timestamp|date:"Y-m-d H:i"}}</td>
-	<td> <input type="checkbox" id="rowCheckBox{{ forloop.parentloop.counter }}"/></td>
+	<td><div id="color-{{ forloop.counter }}">●</div></td>
+	<td> <input type="checkbox" id="rowCheckBox{{ forloop.counter }}"/></td>
+	<td>{{alertGroup.0.alert}}</td>
+	<td>{{alertGroup.0.location_log.timestamp|date:"Y-m-d H:i"}}</td>
 </tr>
-		{% endif %}
-		{% endfor %}
 	{% endfor %}
                         </tbody>
                     </table>	

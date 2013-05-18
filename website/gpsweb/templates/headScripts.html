@@ -201,4 +201,10 @@
 			Collapse(node);
 		}
 	}
+	
+	function onRowClick(lat, lng, name, email, phone)
+	{
+		changeView(lat,lng);
+		$("#driver").html('<dl class="dl-horizontal"><dt>Driver</dt><dd>' + name + '</dd><dt>Phone</dt><dd>' + phone + '</dd><dt>E-mail</dt><dd>' + email + '</dd></dl>');
+	}
 <!-- Do not close script tag, it's close in base.html -->

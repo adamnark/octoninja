@@ -2,23 +2,28 @@
 
 {% block details %} 
  <div style="padding-left: 5%;">
-	<h2>Car2's History: </h2>
+	<h2>{{ car }}'s History: </h2>
 	
 	<div>
-			<label for="fromDate">From: </label>
-			<input id="fromDate" type="date" value="{{ fromDateStr }}"/>
+		<div>
+				<label for="fromDate">From: </label>
+				<input id="fromDate" type="date" value="{{ fromDateStr }}"/>
 
-			<label for="toDate">To: </label>
-			<input id="toDate" type="date" value="{{ toDateStr }}"/>
-	</div>
-	<div>
-		<button id="submitDate" class="btn" onClick="submitDate_click()">Change dates</button>
+				<label for="toDate">To: </label>
+				<input id="toDate" type="date" value="{{ toDateStr }}"/>
+		</div>
+		<div>
+			<button id="submitDate" class="btn" onClick="submitDate_click()">Change dates</button>
+		</div>
 	</div>
 	
-	<div style="margin-top: 5%;">
-		<p><b>Total Route Length</b> : {{route_details.length}} km</p>
-		<p><b>Avg Speed in route</b> : {{route_details.avgSpeed}} kph</p>
-		<p><b>Max Speed in route</b> : {{route_details.maxSpeed}} kph</p>
+	<div>
+		<h4>Statistics for this timeframe</h4>
+		<dl class="dl-horizontal">
+			<dt>Total Route Length:</dt><dd>{{route_details.length}} km</dd>
+			<dt>Avg Speed in route:</dt><dd>{{route_details.avgSpeed}} kph</dd>
+			<dt>Max Speed in route:</dt><dd>{{route_details.maxSpeed}} kph</dd>
+		</dl>
 	</div>
 
 	<div>
@@ -38,7 +43,7 @@
 				<p>&nbsp;&nbsp;{{td}} {{td.start|date:"d/m/y"}} - {{td.end|date:"d/m/y"}}</p>
 			{%endfor%}
 		{%else%}
-			<p "bold"=true>There was no temporary drivers in this dates</p>
+			<p "bold"=true>There was no temporary drivers in these dates</p>
 		{% endif %}
 	</div>
 	<script type="text/javascript">
