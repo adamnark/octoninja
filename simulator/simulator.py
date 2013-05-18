@@ -2,8 +2,9 @@ import re
 import socket
 import random
 import time
+import sys
 
-SLEEP_INTERVAL = 1
+SLEEP_INTERVAL = 4
 PORT = 9900
 
 imei_pool = [
@@ -40,6 +41,8 @@ class Simulator():
 			print '> ' + message
 			self.send(message)
 			time.sleep(SLEEP_INTERVAL)
+		print "Done sending as %s" % imei
+		sys.exit(0)
 			
 	def generateSpeed(self):
 		a = random.randint(0, 80)
