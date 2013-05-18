@@ -8,7 +8,7 @@ from gpsweb.models import *
 from gpsweb.forms import RegistrationForm, LoginForm
 import datetime
 from gpsweb.utils import utils
-
+from pprint import pprint
 
 def UserRegistration(request):
     if request.user.is_authenticated():
@@ -146,27 +146,26 @@ def driverHistory(request, driver_id, fromDate=None, toDate=None):
 @login_required 
 def alerts(request):
     user = request.user
-    alerts_log = AlertLog.objects.filter(alert__car__owner = user).filter(marked_as_read = False).order_by('location_log__timestamp')
+    user_alerts = Alert.objects.filter(car__owner = user)
     
-    first_loop = True
-    alert_group = []
-    alerts_group_array = []
-    for cur_alert in alerts_log:
-        if cur_alert.notification_sent and not first_loop: #close old group and start new group
-            alerts_group_array.append(alert_group)
-            alert_group = []
-            first_loop = False
-        alert_group.append(cur_alert)
-        first_loop = False
-    if alert_group:
-        alerts_group_array.append(alert_group)
-  
+    groups = []
+    for user_alert in user_alerts:
+        alerts_logs = AlertLog.objects.filter(alert = user_alert).filter(marked_as_read = False).order_by('location_log__timestamp')
+        group = []
+        for alert_log in alerts_logs:
+            if alert_log.notification_sent and group:
+                groups.append(group)
+                group = []
+            group.append(alert_log)
+        if group:
+            groups.append(group)    
+    
     context = {
         'menuParams' : utils.initMenuParameters(user),
         'user' : user,
         'map_center_lat' : '32.047818',
         'map_center_long' : '34.761265',
-        'alertsArrays':alerts_group_array,
+        'alertsArrays':groups,
     }
     return render(request, 'alert/alerts.html', context)              
         

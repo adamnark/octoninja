@@ -18,7 +18,8 @@ html, body {
     height: 100%;
 }
 .content-area, .article-tree {
-    background: #5eb95e;
+    background: #F1F1F1;
+	padding: 1%;
     overflow:auto;
     height: 100%;
 }
