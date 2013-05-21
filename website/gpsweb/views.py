@@ -123,18 +123,23 @@ def driverHistory(request, driver_id, fromDate=None, toDate=None):
     #Need to get all primary\temporary of the driver in this dates
 
     temporary = TemporaryDriver.objects.filter(driver = driver).filter(Q(end__gte = fromDateStr) | Q(start__lte = toDateStr))
-    temporaryPeriodsLocations = utils.getLocationsOfPeriod(fromDateStr, toDateStr, temporary)
+    temporaryPeriodsLocations = utils.getLocationsOfPeriod(fromDateStr, toDateStr, temporary, isTemporaryDriver=True)
     primary = PrimaryDriver.objects.filter(driver = driver).filter(Q(end__gte = fromDateStr) | Q(end = None) )
     primaryPeriodsLocations = utils.getLocationsOfPeriod(fromDateStr, toDateStr, primary)
-
-    
+    periodsLocations =  temporaryPeriodsLocations + primaryPeriodsLocations
+    total_length = 0
+    for period in periodsLocations:
+        total_length += period.get_length()
+        
+    alerts = AlertLog.objects.filter(location_log__driver = driver[0]).filter(Q(location_log__timestamp__gte = fromDateStr) & Q(location_log__timestamp__lte = toDateStr)).filter(notification_sent = True)
  
     context = {
         'menuParams' : utils.initMenuParameters(user),
         'fromDateStr' : fromDateStr[:-9], # [:-9] truncates the hour
         'toDateStr' : toDateStr[:-9],
-        'temporaryPeriodsLocations' : temporaryPeriodsLocations,
-        'primaryPeriodsLocations' : primaryPeriodsLocations,
+        'periodsLocations' : periodsLocations,
+        'total_length':total_length,
+        'alerts_count':len(alerts),
         'user' : user,
         'driver' : driver[0],
         'map_center_lat' : '32.047818',
@@ -168,37 +173,4 @@ def alerts(request):
         'alertsArrays':groups,
     }
     return render(request, 'alert/alerts.html', context)              
-        
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-    

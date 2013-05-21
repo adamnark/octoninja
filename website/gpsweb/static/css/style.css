@@ -29,3 +29,7 @@ html, body {
     overflow:auto;
     height: 100%;
 }
+#gps-table{
+	height: 80%;
+	overflow: auto;
+}

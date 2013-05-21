@@ -1,28 +1,73 @@
-{% extends "base_map_split.html" %}
+﻿{% extends "base_map_split.html" %}
 
 {% block details %}
-</br>
-</br>
-<label for="fromDate">From : </label><input id="fromDate" type="date" value="{{ fromDateStr }}"/><br>
-<label for="toDate">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label><input id="toDate" type="date" value="{{ toDateStr }}"/><br>
-<button id="submitDate" onClick="submitDate_click()">Submit</button><br>
-</br>
-</br>
-</br>
-{% if primaryPeriodsLocations %}
-		{% for line in primaryPeriodsLocations %}
-			driver: {{line.driverPeriod.driver}}</br>
-			start {{line.driverPeriod.start}}</br>
-			end {{line.driverPeriod.end}}</br>
-			##############################</br>
-			{% for location in line.locationList %}
-				lat {{location.lat}}</br>
-				long {{location.long}}</br>
-				time {{location.timestamp}}</br>
-				*******************</br>
-			{% endfor %}
-		{% endfor %}
-{% endif %}
+<h2>{{driver}}'s History</h2> 
+
+<p>Pick a time span to see {{driver}}'s travel history.</p>
+<div class="container">
+	<div>
+	<label for="fromDate">From: </label>
+	<input id="fromDate" type="date" value="{{ fromDateStr }}"/>
+
+	<label for="toDate">To: </label>
+	<input id="toDate" type="date" value="{{ toDateStr }}"/>
+	</div>
+	<div>
+	<button id="submitDate" class="btn" onClick="submitDate_click()">Change dates</button>
+	</div>
+	
+	<div class="span5 offset1">
+		<dl class="dl-horizontal"> 
+			<dt>Total KMs traveled:</dt><dd>{{total_length}} km</dd> 
+			<dt>Alerts triggered:</dt>  <dd>{{alerts_count}}</dd>
+		</dl>
+	</div>
+</div>
+
+<div id="gps-table" style="height: 55%;">
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th><!-- color col --></th>
+				<th><div class="text-center">Primary</div></th>
+				<th>Start</th>
+				<th>End</th>
+				<th>Car</th>
+				<th>Distance Traveled</th>
+			</tr>
+		</thead>
+		<tbody  style="cursor: pointer;">
+		{%if periodsLocations%}
+			{%for period in periodsLocations%}
+				<tr onclick="onRowClick('{{ period.locationDetailes.locationList.0.lat }}', '{{ period.locationDetailes.locationList.0.long }}', '','');">
+					<td><div id="color-{{ forloop.counter }}">●</div></td>
+					<td><div class="text-center">
+					{% if not period.isTemporaryDriver %}
+						<i class="icon-star"></i>
+					{%else%}
+						<i class="icon-minus"></i>
+					{% endif %}
+					</div>
+					</td>
+					<td>{{period.driverPeriod.start|date:"Y-m-d"}}</td>
+					<td>{% if period.driverPeriod.end %} 
+							{{period.driverPeriod.end|date:"Y-m-d"}}
+						{%else%}
+							-
+						{% endif %}
+					</td>
+					<td>{{period.driverPeriod.car}}</td>
+					<td>{{period.locationDetailes.length}} km</td>
+				</tr>
+			{%endfor%}
+		{%else%}
+			<tr>
+				<td colspan="6"><div class="text-center">Nothing to show.</div></td>
+			</tr>
+		{%endif%}
+		</tbody>
+	</table>
+</div>
 <script type="text/javascript">
 	function submitDate_click()
 	{
@@ -42,21 +87,23 @@
 {% block extendedFunction %}
 function extendedFunction()
 {  
-	{% if primaryPeriodsLocations %}
-		{% for driversLocations in primaryPeriodsLocations %}
-			{% for location in driversLocations.locationList %}
-				var marker = createMarker(
-				new google.maps.LatLng({{ location.lat }},{{ location.long }}),
-				'{{ location.timestamp }} <br> {{ location.speed }} kph',
-				'{{ location.timestamp }}',
+	var marker;
+	{% if periodsLocations %}
+		{% for period in periodsLocations %}
+			{% for location_log in period.locationDetailes.locationList %}
+				marker = createMarker(
+				new google.maps.LatLng({{ location_log.lat }},{{ location_log.long }}),
+				'{{ location_log.timestamp }} <br> {{ location_log.speed }} kph',
+				'{{ location_log.timestamp }}',
 				"{{ STATIC_URL }}img/spot.png",
-				{{ forloop.counter }},0);
-				markerArray[0][{{forloop.counter}}] = marker;
+				{{ forloop.counter }},{{forloop.parentloop.counter}}-1);
+				markerArray[{{forloop.parentloop.counter}}-1][{{forloop.counter}}] = marker;
 				latlngbounds.extend( marker.getPosition() );
 			{% endfor %}
+				AddLine({{ forloop.counter }}-1 , 0);//(lineNumber , reverse=false);
+				var row = document.getElementById("color-{{ forloop.counter }}").style.color = lineColors[{{ forloop.counter }}-1];;
 		{% endfor %}
-		map.fitBounds( latlngbounds );
-		AddLine(0,1);//(lineNumber , reverse=true)
+				map.fitBounds( latlngbounds );
 	{% endif %}
 }
 {% endblock extendedFunction%}		

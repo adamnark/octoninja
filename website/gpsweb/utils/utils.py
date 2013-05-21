@@ -18,8 +18,6 @@ def calc_dist(lat_a, long_a, lat_b, long_b):
         )
     )
     
-
-    
 class RouteDetails:    
     def __init__(self, locationList):
         self.locationList = locationList
@@ -74,13 +72,15 @@ def userCarDrivers(user):
     return carDrivers 
 
 class menuParameters:
-    def __init__(self, cars, drivers):
+    def __init__(self, cars, drivers, user):
         self.cars = cars
         self.drivers= drivers
+        self.user = user
+        
 def initMenuParameters(user):
     cars = Car.objects.filter(owner_id=user.id)
     drivers = Driver.objects.filter(owner_id=user.id)
-    menuParams = menuParameters(cars, drivers)
+    menuParams = menuParameters(cars, drivers, user)
     return menuParams
 
 def formatDateStr(date , zeroHour=True):
@@ -93,10 +93,15 @@ def formatDateStr(date , zeroHour=True):
         
         
 class driverLocations:
-    def __init__(self, driverPeriod, locationList):
+    def __init__(self, driverPeriod, locationDetailes,isTemporaryDriver):
         self.driverPeriod = driverPeriod
-        self.locationList= locationList 
-def getLocationsOfPeriod(fromDate,toDate,driverPeriods):
+        self.locationDetailes= locationDetailes 
+        self.isTemporaryDriver= isTemporaryDriver 
+        
+    def get_length(self):
+        return self.locationDetailes.length()
+      
+def getLocationsOfPeriod(fromDate,toDate,driverPeriods ,isTemporaryDriver=False):
     driverLocation=[]
     print driverPeriods
     toDate = datetime.datetime.strptime(toDate, '%Y-%m-%d %H:%M:%S')
@@ -111,7 +116,7 @@ def getLocationsOfPeriod(fromDate,toDate,driverPeriods):
         
         list_of_locations = LocationLog.objects.filter(car=period.car).filter(driver = period.driver).filter(Q(timestamp__gte = startDate) & Q(timestamp__lte = endDate)).order_by('-timestamp')
         if list_of_locations:
-            val = driverLocations(period,list_of_locations)
+            val = driverLocations(period,RouteDetails(list_of_locations),isTemporaryDriver)
             driverLocation.append(val)
     print driverLocation
     return driverLocation    

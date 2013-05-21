@@ -4,28 +4,29 @@
 	<h2> {{ user.first_name }}'s Dashboard: </h2> 
 		{% if list_of_locations %}
 			<p>Listed below are all your vehicles:</p>
-			<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-						<th></th>
-						<th>Driver</th>
-						<th>Car</th>
-						<th>Last reading</th>
-					</tr>
-				</thead>
-                <tbody style="cursor: pointer;">
+			<div id="gps-table ">
+				<table class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Driver</th>
+							<th>Car</th>
+							<th>Last reading</th>
+						</tr>
+					</thead>
+					<tbody style="cursor: pointer;">
 
-		{% for line in list_of_locations %}
-		<tr onclick="onRowClick('{{ line.lat }}', '{{ line.long }}', '{{ line.driver }}','{{line.driver.person.telephone}}','{{line.driver.person.email}}');">
-						<td><img src="{{ STATIC_URL }}img/{{ line.car.icon }}.png"></td>
-						<td>{{ line.driver }}</td>
-						<td>{{ line.car.name }}</td>
-						<td>{{ line.timestamp }}</td>
-		</tr>
-		
-		{% endfor %}
-			</tbody>
-		</table>
+			{% for line in list_of_locations %}
+			<tr onclick="onRowClick('{{ line.lat }}', '{{ line.long }}', '{{ line.driver }}','{{line.driver.person.telephone}}','{{line.driver.person.email}}');">
+							<td><img src="{{ STATIC_URL }}img/{{ line.car.icon }}.png"></td>
+							<td>{{ line.driver }}</td>
+							<td>{{ line.car.name }}</td>
+							<td>{{ line.timestamp }}</td>
+			</tr>
+			
+			{% endfor %}
+				</tbody>
+			</table>
 	
 	{% else %}
 		<p>No locations are available for viewing.</p>
@@ -33,7 +34,7 @@
 			
 	<div id="driver">
     </div>
-
+</div>
 {% endblock details %}
 
 <!-- Extended Function call on load -->

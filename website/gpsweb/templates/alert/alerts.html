@@ -1,28 +1,30 @@
 ﻿{% extends "base_map_split.html" %}
 
 {% block details %} 
-	<h2>{{ user.first_name }}'s  Triggered Alerts</h2> 
+	<h2>Triggered Alerts</h2> 
 	<p>Listed below are all the alerts that have been triggered.</p>
+	<div id="gps-table">
 	<table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-								<th></th>
-								<th><i class="icon-check"></i></th>
-								<th>Alert</th>
-								<th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+		<thead>
+			<tr>
+				<th></th>
+				<th><i class="icon-check"></i></th>
+				<th>Alert</th>
+				<th>Time</th>
+			</tr>
+		</thead>
+		<tbody style="cursor: pointer;">
 {% for alertGroup in alertsArrays %}
-<tr>
+<tr onclick="onRowClick('{{ alertGroup.0.location_log.lat }}', '{{ alertGroup.0.location_log.long }}', '','');">
 	<td><div id="color-{{ forloop.counter }}">●</div></td>
 	<td> <input type="checkbox" id="rowCheckBox{{ forloop.counter }}"/></td>
 	<td>{{alertGroup.0.alert}}</td>
 	<td>{{alertGroup.0.location_log.timestamp|date:"Y-m-d H:i"}}</td>
 </tr>
 	{% endfor %}
-                        </tbody>
-                    </table>	
+		</tbody>
+	</table>
+	</div>					
 {% endblock details %}
 
 {% block extendedFunction %}

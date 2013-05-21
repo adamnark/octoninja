@@ -49,7 +49,7 @@ class Car(models.Model):
         return currDriver.driver
     
     def getTemporaryDriversByDateRange(self, fromDate, toDate):
-        TemporaryDrivers = TemporaryDriver.objects.filter(car = self).filter(Q(end__gte = fromDate) | Q(start__lte = toDate))
+        TemporaryDrivers = TemporaryDriver.objects.filter(car = self).filter(Q(end__gte = fromDate) & Q(start__lte = toDate))
         return TemporaryDrivers
     def getPrimaryDriversByDateRange(self, fromDate, toDate):
         primaryDrivers = PrimaryDriver.objects.filter(car = self).filter(Q(end__gte = fromDate) | Q(end = None) )
