@@ -3,7 +3,7 @@
 {% block details %} 
 	<h2>Triggered Alerts</h2> 
 	<p>Listed below are all the alerts that have been triggered.</p>
-	<form action="#" method="post">
+	<form action="/alerts" method="post">{% csrf_token %}
 	<div id="gps-table">
 	<table class="table table-striped table-hover">
 		<thead>
@@ -18,14 +18,15 @@
 {% for alertGroup in alertsArrays %}
 <tr onclick="onRowClick('{{ alertGroup.0.location_log.lat }}', '{{ alertGroup.0.location_log.long }}', '','');">
 	<td><div id="color-{{ forloop.counter }}">●</div></td>
-	<td> <input type="checkbox" name="alertCheckBox" value="{{ alertGroup.0.alert.id }}"/></td>
+	<td> <input type="checkbox" name="alertCheckBox" value="{{ alertGroup.0.id }}"/></td>
 	<td>{{alertGroup.0.alert}}</td>
 	<td>{{alertGroup.0.location_log.timestamp|date:"Y-m-d H:i"}}</td>
 </tr>
 	{% endfor %}
 		</tbody>
 	</table>
-	</div>	
+	</div>
+	<input type="submit" value='Mark as read' class='btn'>	
   </form>	
 {% endblock details %}
 

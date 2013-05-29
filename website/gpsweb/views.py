@@ -194,15 +194,16 @@ def driverHistoryReportPrinter(request, driver_id, fromDate=None, toDate=None):
 def alerts(request):
     user = request.user
     user_alerts = Alert.objects.filter(car__owner = user)
-    if request.method == 'POST': # If the form has been submitted...
-        form = ContactForm(request.POST) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
-            alertCheckBoxes = form.cleaned_data['alertCheckBox']
-			for alertId in alertCheckBoxes:
-				print alertId
-
-            
     
+    
+    if request.method == 'POST': # If the form has been submitted...
+        if request.POST.get('alertCheckBox',False):
+            chkbxs = request.POST.getlist('alertCheckBox')
+            for x in chkbxs:
+                alertLog = AlertLog.objects.get(id = int(x))
+                alertLog.marked_as_read = True
+                alertLog.save()
+
     groups = []
     for user_alert in user_alerts:
         alerts_logs = AlertLog.objects.filter(alert = user_alert).filter(marked_as_read = False).order_by('location_log__timestamp')
