@@ -10,14 +10,14 @@
 				<ul class="nav">
 					<li><a href="/">Home</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Car History<b class="caret"></b></a>
+						Cars<b class="caret"></b></a>
 						<ul class="dropdown-menu">
 						{% for car in menuParams.cars %} 
 							<li><a href="/car_history/{{car.id}}"><img src="{{ STATIC_URL }}img/{{car.icon}}.png" alt="some_text">{{car.name}}</a>
 						{% endfor %}
 						</ul>
 					</li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Driver History<b class="caret"></b></a>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Drivers<b class="caret"></b></a>
 						<ul class="dropdown-menu">
 						{% for driver in menuParams.drivers %} 
 							<li><a href="/driver_history/{{driver.id}}">{{ driver }}</a>

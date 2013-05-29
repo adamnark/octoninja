@@ -8,6 +8,7 @@ from gpsweb.models import *
 from gpsweb.forms import RegistrationForm, LoginForm
 import datetime
 from gpsweb.utils import utils
+
 from pprint import pprint
 
 def UserRegistration(request):
@@ -111,8 +112,8 @@ def carHistory(request, car_id, fromDate=None, toDate=None):
     return render(request, 'carHistory/carHistory.html', context)         
     
 #####################    Driver History     #####################   
-@login_required 
-def driverHistory(request, driver_id, fromDate=None, toDate=None):
+
+def generateDriverContext(request, driver_id, fromDate=None, toDate=None):
     user = request.user
     user_id = user.id
     driver = Driver.objects.filter(owner_id=user_id).filter(id__in=driver_id)
@@ -132,11 +133,13 @@ def driverHistory(request, driver_id, fromDate=None, toDate=None):
         total_length += period.get_length()
         
     alerts = AlertLog.objects.filter(location_log__driver = driver[0]).filter(Q(location_log__timestamp__gte = fromDateStr) & Q(location_log__timestamp__lte = toDateStr)).filter(notification_sent = True)
- 
+    
     context = {
         'menuParams' : utils.initMenuParameters(user),
         'fromDateStr' : fromDateStr[:-9], # [:-9] truncates the hour
         'toDateStr' : toDateStr[:-9],
+        'fromDate' : fromDate, 
+        'toDate' : toDate,
         'periodsLocations' : periodsLocations,
         'total_length':total_length,
         'alerts_count':len(alerts),
@@ -145,7 +148,46 @@ def driverHistory(request, driver_id, fromDate=None, toDate=None):
         'map_center_lat' : '32.047818',
         'map_center_long' : '34.761265',
     }
+    
+    return context
+
+
+@login_required 
+def driverHistory(request, driver_id, fromDate=None, toDate=None):   
+    context =  generateDriverContext(request, driver_id, fromDate, toDate)
     return render(request, 'driverHistory/driverHistory.html', context)        
+
+@login_required 
+def driverHistoryReportCsv(request, driver_id, fromDate=None, toDate=None):
+    context =  generateDriverContext(request, driver_id, fromDate, toDate)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="%s-%s-%s.csv"' % (context['driver'], context['fromDateStr'],context['toDateStr'])
+    
+    import csv
+    #from datetime import date
+    
+    writer = csv.writer(response)
+    writer.writerow(["Start","End","Car","Distance Traveled",])
+    
+    periodsLocations = context['periodsLocations']
+    for period in periodsLocations:
+        row = []
+        row.append(period.driverPeriod.start.strftime('%Y-%m-%d'))
+        if period.driverPeriod.end:
+            row.append(period.driverPeriod.end.strftime('%Y-%m-%d'))
+        else:
+            row.append('')
+        row.append(period.driverPeriod.car)
+        row.append(period.locationDetailes.length())
+        
+        writer.writerow(row)
+
+    return response
+    
+@login_required 
+def driverHistoryReportPrinter(request, driver_id, fromDate=None, toDate=None):    
+    context =  generateDriverContext(request, driver_id, fromDate, toDate)
+    return render(request, 'report/driverReport.html', context)
 
 #####################   Alerts    #####################
 @login_required 
@@ -174,3 +216,8 @@ def alerts(request):
     }
     return render(request, 'alert/alerts.html', context)              
 
+#####################   Reports    #####################
+
+
+    
+ 
