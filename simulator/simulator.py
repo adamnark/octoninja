@@ -41,7 +41,8 @@ class Simulator():
 			print '> ' + message
 			self.send(message)
 			time.sleep(SLEEP_INTERVAL)
-		print "Done sending as %s" % imei
+		print "Done sending as %s" % self.imei
+		self.socket.close()
 		sys.exit(0)
 			
 	def generateSpeed(self):
