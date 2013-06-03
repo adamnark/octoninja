@@ -2,12 +2,12 @@
 
 {% block details %}
 
-<div class="container">
+
 	<div class="row">
-		<div class="span4" style="padding-left: 10px;">
+		<div class="span6" style="padding-left: 10px;">
 			<h2>{{driver}}'s History</h2>
 		</div>
-		<div class="span1 offset3">
+		<div class="span2 offset4">
 		{%if fromDate%}
 		<a target="_blank" href="/driver_history_report_printer/{{ driver.id }}/{{fromDate}}/{{toDate}}"><img src="{{ STATIC_URL }}img/printer-icon.png"></a>
 		<a target="_blank" href="/driver_history_report_csv/{{ driver.id }}/{{fromDate}}/{{toDate}}"><img src="{{ STATIC_URL }}img/csv-icon.png"></a>
@@ -17,9 +17,9 @@
 		{%endif%}
 		</div>
 	</div>
-</div>
+
 <p>Pick a time span to see {{driver}}'s travel history.</p>
-<div class="container">
+<div class="row" style="margin-left:0px;">
 	<div>
 	<label for="fromDate">From: </label>
 	<input id="fromDate" type="date" value="{{ fromDateStr }}"/>

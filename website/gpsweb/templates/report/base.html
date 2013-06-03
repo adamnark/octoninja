@@ -37,12 +37,9 @@
     <body>
         <div id="wrap">
             <div id="main" class="container clear-top">
-                <h2>{{driver}}'s History</h2> 
-                <p class="lead"> 
-                    Distance traveled by {{driver}} between {{fromDateStr}} and {{toDateStr}}.
-                </p>
+			{% block reportHeader %}  {% endblock reportHeader%}
                 <div id="gps-table" style="height: 55%;">
-					{% block reportDetails %}  {% endblock reportDetails%}
+					{% block reportTable %}  {% endblock reportTable%}
                 </div>
             </div>
         </div>

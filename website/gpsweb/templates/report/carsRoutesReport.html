@@ -1,0 +1,47 @@
+{% extends "report/base.html" %}
+{% block reportHeader %}  
+<h2>Cars History</h2> 
+<p class="lead"> 
+	Distance traveled between {{fromDateStr}} and {{toDateStr}}.
+</p>
+{% endblock reportHeader%}		
+		
+{% block reportTable %}  
+
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th>Car</th>
+				<th>Route Length</th>
+				<th>Avg Speed</th>
+				<th>Max Speed</th>
+			</tr>
+		</thead>
+		<tbody  style="cursor: pointer;">
+		{%if carsRoutes%}
+			{%for carRoute in carsRoutes%}
+				<tr>
+					<td>{{carRoute.locationList.0.car}}</td>
+					<td>{{carRoute.length}}</td>
+					<td>{{carRoute.avgSpeed}}</td>
+					<td>{{carRoute.maxSpeed}}</td>
+				</tr>
+			{%endfor%}
+				<tr class="">
+					<td colspan="1">
+					<div>
+					<strong>
+					Total Distance Traveled:
+					</strong>
+					</div>    
+					</td>
+					<td>{{totalCarsRoutes}} km</td>
+				</tr>
+		{%else%}
+			<tr>
+				<td colspan="6"><div class="text-center">Nothing to show.</div></td>
+			</tr>
+		{%endif%}
+		</tbody>
+	</table>
+{% endblock reportTable%}					

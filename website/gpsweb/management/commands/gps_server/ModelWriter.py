@@ -70,17 +70,22 @@ def checkForTriggers(locationLog, alert):
             alert_exist = True
             
     elif str(alert.type) == str(Alert.SCHEDULE_ALERT):
-        if PacketParser.is_in_time_slot(locationLog, alert):
+        if PacketParser.is_in_time_slot(locationLog.timestamp, alert.schedule_bit_field):
             alert_exist = True
             
     return alert_exist
 
 def getAlertFormat(alert, recipientType):
+    preface = "Hi %(nickname)s!"
+    google_maps_url = "https://maps.google.com/maps?q=%(location)s"
+    html_pface = "<html><head></head><body><p>" + preface + "</p><h4>" + alert.name + " alert has gone off!</h4> "
+    
+    
     if str(alert.type) == str(Alert.SPEED_ALERT):
         if recipientType == "email" : 
-            return """<html> <head></head> <body> <p>Hi %(nickname)s!<br>  %(driver_name)s was going %(speed)s kph with %(car_name)s.  <a href="https://maps.google.com/maps?q=%(location)s">Click here to see the location!</a><br> </p> </body> </html>"""
+            return html_pface + "<p>%(driver_name)s was going %(speed)s kph with %(car_name)s.  <a href='"+google_maps_url+"'>Click here to see the location!</a><br></p></body></html>"
         elif recipientType == "sms" :
-            return """%(driver_name)s was going %(speed)s kph with %(car_name)s. \nLocation: https://maps.google.com/maps?q=%(location)s"""
+            return "%(driver_name)s was going %(speed)s kph with %(car_name)s. \nLocation: " + google_maps_url
     if str(alert.type) == str(Alert.GEOFENCE_ALERT):
         if recipientType == "email" : 
             return ""
@@ -88,9 +93,9 @@ def getAlertFormat(alert, recipientType):
             return ""
     if str(alert.type) == str(Alert.SCHEDULE_ALERT):
         if recipientType == "email" : 
-            return ""
+            return html_pface + "<p>%(driver_name)s is moving with %(car_name)s outside permitted hours. <a href="+google_maps_url+">Click here to see the location!</a><br></p></body></html>"
         elif recipientType == "sms" :
-            return ""
+            return "%(driver_name)s is moving with %(car_name)s outside permitted hours. \nLocation: " + google_maps_url
 
 def sendAlert(locationLog, alert):
     if alert.state + timedelta(minutes = alert.cutoff) > locationLog.timestamp :

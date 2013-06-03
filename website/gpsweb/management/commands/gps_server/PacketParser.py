@@ -71,9 +71,18 @@ def get_utm_helper(a, b, c):
     if b == c : num *= (-1)
     
     return num
-
-def is_in_time_slot(timestamp,value):
-    print ('*'*10) + ' gps_functions.is_in_time_slot() not implemented! ' + ('*'*10)
+    
+from django.utils.timezone import get_current_timezone ,get_current_timezone_name, make_naive
+def is_in_time_slot(timestamp,schedule):
+    timestamp_naive = make_naive(timestamp,get_current_timezone())
+    #weekday() Return the day of the week as an integer, where Monday is 0 and Sunday is 6
+    weekDay = (timestamp_naive.weekday() + 1) % 7 
+    hour = timestamp_naive.hour
+    bit = (weekDay*24)+hour
+    if schedule[bit]:
+        return True
+    else:
+        return False
 
 def is_in_area(utm,value):
     print ('*'*10) + ' gps_functions.is_in_area() not implemented! ' + ('*'*10)

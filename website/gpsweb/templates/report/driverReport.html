@@ -1,5 +1,12 @@
 {% extends "report/base.html" %}
-{% block reportDetails %}  
+{% block reportHeader %}  
+<h2>{{driver}}'s History</h2> 
+<p class="lead"> 
+	Distance traveled by {{driver}} between {{fromDateStr}} and {{toDateStr}}.
+</p>
+{% endblock reportHeader%}		
+		
+{% block reportTable %}  
 
 	<table class="table table-striped table-hover">
 		<thead>
@@ -51,4 +58,4 @@
 		{%endif%}
 		</tbody>
 	</table>
-{% endblock reportDetails%}					
+{% endblock reportTable%}					

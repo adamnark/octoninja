@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from gpsweb.models import *
 from gpsweb.forms import RegistrationForm, LoginForm
 import datetime
+import csv
 from gpsweb.utils import utils
 
 from pprint import pprint
@@ -162,10 +163,7 @@ def driverHistoryReportCsv(request, driver_id, fromDate=None, toDate=None):
     context =  generateDriverContext(request, driver_id, fromDate, toDate)
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="%s-%s-%s.csv"' % (context['driver'], context['fromDateStr'],context['toDateStr'])
-    
-    import csv
-    #from datetime import date
-    
+
     writer = csv.writer(response)
     writer.writerow(["Start","End","Car","Distance Traveled",])
     
@@ -190,11 +188,10 @@ def driverHistoryReportPrinter(request, driver_id, fromDate=None, toDate=None):
     return render(request, 'report/driverReport.html', context)
 
 #####################   Alerts    #####################
-@login_required 
-def alerts(request):
+
+def generateAlertsContext(request):
     user = request.user
     user_alerts = Alert.objects.filter(car__owner = user)
-    
     
     if request.method == 'POST': # If the form has been submitted...
         if request.POST.get('alertCheckBox',False):
@@ -223,10 +220,76 @@ def alerts(request):
         'map_center_long' : '34.761265',
         'alertsArrays':groups,
     }
+    return context
+
+@login_required 
+def alerts(request):
+    context = generateAlertsContext(request)
     return render(request, 'alert/alerts.html', context)              
 
+@login_required 
+def alertsReportCsv(request):
+    context =  generateAlertsContext(request)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="Alerts.csv"'
+    writer = csv.writer(response)
+    writer.writerow(["Alert","Driver","Time"])
+    
+    alertsArrays = context['alertsArrays']
+    for alerts in alertsArrays:
+        row = []
+        row.append(alerts[0].alert)
+        row.append(alerts[0].location_log.driver)
+        row.append(alerts[0].location_log.timestamp.strftime('%Y-%m-%d %H:%M'))
+        writer.writerow(row)
+    return response
+    
+@login_required 
+def alertsReportPrinter(request): 
+    context = generateAlertsContext(request)
+    return render(request, 'report/alertReport.html', context) 
 #####################   Reports    #####################
+def generateCarsRouteContext(request, fromDate, toDate):
+    user = request.user
+    user_id = user.id
+    cars = Car.objects.filter(owner_id=user_id)
+    fromDateStr = utils.formatDateStr(fromDate)
+    toDateStr = utils.formatDateStr(toDate, zeroHour=False)
+    totalCarsRoutes = 0
+    carsRoutes=[]
+    for car in cars:
+        list_of_locations = LocationLog.objects.filter(car=car).filter(timestamp__range=[fromDateStr,toDateStr]).order_by('-timestamp')
+        routeDetails = utils.RouteDetails(list_of_locations)
+        totalCarsRoutes = totalCarsRoutes + routeDetails.length()
+        carsRoutes.append(routeDetails)
+    context = {
+        'user' : user,
+        'fromDateStr' : fromDateStr[:-9], # [:-9] truncates the hour
+        'toDateStr' : toDateStr[:-9],
+        'carsRoutes':carsRoutes,
+        'totalCarsRoutes':totalCarsRoutes,
+        }
+    return context
 
-
+@login_required 
+def carsRoutesCsv(request, fromDate, toDate):
+    context = generateCarsRouteContext(request, fromDate, toDate)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="cars-routes-%s-%s.csv"' % (context['fromDateStr'],context['toDateStr'])
+    writer = csv.writer(response)
+    writer.writerow(["Car","Total Route (Km)","Avg Speed (Kmh)" ,"Max Speed(Kmh)",context['fromDateStr'],context['toDateStr']])
+    
+    carsRoutes = context['carsRoutes']
+    for carRoutes in carsRoutes:
+        row = []
+        row.append(carRoutes.locationList[0].car)
+        row.append(carRoutes.length())
+        row.append(carRoutes.avgSpeed())
+        row.append(carRoutes.maxSpeed())
+        writer.writerow(row)
+    return response
+def carsRoutesPrinter(request, fromDate, toDate):
+    context = generateCarsRouteContext(request, fromDate, toDate)
+    return render(request, 'report/carsRoutesReport.html', context)     
     
  
