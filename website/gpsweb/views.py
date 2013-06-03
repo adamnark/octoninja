@@ -114,8 +114,7 @@ def carHistory(request, car_id, fromDate=None, toDate=None):
     
 #####################    Driver History     #####################   
 
-def generateDriverContext(request, driver_id, fromDate=None, toDate=None):
-    user = request.user
+def generateDriverContext(user, driver_id, fromDate=None, toDate=None):
     user_id = user.id
     driver = Driver.objects.filter(owner_id=user_id).filter(id__in=driver_id)
     if not driver:
@@ -155,12 +154,12 @@ def generateDriverContext(request, driver_id, fromDate=None, toDate=None):
 
 @login_required 
 def driverHistory(request, driver_id, fromDate=None, toDate=None):   
-    context =  generateDriverContext(request, driver_id, fromDate, toDate)
+    context =  generateDriverContext(request.user, driver_id, fromDate, toDate)
     return render(request, 'driverHistory/driverHistory.html', context)        
 
 @login_required 
 def driverHistoryReportCsv(request, driver_id, fromDate=None, toDate=None):
-    context =  generateDriverContext(request, driver_id, fromDate, toDate)
+    context =  generateDriverContext(request.user, driver_id, fromDate, toDate)
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="%s-%s-%s.csv"' % (context['driver'], context['fromDateStr'],context['toDateStr'])
 
@@ -184,7 +183,7 @@ def driverHistoryReportCsv(request, driver_id, fromDate=None, toDate=None):
     
 @login_required 
 def driverHistoryReportPrinter(request, driver_id, fromDate=None, toDate=None):    
-    context =  generateDriverContext(request, driver_id, fromDate, toDate)
+    context =  generateDriverContext(request.user, driver_id, fromDate, toDate)
     return render(request, 'report/driverReport.html', context)
 
 #####################   Alerts    #####################
