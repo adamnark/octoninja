@@ -12,19 +12,24 @@ class Person(models.Model):
         return self.nickname
 
 class Driver(models.Model):
-    person =     models.ForeignKey(Person)
-    owner  =     models.ForeignKey(User)
+    is_active  = models.BooleanField() 
+    person     = models.ForeignKey(Person)
+    owner      = models.ForeignKey(User)
     def __unicode__(self):
         return str(self.person)
 
 
 class Car(models.Model):
-    name =              models.CharField(max_length=200)
-    car_number =        models.CharField(max_length=7) # 1234567 (which is 12-345-67)
+    is_active =         models.BooleanField()
+    name =              models.CharField(max_length=7)
     owner =             models.ForeignKey(User)
     icon =              models.IntegerField()
+    
     def __unicode__(self):
-        return self.name
+        a = self.name[0:2]
+        b = self.name[2:5]
+        c = self.name[5:7]
+        return "%s-%s-%s" % (a, b, c)
     def getPrimaryDriver(self):
         primaryDriver = PrimaryDriver.objects.filter(car = self).filter(end=None)
         if primaryDriver:
@@ -107,14 +112,16 @@ class Alert(models.Model):
     type =      models.IntegerField(max_length=1, choices=ALERTS_TYPE)
     max_speed = models.IntegerField()
     schedule_bit_field = models.CharField(max_length=168)
-    geo_top_left_lat =       models.CharField(max_length=13) # 34.7888233333
-    geo_top_left_long =      models.CharField(max_length=13) # 32.0915033333
-    geo_bottom_right_lat =       models.CharField(max_length=13) # 34.7888233333
-    geo_bottom_right_long =      models.CharField(max_length=13) # 32.0915033333
-
+    
     def __unicode__(self):
         return self.name
 
+class AlertCircle(models.Model):
+    alert =         models.ForeignKey(Alert)
+    center_lat =    models.CharField(max_length=13) # 34.7888233333
+    center_long =   models.CharField(max_length=13) # 32.0915033333
+    radius =        models.IntegerField()
+        
 class AlertLog(models.Model):
     location_log = models.ForeignKey(LocationLog)
     alert = models.ForeignKey(Alert)

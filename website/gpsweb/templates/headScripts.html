@@ -1,13 +1,13 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U&sensor=true">
-</script>
 
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeIszTTR7abiVR8Xq3HiOEqv-3RyeNU1U&sensor=true&libraries=drawing"></script>
 <script type="text/javascript">
    var markerArray = [];
    var latlngbounds = new google.maps.LatLngBounds();
    var map;
    var line = [];
    var lineColors = ["red", "purple", "aqua", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "orange", "silver", "teal", "white", "yellow"]
+   var circles = [];
    function load()
    {
 		for (var i=0 ; i < 100 ; i++){//100 number of lines
@@ -123,84 +123,16 @@
 		animateCircle(lineId);
 	}
 
-	function showHide(HID,IMG) {
-        if (document.getElementById(IMG).src.indexOf('expand') != -1) {
-                document.getElementById(IMG).src='{{ STATIC_URL }}img/collapse.gif';
-                document.getElementById(HID).className='visibleRow';
-        } else {
-                document.getElementById(IMG).src='{{ STATIC_URL }}img/expand.gif';
-                document.getElementById(HID).className='hiddenRow';
-        }
-	}
-
-	function showHideRows(RowsClass ,IMG)
+	function clearCircles()
 	{
-		function getElementsByClassName(classname, node)  {
-			if(!node) node = document.getElementsByTagName("body")[0];
-			var a = [];
-			var re = new RegExp('\\b' + classname + '\\b');
-			var els = node.getElementsByTagName("*");
-			for(var i=0,j=els.length; i<j; i++)
-				if(re.test(els[i].className))a.push(els[i]);
-			return a;
+		for (var i in circles)
+		{
+			circles[i].setVisible(false);
 		}
+		circles = [];
 		
-		var elements = new Array();
-		elements = getElementsByClassName(RowsClass);
-
-		for(i in elements ){
-			if (elements[i].style.display == "none")
-			{
-				elements[i].style.display = "";
-				IMG.src='{{ STATIC_URL }}img/collapse.gif';
-			}
-			else
-			{
-				elements[i].style.display = "none";
-				IMG.src='{{ STATIC_URL }}img/expand.gif';
-			}
-		}
 	}
 	
-	function Expand(node)
-	{
-	// Change the image (if there is an image)
-		if (node.children.length > 0)
-		{
-			if (node.children.item(0).tagName == "IMG")
-			{
-				node.children.item(0).src = '{{ STATIC_URL }}img/collapse.gif';
-			}
-		}
-		node.nextSibling.style.display = '';
-	}
-	 
-	function Collapse(node)
-	{
-		// Change the image (if there is an image)
-		if (node.children.length > 0)
-		{
-			if (node.children.item(0).tagName == "IMG")
-			{
-				node.children.item(0).src = '{{ STATIC_URL }}img/expand.gif';
-			}
-		}
-		node.nextSibling.style.display = 'none';
-	}
-	 
-	function Toggle(node)
-	{
-		// Unfold the branch if it isn't visible
-		if (node.nextSibling.style.display == 'none')
-		{
-			Expand(node);
-		}
-		// Collapse the branch if it IS visible
-		else
-		{
-			Collapse(node);
-		}
-	}
 	
 	function onRowClick(lat, lng, name, email, phone)
 	{

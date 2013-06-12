@@ -9,6 +9,7 @@ from gpsweb.forms import RegistrationForm, LoginForm
 import datetime
 import csv
 from gpsweb.utils import utils
+import json
 
 from pprint import pprint
 
@@ -291,4 +292,73 @@ def carsRoutesPrinter(request, fromDate, toDate):
     context = generateCarsRouteContext(request, fromDate, toDate)
     return render(request, 'report/carsRoutesReport.html', context)     
     
+ 
+ #####################    PERIMETER     #####################   
+@login_required 
+def perimeter(request):
+    user = request.user
+    user_id = user.id
+    context = {
+        'menuParams' : utils.initMenuParameters(user),
+        'user' : user,
+        'carsDrivers' : utils.userCarDrivers(user),
+        'map_center_lat': '32.047818',
+        'map_center_long': '34.761265'}
+    return render(request, 'perimeter/perimeter.html', context)
+ 
+
+ 
+@login_required 
+def setPerimeter(request):
+    user = request.user
+    user_id = user.id
+    person = Person.objects.filter(owner=user).filter(is_primary=True)[0]
+    message = ''
+    
+    if request.is_ajax():
+        if request.method == 'POST':
+            data = json.loads(request.raw_post_data)
+            carsId = [int(id) for id in data[0]]
+            circles = data[1]
+            
+            if not carsId:
+                message += "<p>No cars were selected.</p>"
+            
+            for id in carsId:
+                car = Car.objects.get(id=id)
+                alert = Alert.objects.filter(car=car).filter(type=Alert.GEOFENCE_ALERT)
+                if alert:
+                    alert = alert[0]
+                    circlesAlert = AlertCircle.objects.filter(alert=alert)
+                    for circleAlert in circlesAlert:
+                        circleAlert.delete()
+                else:
+                    alert = Alert(  name="Geo "+str(car),
+                                    car=car,
+                                    state=datetime.datetime.now(),
+                                    cutoff=20,
+                                    type=Alert.GEOFENCE_ALERT,
+                                    max_speed=0,
+                                    schedule_bit_field=0,
+                                    )
+                    alert.save()
+                    alert.recipients.add(person)
+                    alert.save()
+                
+                if not circles:
+                    message += '<p>Perimeter was cleared.</p>'
+                else:
+                    message += '<p>Perimeter was set successfully.</p>'
+                    
+                for circle in circles:
+                    c = AlertCircle(alert=alert,
+                                    center_lat=circle["lat"],
+                                    center_long=circle["lng"],
+                                    radius=circle["rad"],
+                                    )
+                    c.save()
+    
+    return HttpResponse(message) 
+ 
+ 
  

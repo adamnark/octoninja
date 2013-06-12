@@ -1,7 +1,5 @@
 from django.conf.urls import patterns, url
 from wkhtmltopdf.views import PDFTemplateView
-
-
 from gpsweb import views
 
 urlpatterns = patterns('',
@@ -27,6 +25,8 @@ urlpatterns = patterns('',
 #Global Reports
     url(r'^cars_route_report_csv/(\d+)/(\d+)$', views.carsRoutesCsv),
     url(r'^cars_route_report_printer/(\d+)/(\d+)$', views.carsRoutesPrinter),
-    
+# temporary    
+    url(r'^perimeter$', views.perimeter),
+    url(r'^set_perimeter$', views.setPerimeter),
     
 )

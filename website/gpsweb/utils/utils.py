@@ -78,8 +78,8 @@ class menuParameters:
         self.user = user
         
 def initMenuParameters(user):
-    cars = Car.objects.filter(owner_id=user.id)
-    drivers = Driver.objects.filter(owner_id=user.id)
+    cars = Car.objects.filter(owner_id=user.id).filter(is_active=True)
+    drivers = Driver.objects.filter(owner_id=user.id).filter(is_active=True)
     menuParams = menuParameters(cars, drivers, user)
     return menuParams
 

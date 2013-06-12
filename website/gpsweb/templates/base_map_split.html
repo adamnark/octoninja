@@ -2,8 +2,8 @@
 {% block content %}
         <div class="container-fluid wrapper">
             <div class="row-fluid columns content">
-                <div class="span5 article-tree">{% block details %} {% endblock %}</div>
-                <div class="span7 content-area" id="map_canvas" >{% block map %}  {% endblock %}</div>
+                <div class="span{% block span_size_left %}5{% endblock %} article-tree">{% block details %} {% endblock %}</div>
+                <div class="span{% block span_size_right %}7{% endblock %} content-area" id="map_canvas" >{% block map %}  {% endblock %}</div>
             </div>
         </div>
 {% endblock content %}

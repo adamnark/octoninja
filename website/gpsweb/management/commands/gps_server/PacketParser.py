@@ -1,4 +1,6 @@
-#import socket, signal, sys
+from django.utils.timezone import get_current_timezone ,get_current_timezone_name, make_naive
+from gpsweb.utils import utils
+from gpsweb.models import *
 
 def get_imei(data): 
     #only for A message
@@ -72,7 +74,6 @@ def get_utm_helper(a, b, c):
     
     return num
     
-from django.utils.timezone import get_current_timezone ,get_current_timezone_name, make_naive
 def is_in_time_slot(timestamp,schedule):
     timestamp_naive = make_naive(timestamp,get_current_timezone())
     #weekday() Return the day of the week as an integer, where Monday is 0 and Sunday is 6
@@ -84,9 +85,19 @@ def is_in_time_slot(timestamp,schedule):
     else:
         return False
 
-def is_in_area(utm,value):
-    print ('*'*10) + ' gps_functions.is_in_area() not implemented! ' + ('*'*10)
+def is_out_of_area(locationLog, alert):
+    ret = True
+    lat, long = locationLog.lat, locationLog.long
+    circles = AlertCircle.objects.filter(alert=alert)
+    for circle in circles:
+        if is_in_circle(circle, lat, long):
+            ret = True
+            break
+    return ret
     
+def is_in_circle(circle, lat, long):
+    return utils.calc_dist(lat, long, circle.center_lat, circle.center_long) <= circle.radius
+
 
 def main():
     """
