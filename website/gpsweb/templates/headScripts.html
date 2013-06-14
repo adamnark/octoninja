@@ -16,7 +16,12 @@
 				
 		var mapOptions = {
 		  mapTypeId: google.maps.MapTypeId.ROADMAP,
-		  center: new google.maps.LatLng({{ map_center_lat }}, {{ map_center_long }}),
+		  center: new google.maps.LatLng(
+		  {% if map_center_lat %}
+			{{ map_center_lat }}, {{ map_center_long }}),
+		  {% else %}
+			'32.047818','34.761265'),
+		  {% endif %}
 		  zoom: 15
 		  {% block mapOptions %}{% endblock  %}//Add options here only before block
 		};
@@ -138,5 +143,31 @@
 	{
 		changeView(lat,lng);
 		$("#driver").html('<dl class="dl-horizontal"><dt>Driver</dt><dd>' + name + '</dd><dt>Phone</dt><dd>' + phone + '</dd><dt>E-mail</dt><dd>' + email + '</dd></dl>');
+	}
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	function getSelectedCars(){
+		carsCB = document.getElementsByClassName('cbCar');  
+		arr=[]
+		for (i=0;i<carsCB.length;i++){
+			if (carsCB.item(i).checked)
+			{
+				arr.push(carsCB.item(i).value);
+			}
+		}
+		return arr;
 	}
 <!-- Do not close script tag, it's close in base.html -->

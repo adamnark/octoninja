@@ -65,7 +65,7 @@ def UserLogout(request):
 def mainView(request):
     user = request.user
     user_id = user.id
-    cars = Car.objects.filter(owner_id=user_id)
+    cars = Car.objects.filter(owner_id=user_id).filter(is_active=True)
     list_of_locations = []
     for car in cars:
         try:
@@ -303,7 +303,8 @@ def perimeter(request):
         'user' : user,
         'carsDrivers' : utils.userCarDrivers(user),
         'map_center_lat': '32.047818',
-        'map_center_long': '34.761265'}
+        'map_center_long': '34.761265'
+        }
     return render(request, 'perimeter/perimeter.html', context)
  
 
@@ -323,7 +324,6 @@ def setPerimeter(request):
             
             if not carsId:
                 message += "<p>No cars were selected.</p>"
-            
             for id in carsId:
                 car = Car.objects.get(id=id)
                 alert = Alert.objects.filter(car=car).filter(type=Alert.GEOFENCE_ALERT)
@@ -346,9 +346,9 @@ def setPerimeter(request):
                     alert.save()
                 
                 if not circles:
-                    message += '<p>Perimeter was cleared.</p>'
+                    message += '<p>'+str(car)+' - Perimeter was cleared.</p>'
                 else:
-                    message += '<p>Perimeter was set successfully.</p>'
+                    message += '<p>'+str(car)+' - Perimeter was set successfully.</p>'
                     
                 for circle in circles:
                     c = AlertCircle(alert=alert,
@@ -360,5 +360,62 @@ def setPerimeter(request):
     
     return HttpResponse(message) 
  
+  #####################    schedule     #####################   
+@login_required 
+def schedule(request):
+    user = request.user
+    user_id = user.id
+    context = {
+        'menuParams' : utils.initMenuParameters(user),
+        'days':[['Sunday','01'],['Monday','02'], ['Tuesday','03'],['Wednesday','04'], ['Thursday','05'],['Friday','06'],['Saturday','07']],
+        'hours':['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'],
+        'user' : user,
+        'carsDrivers' : utils.userCarDrivers(user),
+    }
+    return render(request, 'schedule/schedule.html', context)
  
+@login_required 
+def setSchedule(request):
+    user = request.user
+    user_id = user.id
+    person = Person.objects.filter(owner=user).filter(is_primary=True)[0]
+    message=''
+    if request.is_ajax():
+        if request.method == 'POST':
+            data = json.loads(request.raw_post_data)
+            carsId = [int(id) for id in data[0]]
+            schedule_bit_field = data[1]
+            print 'schedule_bit_field'+schedule_bit_field
+            pprint(carsId)
+            schedule_bit_field="11"
+            if not carsId:
+                message += "<p>No cars were selected.</p>"
+            
+            for id in carsId:
+                car = Car.objects.get(id=id)
+                alert = Alert.objects.filter(car=car).filter(type=Alert.SCHEDULE_ALERT)
+                if alert: #change existing alert
+                    alert = alert[0]
+                    alert.schedule_bit_field=schedule_bit_field
+                    alert.save()
+                else:     #create new alert
+                    alert = Alert(  name="Schedule "+str(car),
+                                    car=car,
+                                    state=datetime.datetime.now(),
+                                    cutoff=20,
+                                    type=Alert.SCHEDULE_ALERT,
+                                    max_speed=0,
+                                    schedule_bit_field=schedule_bit_field,
+                                    )
+                    alert.save()
+                    alert.recipients.add(person)
+                    alert.save()
+                
+                if schedule_bit_field == 0:
+                    message += '<p>'+str(car)+' - Schedule was cleared.</p>'
+                else:
+                    message += '<p>'+str(car)+' - Schedule was set successfully.</p>'
+                    
+    print message       
+    return HttpResponse(message) 
  

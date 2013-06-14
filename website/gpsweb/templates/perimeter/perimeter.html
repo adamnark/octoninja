@@ -24,7 +24,7 @@
                                 <tbody>
 									{% for carDriver in carsDrivers %} 
 									<tr>
-                                        <td> <input type="checkbox" name="cbCar" value="{{carDriver.car.id}}"/></td>
+                                        <td> <input type="checkbox" class="cbCar" value="{{carDriver.car.id}}"/></td>
                                         <td>{{carDriver.car}}</td>
                                         <td>{{carDriver.driver}}</td>
                                     </tr>	
@@ -42,22 +42,6 @@
 <!-- Extended Function call on load -->
 {% block extendedFunction %}
 
-
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
 
 
 function getCirclesJSON(){
@@ -78,7 +62,6 @@ function getSelectedCars(){
 	$('input:checkbox:checked').each( function() {
 	arr.push($(this).val());});
 	return arr;
-	
 }
 
 function ajaxSetPerimeter(){

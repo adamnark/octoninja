@@ -21,7 +21,13 @@
 				{% include 'menu/menu.html' %}
 			</div>
 		</div>
-		{% block content %}{% endblock %}
+		{% block content %}
+		<div class="container-fluid wrapper">
+		<div class="row-fluid columns content">
+			<div class="span12 article-tree">{% block details %} {% endblock %}</div>
+		</div>
+		</div>
+		{% endblock %}
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 		<script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>

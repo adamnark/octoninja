@@ -91,8 +91,11 @@ def is_out_of_area(locationLog, alert):
     circles = AlertCircle.objects.filter(alert=alert)
     for circle in circles:
         if is_in_circle(circle, lat, long):
-            ret = True
+            ret = False
             break
+    if not circles:
+        ret = False
+        
     return ret
     
 def is_in_circle(circle, lat, long):

@@ -25,8 +25,11 @@ urlpatterns = patterns('',
 #Global Reports
     url(r'^cars_route_report_csv/(\d+)/(\d+)$', views.carsRoutesCsv),
     url(r'^cars_route_report_printer/(\d+)/(\d+)$', views.carsRoutesPrinter),
-# temporary    
+#Perimeter    
     url(r'^perimeter$', views.perimeter),
     url(r'^set_perimeter$', views.setPerimeter),
+#Schedule Alert set
+    url(r'^schedule$', views.schedule),    
+    url(r'^set_schedule$', views.setSchedule),
     
 )
