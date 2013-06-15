@@ -44,7 +44,7 @@
 <!-- Extended Function call on load -->
 {% block extendedFunction %}
 
-
+var carCircles =[];
 
 function getCirclesJSON(){
 	var circlesCollection = [];
@@ -65,12 +65,23 @@ function getSelectedCars(){
 	arr.push($(this).val());});
 	return arr;
 }
-
+function updateCarsCircles(carsArr)
+{
+   for (var carId in carsArr)
+   {
+       carCircles[carsArr[carId]] = []
+	   for (var i in circles){
+		  carCircles[carsArr[carId]].push(circles[i]);
+       }
+   }
+}
 function ajaxSetPerimeter(){
 	var csrftoken = getCookie('csrftoken');
 	var circlesJSON = getCirclesJSON();
 	var selectedCars = getSelectedCars();
+	updateCarsCircles(selectedCars);
 	var data = [selectedCars,circlesJSON];
+	
 	$.ajax({
 		url:"set_perimeter",
 		type: 'POST',
@@ -91,7 +102,7 @@ function ajaxSetPerimeter(){
 	});
 }
 
-var carCircles =[];
+
 
 
 function extendedFunction(){ 
