@@ -19,6 +19,7 @@
                                         <th><i class="icon-check"></i></th>
                                         <th>Car</th>
                                         <th>Primary Driver</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -27,6 +28,7 @@
                                         <td> <input type="checkbox" class="cbCar" value="{{carDriver.car.id}}"/></td>
                                         <td>{{carDriver.car}}</td>
                                         <td>{{carDriver.driver}}</td>
+                                        <td><input onClick="drawCarCircles({{carDriver.car.id}})" value='Get Circles' class='btn' type='button'></td>
                                     </tr>	
 									{% endfor %}
                                     
@@ -89,6 +91,7 @@ function ajaxSetPerimeter(){
 	});
 }
 
+var carCircles =[];
 
 
 function extendedFunction(){ 
@@ -110,7 +113,7 @@ function extendedFunction(){
 				editable: true
 			}
 		});
-		
+	
 	drawingManager.setMap(map);
 	
 	google.maps.event.addListener(drawingManager, 'circlecomplete', function(circle){
@@ -118,8 +121,37 @@ function extendedFunction(){
 				});
 
 		$('#message').hide();
+		
+		{% for carDriver in carsDrivers %} 
+		    carCircles[{{carDriver.car.id}}]=[];
+	       {% for circle in carDriver.circles %} 
+		    var cOptions = {
+                fillColor: '#fff000',
+				fillOpacity: 0.50,
+				strokeWeight: 1,
+				clickable: true,
+				zIndex: 1,
+				editable: true,
+                center: new google.maps.LatLng({{ circle.center_lat }}, {{ circle.center_long }}),
+                radius: {{circle.radius}},
+				visible: false
+                };
+                c = new google.maps.Circle(cOptions);
+				c.setMap(map);
+				carCircles[{{carDriver.car.id}}].push(c);
+         {% endfor %}	
+    {% endfor %}
 }
-
+function drawCarCircles(carId)
+{
+   clearCircles();
+   for (i in carCircles[carId]){
+      c = carCircles[carId][i];
+      circles.push(c);
+	  circles[i].setVisible(true);
+	  
+   }
+}
 
 
 {% endblock extendedFunction%}				

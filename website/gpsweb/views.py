@@ -301,7 +301,8 @@ def perimeter(request):
     context = {
         'menuParams' : utils.initMenuParameters(user),
         'user' : user,
-        'carsDrivers' : utils.userCarDrivers(user),
+        #'carsDrivers' : utils.userCarDrivers(user),
+        'carsDrivers' : utils.userCarDriverCircles(user),
         'map_center_lat': '32.047818',
         'map_center_long': '34.761265'
         }

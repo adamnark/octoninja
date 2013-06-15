@@ -6,7 +6,7 @@
 
 <div class="span12" style="padding-left: 10px;">
 		<h2>Add schedule alerts.</h2>
-		<p>Set allowed days & hours.</p>
+		<p>Set <b>disallowed</b> driving hours.</p>
 		<p>When setting a schedule, the previous schedule will be overridden for the checked cars.</p>
 	
 <div id="gps-table">
@@ -64,6 +64,7 @@
 {% block extendedFunction %}
 var hour=['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
 var days=['01','02','03','04','05','06','07'];
+
 function AllDayCheckbox(day,action){
 	for (i=0;i<24;i++)
 	{
@@ -114,6 +115,6 @@ function ajaxSetSchedule(){
 
 function extendedFunction()
 {  
-	
+	$('#message').hide();
 }
 {% endblock extendedFunction%}							

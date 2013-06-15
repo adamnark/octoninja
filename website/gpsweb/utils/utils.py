@@ -71,6 +71,23 @@ def userCarDrivers(user):
         carDrivers.append(val)
     return carDrivers 
 
+class CarDriverCircles:
+    def __init__(self, car, driver, circles):
+        self.car = car
+        self.driver= driver 
+        self.circles = circles 
+def userCarDriverCircles(user):
+    carDrivers = []
+    cars = Car.objects.filter(owner_id=user.id)
+    for car in cars:
+        driver = car.getPrimaryDriver()
+        alert = Alert.objects.filter(car=car).filter(type=Alert.GEOFENCE_ALERT)
+        circlesAlert = AlertCircle.objects.filter(alert=alert)
+        val = CarDriverCircles(car, driver, circlesAlert)
+        carDrivers.append(val)
+    return carDrivers
+    
+    
 class menuParameters:
     def __init__(self, cars, drivers, user):
         self.cars = cars
