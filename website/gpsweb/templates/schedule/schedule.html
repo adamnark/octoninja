@@ -16,6 +16,7 @@
 			<th><i class="icon-check"></i></th>
 			<th>Car</th>
 			<th>Primary Driver</th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -24,6 +25,7 @@
 			<td> <input type="checkbox" class = "cbCar" value="{{carDriver.car.id}}"/></td>
 			<td>{{carDriver.car}}</td>
 			<td>{{carDriver.driver}}</td>
+			<td><input onClick="setCarSchedule({{carDriver.car.id}})" value='Get Schedule' class='btn' type='button'></td>
 		</tr>	
 		{% endfor %}
 		
@@ -64,7 +66,7 @@
 {% block extendedFunction %}
 var hour=['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
 var days=['01','02','03','04','05','06','07'];
-
+var schedule = [];
 function AllDayCheckbox(day,action){
 	for (i=0;i<24;i++)
 	{
@@ -91,6 +93,7 @@ function ajaxSetSchedule(){
 	var csrftoken = getCookie('csrftoken');
 	var scheduleJSON = getScheduleJSON();
 	var selectedCars = getSelectedCars();
+	updateCarsSchedule(selectedCars, scheduleJSON);
 	var data = [selectedCars,scheduleJSON];
 	$.ajax({
 		url:"set_schedule",
@@ -116,5 +119,39 @@ function ajaxSetSchedule(){
 function extendedFunction()
 {  
 	$('#message').hide();
+	{% for carDriver in carsDrivers %} 
+	schedule[{{carDriver.car.id}}]="{{carDriver.schedule}}";
+	{% endfor %} 
+}
+
+function setCarSchedule(carId)
+{
+   for (dayId in days)//Clear all days
+   {
+		AllDayCheckbox(days[dayId],false);
+   }
+   scheduleBits = schedule[carId];
+   var i=0;
+   for (dayId in days)
+   {
+		for (hourId in hour)
+		{
+			if (scheduleBits.charAt(i) == '1')
+			{
+				document.getElementById(days[dayId]+hour[hourId]).checked = true;
+			}
+			i = i+1;
+		
+		}
+   }
+}
+
+function updateCarsSchedule(selectedCars, scheduleJSON)
+{
+	for (var carId in selectedCars)
+	{
+	   schedule[selectedCars[carId]] = scheduleJSON;
+	}
+
 }
 {% endblock extendedFunction%}							

@@ -87,6 +87,24 @@ def userCarDriverCircles(user):
         carDrivers.append(val)
     return carDrivers
     
+class CarDriverSchedule:
+    def __init__(self, car, driver, schedule):
+        self.car = car
+        self.driver= driver 
+        self.schedule = schedule 
+def userCarDriverSchedule(user):
+    carDrivers = []
+    cars = Car.objects.filter(owner_id=user.id)
+    for car in cars:
+        driver = car.getPrimaryDriver()
+        alert = Alert.objects.filter(car=car).filter(type=Alert.SCHEDULE_ALERT)
+        if alert:
+            schedule = alert[0].schedule_bit_field
+        else:
+            schedule = ""
+        val = CarDriverSchedule(car, driver, schedule)
+        carDrivers.append(val)
+    return carDrivers
     
 class menuParameters:
     def __init__(self, cars, drivers, user):

@@ -371,7 +371,7 @@ def schedule(request):
         'days':[['Sunday','01'],['Monday','02'], ['Tuesday','03'],['Wednesday','04'], ['Thursday','05'],['Friday','06'],['Saturday','07']],
         'hours':['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'],
         'user' : user,
-        'carsDrivers' : utils.userCarDrivers(user),
+        'carsDrivers' : utils.userCarDriverSchedule(user),
     }
     return render(request, 'schedule/schedule.html', context)
  
@@ -387,8 +387,7 @@ def setSchedule(request):
             carsId = [int(id) for id in data[0]]
             schedule_bit_field = data[1]
             print 'schedule_bit_field'+schedule_bit_field
-            pprint(carsId)
-            schedule_bit_field="11"
+
             if not carsId:
                 message += "<p>No cars were selected.</p>"
             
