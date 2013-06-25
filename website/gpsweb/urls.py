@@ -31,5 +31,6 @@ urlpatterns = patterns('',
 #Schedule Alert set
     url(r'^schedule$', views.schedule),    
     url(r'^set_schedule$', views.setSchedule),
-    
+# Fuel Page
+    url(r'^fuel$', views.fuel),
 )

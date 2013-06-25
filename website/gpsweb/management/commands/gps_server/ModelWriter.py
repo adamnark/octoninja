@@ -63,35 +63,37 @@ def checkForTriggers(locationLog, alert):
         if locationLog.speed >= alert.max_speed:
             alert_exist = True
 
-    elif str(alert.type) == str(Alert.GEOFENCE_ALERT):
+    if str(alert.type) == str(Alert.GEOFENCE_ALERT):
         if PacketParser.is_out_of_area(locationLog, alert):
             alert_exist = True
 
-    elif str(alert.type) == str(Alert.SCHEDULE_ALERT):
+    if str(alert.type) == str(Alert.SCHEDULE_ALERT):
         if PacketParser.is_in_time_slot(locationLog.timestamp, alert.schedule_bit_field):
             alert_exist = True
 
+    print "checkForTriggers returned " + str(alert_exist)
+            
     return alert_exist
 
 def getAlertFormat(alert, recipientType):
     preface = "Hi %(nickname)s!"
     google_maps_url = "https://maps.google.com/maps?q=%(location)s"
     html_pface = "<html><head></head><body><p>" + preface + "</p><h4>" + alert.name + " alert has gone off!</h4> "
-
+    link = "<a href='"+google_maps_url+"'>Click here to see the location!</a>"
 
     if str(alert.type) == str(Alert.SPEED_ALERT):
         if recipientType == "email" :
-            return html_pface + "<p>%(driver_name)s was going %(speed)s kph with %(car_name)s.  <a href='"+google_maps_url+"'>Click here to see the location!</a><br></p></body></html>"
+            return html_pface + "<p>%(driver_name)s was going %(speed)s kph with %(car_name)s. " + link + "<br></p></body></html>"
         elif recipientType == "sms" :
             return "%(driver_name)s was going %(speed)s kph with %(car_name)s. \nLocation: " + google_maps_url
     if str(alert.type) == str(Alert.GEOFENCE_ALERT):
         if recipientType == "email" :
-            return ""
+            return html_pface + "<p>%(driver_name)s is moving with %(car_name)s outside of the permitted perimeter. " + link + " <br></p></body></html>"
         elif recipientType == "sms" :
-            return ""
+            return "%(driver_name)s is moving with %(car_name)s outside of permitted perimeter. \nLocation: " + google_maps_url
     if str(alert.type) == str(Alert.SCHEDULE_ALERT):
         if recipientType == "email" :
-            return html_pface + "<p>%(driver_name)s is moving with %(car_name)s outside permitted hours. <a href="+google_maps_url+">Click here to see the location!</a><br></p></body></html>"
+            return html_pface + "<p>%(driver_name)s is moving with %(car_name)s outside of the permitted hours. " + link + "<br></p></body></html>"
         elif recipientType == "sms" :
             return "%(driver_name)s is moving with %(car_name)s outside permitted hours. \nLocation: " + google_maps_url
 
@@ -104,7 +106,7 @@ def sendAlert(locationLog, alert):
         if recipient.email:
             sendMail(locationLog, alert, recipient)
         if recipient.telephone:
-            #sendSMS(locationLog, alert, recipient)
+            sendSms(locationLog, alert, recipient)
             pass
     return True
 
@@ -133,5 +135,8 @@ def sendSms(locationLog, alert, recipient):
 
     telephone = recipient.telephone
     message = sms_args['format'] % sms_args
-    sms(telephone, message)
+    try:
+        sms(telephone, message)
+    except:
+        print "couldn't send sms"
 

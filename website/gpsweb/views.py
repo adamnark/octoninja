@@ -5,13 +5,28 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from gpsweb.models import *
-from gpsweb.forms import RegistrationForm, LoginForm
+from gpsweb.forms import * # RegistrationForm, LoginForm
 import datetime
 import csv
 from gpsweb.utils import utils
 import json
 
 from pprint import pprint
+
+
+def fuel(request):
+    if request.method == 'POST': # If the form has been submitted...
+        form = FuelConsupmtionForm(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            # Process the data in form.cleaned_data
+            # ...
+            return HttpResponseRedirect('/fuel/') # Redirect after POST
+    else:
+        form = FuelConsupmtionForm() # An unbound form
+
+    return render(request, 'fuel.html', {'form': form})
+
+
 
 def UserRegistration(request):
     if request.user.is_authenticated():

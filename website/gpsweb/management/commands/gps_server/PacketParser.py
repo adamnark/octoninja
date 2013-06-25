@@ -2,6 +2,8 @@ from django.utils.timezone import get_current_timezone ,get_current_timezone_nam
 from gpsweb.utils import utils
 from gpsweb.models import *
 
+from pprint import pprint
+
 def get_imei(data): 
     #only for A message
     msg_type = get_msg_type(data)
@@ -80,26 +82,39 @@ def is_in_time_slot(timestamp,schedule):
     weekDay = (timestamp_naive.weekday() + 1) % 7 
     hour = timestamp_naive.hour
     bit = (weekDay*24)+hour
-    if schedule[bit]:
+
+    if schedule[bit] == '0':
         return True
     else:
-        return False
+        return False 
+
 
 def is_out_of_area(locationLog, alert):
     ret = True
     lat, long = locationLog.lat, locationLog.long
     circles = AlertCircle.objects.filter(alert=alert)
+
     for circle in circles:
+        pprint(circle)
         if is_in_circle(circle, lat, long):
             ret = False
             break
     if not circles:
         ret = False
-        
+    
+    print 'is_out_of_area returned ' + str(ret)
+    
     return ret
     
 def is_in_circle(circle, lat, long):
-    return utils.calc_dist(lat, long, circle.center_lat, circle.center_long) <= circle.radius
+    # print '*'*10
+    # print 'is_in_circle: '
+    # print 'calc_dist()=' + str(utils.calc_dist(lat, long, circle.center_lat, circle.center_long))
+    # print 'circle.radius=' + str(circle.radius)
+    # print '*'*10
+    dist_in_km = utils.calc_dist(lat, long, circle.center_lat, circle.center_long)
+    dist = dist_in_km * 1000
+    return dist <= circle.radius
 
 
 def main():

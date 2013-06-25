@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-
+from django.forms.extras.widgets import SelectDateWidget
 class RegistrationForm(ModelForm):
         username        = forms.CharField(label=(u'User Name'))
         email           = forms.EmailField(label=(u'Email Address'))
@@ -28,3 +28,12 @@ class RegistrationForm(ModelForm):
 class LoginForm(forms.Form):   
     username    = forms.CharField(label=(u'User Name'))
     password    = forms.CharField(label=(u'Password'), widget=forms.PasswordInput(render_value=False))
+
+    
+class FuelConsupmtionForm(forms.Form):
+    YEARS = range(2009, 2016)
+    MONTHS = range(1, 12)
+    year = forms.DateField(widget=SelectDateWidget(years=YEARS))
+    data_file = forms.FileField(allow_empty_file=False)
+    
+    

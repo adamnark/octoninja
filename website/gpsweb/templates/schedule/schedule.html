@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-{% block span_size_left %}9{% endblock %}
-{% block span_size_right %}3{% endblock %}
+
 {% block details %} 
 
 
 <div class="span12" style="padding-left: 10px;">
 		<h2>Add schedule alerts.</h2>
-		<p>Set <b>disallowed</b> driving hours.</p>
+		<p>Set selected cars, and mark the working hours for them.</p>
 		<p>When setting a schedule, the previous schedule will be overridden for the checked cars.</p>
 	
 <div id="gps-table">
@@ -46,13 +45,13 @@
 		<tr>
 			<td>{{day.0}}</td>
 			{% for hour in hours %}
-			<td><input type = "checkbox" class = "hourCheckBox" id = {{day.1}}{{hour}} /></td>
+			<td><input type = "checkbox" class = "hourCheckBox " id = {{day.1}}{{hour}} /></td>
 			{% endfor %}
 			<td>
-			<input type="button" value="All Day" onClick="AllDayCheckbox('{{day.1}}',true)"/>
+			<input type="button" class='btn' value="All Day" onClick="AllDayCheckbox('{{day.1}}',true)"/>
 			</td>
 			<td>
-			<input type="button" value="clear" onClick="AllDayCheckbox('{{day.1}}',false)"/>
+			<input type="button" class='btn' value="Clear Day" onClick="AllDayCheckbox('{{day.1}}',false)"/>
 			</td>
 		</tr>
 		{% endfor %}

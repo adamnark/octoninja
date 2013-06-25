@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block details %} 
+
+<form action="/fuel" method="post">{% csrf_token %}
+{{ form.as_table }}
+<p><input class='btn' type="submit" value="Submit" /></p>
+</form>
+
+{% endblock details %}
+
+{% block extendedFunction %}
+
+
+
+function extendedFunction()
+{
+	$(function(){$("#id_year_day").hide();});
+}
+{% endblock extendedFunction %}
