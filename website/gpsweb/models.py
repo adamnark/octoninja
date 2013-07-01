@@ -136,11 +136,14 @@ class AlertFormat(models.Model):
     format_sms = models.CharField(max_length=250)
     format_email = models.CharField(max_length=1000)
     def __unicode__(self):
-        fmt = '%d\nsms: %s\nemail: %s' % (alert_type, format_sms,format_email)
+        return '%d\nsms: %s\nemail: %s' % (alert_type, format_sms,format_email)
 
 class FuelConsumption(models.Model):     
     car =       models.ForeignKey(Car)
     month =     models.DateTimeField()
+    liters =    models.IntegerField()
+    def __unicode__(self):
+        return '%s @ %s' % (str(self.car), str(self.month))
 
 
 

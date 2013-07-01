@@ -9,22 +9,26 @@ from gpsweb.forms import * # RegistrationForm, LoginForm
 import datetime
 import csv
 from gpsweb.utils import utils
+from gpsweb.utils import fuel_utils
 import json
 
 from pprint import pprint
 
 
 def fuel(request):
+    user = request.user
     if request.method == 'POST': # If the form has been submitted...
         form = FuelConsupmtionForm(request.POST) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
-            # Process the data in form.cleaned_data
-            # ...
-            return HttpResponseRedirect('/fuel/') # Redirect after POST
+        #if form.is_valid(): # All validation rules pass
+        # Process the data in form.cleaned_data
+        fuel_utils.handle_usage_file(request.FILES["data_file"])
+
+        return HttpResponseRedirect('/fuel') # Redirect after POST
     else:
         form = FuelConsupmtionForm() # An unbound form
 
-    return render(request, 'fuel.html', {'form': form})
+    return render(request, 'fuel.html', {'form': form,
+                                         'menuParams' : utils.initMenuParameters(user)})
 
 
 

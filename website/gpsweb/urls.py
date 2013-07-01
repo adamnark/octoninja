@@ -33,4 +33,6 @@ urlpatterns = patterns('',
     url(r'^set_schedule$', views.setSchedule),
 # Fuel Page
     url(r'^fuel$', views.fuel),
+# Cars Form    
+    url(r'^carsForm$', views.fuel),
 )

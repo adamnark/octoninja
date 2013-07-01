@@ -31,9 +31,5 @@ class LoginForm(forms.Form):
 
     
 class FuelConsupmtionForm(forms.Form):
-    YEARS = range(2009, 2016)
-    MONTHS = range(1, 12)
-    year = forms.DateField(widget=SelectDateWidget(years=YEARS))
     data_file = forms.FileField(allow_empty_file=False)
-    
     
