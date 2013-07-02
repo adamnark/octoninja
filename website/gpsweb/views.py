@@ -14,6 +14,20 @@ import json
 
 from pprint import pprint
 
+def get_fuel_data(request,fromDate,toDate):
+    user = request.user
+    message = ""
+    if request.is_ajax():
+        if request.method == 'POST':
+            all_details = generateCarsRouteContext(request,fromDate,toDate) 
+            # for each car - get the usage for given month
+            message = json.dumps([
+                ('12-34-56', 1111, 123123),
+            ])
+    return HttpResponse(message) 
+    
+    
+    
 
 def fuel(request):
     user = request.user

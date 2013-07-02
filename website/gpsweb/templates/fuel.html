@@ -1,19 +1,87 @@
 {% extends "base.html" %}
 
 {% block details %} 
+<div class="well">
 
 <form action="/fuel" method="post" enctype="multipart/form-data">{% csrf_token %}
-{{ form.as_table }}
-<p><input class='btn' type="submit" value="Submit" /></p>
+{{ form }}
+<p><input class='btn' type="submit" value="Submit Data File" /></p>
 </form>
+</div>
+
+<div class="well">
+	<p> Pick a month to show:</p>
+	<div class="input-append date" id="dp" data-date="102/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+		<input class="span7" size="16" type="text" value="02/2012" readonly>
+		<span class="add-on"><i class="icon-calendar"></i></span>
+	</div>
+	<button class="btn btn-primary" id="btnShow">Show usage by month</button>
+</div>
+<div id="message">
+</div>
+
+
 {% endblock details %}
 
 {% block extendedFunction %}
 
 
-
+var currentDate;
 function extendedFunction()
 {
+	setupDatePicker();
+	setupShowButton();	
+}
+
+
+function pad(n){
+	return String('00'+n).slice(-2);
+}
+
+function setupShowButton(){
+	var csrftoken = getCookie('csrftoken');
+	var lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 	
+	var dateStringsTo     = lastDayOfMonth.getFullYear().toString() + pad(lastDayOfMonth.getMonth() + 1) + pad(lastDayOfMonth.getDate());
+	var dateStringsFrom   = currentDate.getFullYear().toString()    + pad(currentDate.getMonth() + 1)    + pad(currentDate.getDate());
+	
+	var url = "get_fuel_data/";
+	url += dateStringsFrom;
+	url += '/';
+	url += dateStringsTo;
+	
+	
+	
+	$("#btnShow").on("click", function(ev){
+		$.ajax({
+			url : url,
+			type: 'POST',
+			
+			success: function(data, textStatus, xhr) {
+				//$('#message').html(data);
+				//$('#message').show(1.5); 
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				//$('#message').html('Connection error...');
+				//$('#message').show(1.5); 
+			},
+			
+			beforeSend: function(xhr, settings){
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			}
+		});
+	});
+}
+
+function setupDatePicker(){
+	var nowTemp = new Date();
+	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), 1, 0, 0, 0, 0);
+	currentDate = now;
+	
+	$('#dp').datepicker();
+	$('#dp').datepicker('setValue', currentDate);
+	$('#dp').datepicker().on('changeDate', function(ev){
+		currentDate = new Date(ev.date.valueOf());
+  });
 }
 {% endblock extendedFunction %}
