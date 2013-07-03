@@ -125,7 +125,10 @@ def formatDateStr(date , zeroHour=True):
     else:
         formatDate = date[0:4]+"-"+date[4:6]+"-"+date[6:8] 
     return formatDate + hour 
-        
+
+def makeDateFromDateStr(datestr):
+    fmt = "%Y-%m-%d %H:%M:%S"
+    return datetime.datetime.strptime(datestr,fmt)
         
 class driverLocations:
     def __init__(self, driverPeriod, locationDetailes,isTemporaryDriver):
