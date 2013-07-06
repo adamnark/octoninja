@@ -95,6 +95,12 @@ class LocationLog(models.Model):
     driver =    models.ForeignKey(Driver)
     def __unicode__(self):
         return "%s -- %s: (%s %s)" % (str(self.id), str(self.timestamp),str(self.lat),str(self.long))
+        
+class AlertArea(models.Model):
+	name =      models.CharField(max_length=250)
+	owner =     models.ForeignKey(User)
+    # def __unicode__(self):
+        # return self.name
 
 class Alert(models.Model):
     name =      models.CharField(max_length=250)
@@ -116,11 +122,6 @@ class Alert(models.Model):
     def __unicode__(self):
         return self.name
 
-class AlertArea(models.Model):
-	name =      models.CharField(max_length=250)
-	owner =     models.ForeignKey(User)
-	def __unicode__(self):
-        return self.name
 
 class AlertCircle(models.Model):
     area =         models.ForeignKey(AlertArea)

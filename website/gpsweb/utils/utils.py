@@ -82,22 +82,22 @@ def userCarDriverArea(user):
     for car in cars:
         driver = car.getPrimaryDriver()
         geoAlert = Alert.objects.filter(car=car).filter(type=Alert.GEOFENCE_ALERT)
-        val = CarDriverCircles(car, driver, geoAlert)
+        val = CarDriverArea(car, driver, geoAlert)
         carDrivers.append(val)
     return carDrivers
 
 class AreaCircles:
     def __init__(self, area, circles):
         self.area= area 
-        self.circles = circles 
+        self.circles = circles
 def userAreaCircles(user):
-    areaCircles = []
-	areas = AlertArea.objects.filter(owner=user)
+    areasCircles = []
+    areas = AlertArea.objects.filter(owner=user)
     for area in areas:
         circlesAlert = AlertCircle.objects.filter(area=area)
-		val = AreaCircles(area, circlesAlert)
-        areaCircles.append(val)
-    return areaCircles
+        val = AreaCircles(area, circlesAlert)
+        areasCircles.append(val)
+    return areasCircles
     
 class CarDriverSchedule:
     def __init__(self, car, driver, schedule):
