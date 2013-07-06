@@ -92,7 +92,7 @@ def is_in_time_slot(timestamp,schedule):
 def is_out_of_area(locationLog, alert):
     ret = True
     lat, long = locationLog.lat, locationLog.long
-    circles = AlertCircle.objects.filter(alert=alert)
+    circles = AlertCircle.objects.filter(area=alert.geo_area)
 
     for circle in circles:
         pprint(circle)

@@ -352,15 +352,17 @@ def carsRoutesPrinter(request, fromDate, toDate):
 def perimeter(request):
     user = request.user
     user_id = user.id
+	
     context = {
         'menuParams' : utils.initMenuParameters(user),
         'user' : user,
         #'carsDrivers' : utils.userCarDrivers(user),
-        'carsDrivers' : utils.userCarDriverCircles(user),
+        'carsDrivers' : utils.userCarDriverArea(user),
+        'areaCircles' : utils.userAreaCircles(user),
         'map_center_lat': '32.047818',
         'map_center_long': '34.761265'
         }
-    return render(request, 'perimeter/perimeter.html', context)
+    return render(request, 'perimeter/perimeter1.html', context)
  
 
  

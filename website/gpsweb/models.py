@@ -112,12 +112,18 @@ class Alert(models.Model):
     type =      models.IntegerField(max_length=1, choices=ALERTS_TYPE)
     max_speed = models.IntegerField()
     schedule_bit_field = models.CharField(max_length=168)
-    
+    geo_area = models.ForeignKey(AlertArea, null=True)
     def __unicode__(self):
         return self.name
 
+class AlertArea(models.Model):
+	name =      models.CharField(max_length=250)
+	owner =     models.ForeignKey(User)
+	def __unicode__(self):
+        return self.name
+
 class AlertCircle(models.Model):
-    alert =         models.ForeignKey(Alert)
+    area =         models.ForeignKey(AlertArea)
     center_lat =    models.CharField(max_length=13) # 34.7888233333
     center_long =   models.CharField(max_length=13) # 32.0915033333
     radius =        models.IntegerField()
