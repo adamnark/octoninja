@@ -27,7 +27,9 @@ urlpatterns = patterns('',
     url(r'^cars_route_report_printer/(\d+)/(\d+)$', views.carsRoutesPrinter),
 #Perimeter    
     url(r'^perimeter$', views.perimeter),
-    url(r'^set_perimeter$', views.setPerimeter),
+    url(r'^set_new_area$', views.setNewArea),
+    url(r'^set_cars_area$', views.setCarsArea),
+    url(r'^update_area$', views.updateArea),
 #Schedule Alert set
     url(r'^schedule$', views.schedule),    
     url(r'^set_schedule$', views.setSchedule),

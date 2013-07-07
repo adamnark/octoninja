@@ -362,12 +362,12 @@ def perimeter(request):
         'map_center_lat': '32.047818',
         'map_center_long': '34.761265'
         }
-    return render(request, 'perimeter/perimeter1.html', context)
+    return render(request, 'perimeter/perimeter.html', context)
  
 
  
 @login_required 
-def setPerimeter(request):
+def setNewArea(request):
     user = request.user
     user_id = user.id
     person = Person.objects.filter(owner=user).filter(is_primary=True)[0]
@@ -376,9 +376,71 @@ def setPerimeter(request):
     if request.is_ajax():
         if request.method == 'POST':
             data = json.loads(request.raw_post_data)
-            carsId = [int(id) for id in data[0]]
-            circles = data[1]
+            circles = data[0]
+            areaName = data[1]
             
+            area = AlertArea.objects.filter(name=areaName)
+            if area:
+                message = 'This area name already in use'
+            else:
+                area = AlertArea(  name=areaName,
+                                   owner=user,
+                                   )
+                area.save()
+                for circle in circles:
+                    c = AlertCircle(area=area,
+                                    center_lat=circle["lat"],
+                                    center_long=circle["lng"],
+                                    radius=circle["rad"],
+                                    )
+                    c.save()
+                message = 'New area added successfully'
+    
+    return HttpResponse(message) 
+    
+@login_required 
+def updateArea(request):
+    user = request.user
+    user_id = user.id
+    person = Person.objects.filter(owner=user).filter(is_primary=True)[0]
+    message = ''
+    
+    if request.is_ajax():
+        if request.method == 'POST':
+            area = None
+            data = json.loads(request.raw_post_data)
+            circles = data[0]
+            areaId = data[1]
+            if areaId:
+                area = AlertArea.objects.get(id=areaId)
+                circlesArea = AlertCircle.objects.filter(area=area)
+                for circleArea in circlesArea:
+                    circleArea.delete()
+                for circle in circles:
+                    c = AlertCircle(area=area,
+                                    center_lat=circle["lat"],
+                                    center_long=circle["lng"],
+                                    radius=circle["rad"],
+                                    )
+                    c.save()
+                message = "Area updated successfully"
+    return HttpResponse(message) 
+    
+@login_required 
+def setCarsArea(request):
+    user = request.user
+    user_id = user.id
+    person = Person.objects.filter(owner=user).filter(is_primary=True)[0]
+    message = ''
+    
+    if request.is_ajax():
+        if request.method == 'POST':
+            area = None
+            data = json.loads(request.raw_post_data)
+            carsId = [int(id) for id in data[0]]
+            areaId = data[1]
+            if areaId:
+                area = AlertArea.objects.get(id=areaId)
             if not carsId:
                 message += "<p>No cars were selected.</p>"
             for id in carsId:
@@ -386,9 +448,8 @@ def setPerimeter(request):
                 alert = Alert.objects.filter(car=car).filter(type=Alert.GEOFENCE_ALERT)
                 if alert:
                     alert = alert[0]
-                    circlesAlert = AlertCircle.objects.filter(alert=alert)
-                    for circleAlert in circlesAlert:
-                        circleAlert.delete()
+                    alert.geo_area = area
+                    alert.save()
                 else:
                     alert = Alert(  name="Geo "+str(car),
                                     car=car,
@@ -397,26 +458,16 @@ def setPerimeter(request):
                                     type=Alert.GEOFENCE_ALERT,
                                     max_speed=0,
                                     schedule_bit_field=0,
+                                    geo_area = area,
                                     )
                     alert.save()
                     alert.recipients.add(person)
                     alert.save()
-                
-                if not circles:
-                    message += '<p>'+str(car)+' - Perimeter was cleared.</p>'
-                else:
-                    message += '<p>'+str(car)+' - Perimeter was set successfully.</p>'
-                    
-                for circle in circles:
-                    c = AlertCircle(alert=alert,
-                                    center_lat=circle["lat"],
-                                    center_long=circle["lng"],
-                                    radius=circle["rad"],
-                                    )
-                    c.save()
-    
+   
     return HttpResponse(message) 
- 
+
+    
+    
   #####################    schedule     #####################   
 @login_required 
 def schedule(request):
