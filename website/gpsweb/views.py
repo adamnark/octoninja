@@ -379,7 +379,7 @@ def setNewArea(request):
             circles = data[0]
             areaName = data[1]
             
-            area = AlertArea.objects.filter(name=areaName)
+            area = AlertArea.objects.filter(name=areaName).filter(owner=user)
             if area:
                 message = 'This area name already in use'
             else:
@@ -457,7 +457,7 @@ def setCarsArea(request):
                                     cutoff=20,
                                     type=Alert.GEOFENCE_ALERT,
                                     max_speed=0,
-                                    schedule_bit_field=0,
+                                    schedule_profile=None,
                                     geo_area = area,
                                     )
                     alert.save()
@@ -479,11 +479,59 @@ def schedule(request):
         'hours':['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'],
         'user' : user,
         'carsDrivers' : utils.userCarDriverSchedule(user),
+        'userScheduleProfiles' : AlertScheduleProfile.objects.filter(owner=user),
     }
     return render(request, 'schedule/schedule.html', context)
- 
+
+
 @login_required 
-def setSchedule(request):
+def setNewScheduleProfile(request):
+    user = request.user
+    user_id = user.id
+    person = Person.objects.filter(owner=user).filter(is_primary=True)[0]
+    message=''
+    if request.is_ajax():
+        if request.method == 'POST':
+            data = json.loads(request.raw_post_data)
+            schedule_profile_name = data[0]
+            schedule_bit_field = data[1]
+          
+            schedule_profile = AlertScheduleProfile.objects.filter(name=schedule_profile_name).filter(owner=user)
+            if schedule_profile:
+                message = 'This profile name already in use'
+            else: #Create new profile
+                schedule_profile = AlertScheduleProfile(name=schedule_profile_name,
+                                            owner=user,
+                                            schedule_bit_field=schedule_bit_field,
+                                   )
+                schedule_profile.save()
+                message = 'New profile added successfully'
+    return HttpResponse(message)
+
+@login_required 
+def updateScheduleProfile(request):
+    user = request.user
+    user_id = user.id
+    person = Person.objects.filter(owner=user).filter(is_primary=True)[0]
+    message=''
+    if request.is_ajax():
+        if request.method == 'POST':
+            data = json.loads(request.raw_post_data)
+            profileId = data[0]
+            schedule_bit_field = data[1]
+            
+            if profileId == '':
+                message += "<p>No profile were selected.</p>"  
+            else:
+                scheduleProfile = AlertScheduleProfile.objects.get(id=profileId)
+                scheduleProfile.schedule_bit_field = schedule_bit_field
+                scheduleProfile.save()
+                message = scheduleProfile.name + ' updated successfully'
+    return HttpResponse(message)
+    
+    
+@login_required 
+def setCarsSchedule(request):
     user = request.user
     user_id = user.id
     person = Person.objects.filter(owner=user).filter(is_primary=True)[0]
@@ -492,37 +540,36 @@ def setSchedule(request):
         if request.method == 'POST':
             data = json.loads(request.raw_post_data)
             carsId = [int(id) for id in data[0]]
-            schedule_bit_field = data[1]
-            print 'schedule_bit_field'+schedule_bit_field
+            profileId = data[1]
 
             if not carsId:
                 message += "<p>No cars were selected.</p>"
-            
-            for id in carsId:
-                car = Car.objects.get(id=id)
-                alert = Alert.objects.filter(car=car).filter(type=Alert.SCHEDULE_ALERT)
-                if alert: #change existing alert
-                    alert = alert[0]
-                    alert.schedule_bit_field=schedule_bit_field
-                    alert.save()
-                else:     #create new alert
-                    alert = Alert(  name="Schedule "+str(car),
-                                    car=car,
-                                    state=datetime.datetime.now(),
-                                    cutoff=20,
-                                    type=Alert.SCHEDULE_ALERT,
-                                    max_speed=0,
-                                    schedule_bit_field=schedule_bit_field,
-                                    )
-                    alert.save()
-                    alert.recipients.add(person)
-                    alert.save()
                 
-                if schedule_bit_field == 0:
-                    message += '<p>'+str(car)+' - Schedule was cleared.</p>'
-                else:
+            if profileId == '':
+                message += "<p>No profile were selected.</p>"    
+            else:
+                scheduleProfile = AlertScheduleProfile.objects.get(id=profileId)
+                for id in carsId:
+                    car = Car.objects.get(id=id)
+                    alert = Alert.objects.filter(car=car).filter(type=Alert.SCHEDULE_ALERT)
+                    if alert: #change existing alert
+                        alert = alert[0]
+                        alert.schedule_profile=scheduleProfile
+                        alert.save()
+                    else:     #create new alert
+                        alert = Alert(  name="Schedule "+str(car),
+                                        car=car,
+                                        state=datetime.datetime.now(),
+                                        cutoff=20,
+                                        type=Alert.SCHEDULE_ALERT,
+                                        max_speed=0,
+                                        schedule_profile=scheduleProfile,
+                                        )
+                        alert.save()
+                        alert.recipients.add(person)
+                        alert.save()
+                        
                     message += '<p>'+str(car)+' - Schedule was set successfully.</p>'
                     
-    print message       
     return HttpResponse(message) 
  

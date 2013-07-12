@@ -32,7 +32,9 @@ urlpatterns = patterns('',
     url(r'^update_area$', views.updateArea),
 #Schedule Alert set
     url(r'^schedule$', views.schedule),    
-    url(r'^set_schedule$', views.setSchedule),
+    url(r'^set_new_schedule$', views.setNewScheduleProfile),
+    url(r'^set_car_schedule$', views.setCarsSchedule),
+    url(r'^update_schedule_profile$', views.updateScheduleProfile),
 # Fuel Page
     url(r'^fuel$', views.fuel),
     url(r'^get_fuel_data/(\d+)/(\d+)$', views.get_fuel_data),

@@ -68,7 +68,7 @@ def checkForTriggers(locationLog, alert):
             alert_exist = True
 
     if str(alert.type) == str(Alert.SCHEDULE_ALERT):
-        if PacketParser.is_in_time_slot(locationLog.timestamp, alert.schedule_bit_field):
+        if PacketParser.is_in_time_slot(locationLog.timestamp, alert.schedule_profile.schedule_bit_field):
             alert_exist = True
 
     print "checkForTriggers returned " + str(alert_exist)

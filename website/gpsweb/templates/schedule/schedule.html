@@ -9,27 +9,9 @@
 		<p>When setting a schedule, the previous schedule will be overridden for the checked cars.</p>
 	
 <div id="gps-table">
-<table class="table table-striped table-hover">
-	<thead>
-		<tr>
-			<th><i class="icon-check"></i></th>
-			<th>Car</th>
-			<th>Primary Driver</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for carDriver in carsDrivers %} 
-		<tr>
-			<td> <input type="checkbox" class = "cbCar" value="{{carDriver.car.id}}"/></td>
-			<td>{{carDriver.car}}</td>
-			<td>{{carDriver.driver}}</td>
-			<td><input onClick="setCarSchedule({{carDriver.car.id}})" value='Get Schedule' class='btn' type='button'></td>
-		</tr>	
-		{% endfor %}
-		
-	</tbody>
-</table>
+	
+	<input type="text" id="NewProfileName" placeholder="Type new profile name">
+	<input  onClick="ajaxCreateNewProfile()" value='Create New Profile' class='btn' type='button'>	
 	<table border="1" class="table table-striped table-hover">
 		<thead>
 		<tr>
@@ -55,9 +37,42 @@
 			</td>
 		</tr>
 		{% endfor %}
+	
 	</table>
+	<select onchange="setProfileSchedule(this.options[this.selectedIndex].value)" id="userProfiles">
+	<option></option>
+	{% for profile in userScheduleProfiles %} 
+	<option value="{{profile.id}}">{{profile.name}}</option>
+	{% endfor %}
+	</select>
+	<input  onClick="ajaxUpdateExistingProfile()" value='Update Profile' class='btn' type='button'>	
 	</div>
-	<input  onClick="ajaxSetSchedule()" value='Set Schedule' class='btn' type='button'>	
+	<table class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th><i class="icon-check"></i></th>
+			<th>Car</th>
+			<th>Primary Driver</th>
+			<th>Scheule Profile</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for carDriver in carsDrivers %} 
+		<tr>
+			<td> <input type="checkbox" class = "cbCar" value="{{carDriver.car.id}}"/></td>
+			<td>{{carDriver.car}}</td>
+			<td>{{carDriver.driver}}</td>
+			{% if carDriver.schedule %}
+			<td>{{carDriver.schedule}}</td>
+			{% else %}
+			<td>None</td>
+			{% endif %}
+		</tr>	
+		{% endfor %}
+		
+	</tbody>
+	</table>
+	<input  onClick="ajaxSetCarsSchedule()" value='Set Schedule' class='btn' type='button'>	
 	<div id='message' class='alert hidden'></div>
 </div>
 {% endblock details %}
@@ -88,14 +103,14 @@ function getScheduleJSON(){
 	}
 	return scheduleBitField;
 }
-function ajaxSetSchedule(){
+function ajaxSetCarsSchedule(){
 	var csrftoken = getCookie('csrftoken');
-	var scheduleJSON = getScheduleJSON();
+	var profilesOptions = document.getElementById("userProfiles");
+	var profileId = profilesOptions.options[profilesOptions.selectedIndex].value;
 	var selectedCars = getSelectedCars();
-	updateCarsSchedule(selectedCars, scheduleJSON);
-	var data = [selectedCars,scheduleJSON];
+	var data = [selectedCars,profileId];
 	$.ajax({
-		url:"set_schedule",
+		url:"set_car_schedule",
 		type: 'POST',
 		data:JSON.stringify(data),
 		
@@ -114,22 +129,75 @@ function ajaxSetSchedule(){
 	});
 	
 }
+function ajaxCreateNewProfile(){
+	var csrftoken = getCookie('csrftoken');
+	var scheduleJSON = getScheduleJSON();
+	var newName = document.getElementById("NewProfileName").value;
+	var data = [newName,scheduleJSON];
+	$.ajax({
+		url:"set_new_schedule",
+		type: 'POST',
+		data:JSON.stringify(data),
+		
+		success: function(data, textStatus, xhr) {
+			$('#message').html(data);
+			$('#message').show(1.5); 
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			$('#message').html('Connection error...');
+			$('#message').show(1.5); 
+        },
+		
+		beforeSend: function(xhr, settings){
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		}
+	});
+}
+function ajaxUpdateExistingProfile(){
+	var csrftoken = getCookie('csrftoken');
+	var scheduleJSON = getScheduleJSON();
+	var profilesOptions = document.getElementById("userProfiles");
+	var profileId = profilesOptions.options[profilesOptions.selectedIndex].value;
+	if (profileId != "")
+	{
+		schedule[profileId] = scheduleJSON;
+	}
+	var data = [profileId,scheduleJSON];
+	$.ajax({
+		url:"update_schedule_profile",
+		type: 'POST',
+		data:JSON.stringify(data),
+		
+		success: function(data, textStatus, xhr) {
+			$('#message').html(data);
+			$('#message').show(1.5); 
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			$('#message').html('Connection error...');
+			$('#message').show(1.5); 
+        },
+		
+		beforeSend: function(xhr, settings){
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		}
+	});
+}
 
 function extendedFunction()
 {  
 	$('#message').hide();
-	{% for carDriver in carsDrivers %} 
-	schedule[{{carDriver.car.id}}]="{{carDriver.schedule}}";
+	{% for profile in userScheduleProfiles %} 
+	schedule[{{profile.id}}]="{{profile.schedule_bit_field}}";
 	{% endfor %} 
 }
 
-function setCarSchedule(carId)
+function setProfileSchedule(profileId)
 {
-   for (dayId in days)//Clear all days
-   {
+	for (dayId in days)//Clear all days
+	{
 		AllDayCheckbox(days[dayId],false);
-   }
-   scheduleBits = schedule[carId];
+	}
+   scheduleBits = schedule[profileId];
    var i=0;
    for (dayId in days)
    {

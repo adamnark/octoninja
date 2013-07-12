@@ -102,6 +102,13 @@ class AlertArea(models.Model):
     def __unicode__(self):
         return self.name
 
+class AlertScheduleProfile(models.Model):
+    name =      models.CharField(max_length=250)
+    owner =     models.ForeignKey(User)
+    schedule_bit_field = models.CharField(max_length=168)
+    def __unicode__(self):
+        return self.name      
+        
 class Alert(models.Model):
     name =      models.CharField(max_length=250)
     car =      models.ForeignKey(Car)
@@ -117,8 +124,8 @@ class Alert(models.Model):
         (SCHEDULE_ALERT, 'Schedule'))
     type =      models.IntegerField(max_length=1, choices=ALERTS_TYPE)
     max_speed = models.IntegerField()
-    schedule_bit_field = models.CharField(max_length=168)
-    geo_area = models.ForeignKey(AlertArea, null=True)
+    schedule_profile = models.ForeignKey(AlertScheduleProfile, default=None, null=True, blank=True)
+    geo_area = models.ForeignKey(AlertArea, default=None, null=True, blank=True)
     def __unicode__(self):
         return self.name
 

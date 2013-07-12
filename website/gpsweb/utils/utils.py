@@ -111,7 +111,7 @@ def userCarDriverSchedule(user):
         driver = car.getPrimaryDriver()
         alert = Alert.objects.filter(car=car).filter(type=Alert.SCHEDULE_ALERT)
         if alert:
-            schedule = alert[0].schedule_bit_field
+            schedule = alert[0].schedule_profile
         else:
             schedule = ""
         val = CarDriverSchedule(car, driver, schedule)
