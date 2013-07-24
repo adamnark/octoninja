@@ -34,7 +34,7 @@
 <ul class="nav nav-tabs" id="myTab">
   <li><a href="#chart1tab" data-toggle="tab">Distance(km) per Liter</a></li>
   <li><a href="#chart2tab" data-toggle="tab">Fuel Consumption</a></li>
-  <li><a href="#chart3tab" data-toggle="tab">KM Traveled</a></li>
+  <li><a href="#chart3tab" data-toggle="tab">Kilometrage</a></li>
 </ul>
  
 <div class="tab-content">
@@ -114,6 +114,27 @@ function updateChart(data){
         series: [{
             name: 'Liter',
             data: data[2],
+			color: '#FF87F7'
+        }]
+    });
+	$('#chart3').highcharts({
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Kilometrage  -- ' + (currentDate.getMonth()+1) + '/' + currentDate.getFullYear()
+        },
+        xAxis: {
+            categories: data[0]
+        },
+        yAxis: {
+            title: {
+                text: 'KM'
+            }
+        },
+        series: [{
+            name: 'KM',
+            data: data[3],
 			color: '#FF87F7'
         }]
     });

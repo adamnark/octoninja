@@ -48,7 +48,7 @@ def get_fuel_data(request,fromDate,toDate):
                     km_per_liter.append(usage)
                     liter.append(liters)
                         
-            message = json.dumps([car_names, km_per_liter, liter, ])
+            message = json.dumps([car_names, km_per_liter, liter,km ])
     return HttpResponse(message) 
     
     
