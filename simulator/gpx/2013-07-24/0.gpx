@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1"
+			xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3"
+			xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1"
+			creator="GMapToGarminGPX.py" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd">
+	<rte>
+		<name>0</name>
+		<rtept lat="32.114363" lon="34.840756">
+			<name>Point A</name>
+			<extensions>
+				<gpxx:RoutePointExtension>
+					<gpxx:rpt lat="32.11436" lon="34.84076"/>
+					<gpxx:rpt lat="32.11446" lon="34.84092"/>
+					<gpxx:rpt lat="32.11459" lon="34.84084"/>
+					<gpxx:rpt lat="32.11458" lon="34.8406"/>
+					<gpxx:rpt lat="32.11442" lon="34.84048"/>
+					<gpxx:rpt lat="32.11401" lon="34.84029"/>
+					<gpxx:rpt lat="32.11349" lon="34.83989"/>
+					<gpxx:rpt lat="32.11177" lon="34.83884"/>
+					<gpxx:rpt lat="32.11041" lon="34.83769"/>
+					<gpxx:rpt lat="32.10862" lon="34.83571"/>
+					<gpxx:rpt lat="32.10739" lon="34.83411"/>
+					<gpxx:rpt lat="32.10689" lon="34.83294"/>
+					<gpxx:rpt lat="32.10675" lon="34.8316"/>
+					<gpxx:rpt lat="32.10701" lon="34.82978"/>
+					<gpxx:rpt lat="32.10715" lon="34.82806"/>
+					<gpxx:rpt lat="32.10717" lon="34.82752"/>
+					<gpxx:rpt lat="32.10687" lon="34.82603"/>
+					<gpxx:rpt lat="32.10611" lon="34.82132"/>
+					<gpxx:rpt lat="32.106" lon="34.81948"/>
+					<gpxx:rpt lat="32.10625" lon="34.81729"/>
+					<gpxx:rpt lat="32.1068" lon="34.81613"/>
+					<gpxx:rpt lat="32.10789" lon="34.81489"/>
+					<gpxx:rpt lat="32.10701" lon="34.8141"/>
+					<gpxx:rpt lat="32.10557" lon="34.81237"/>
+					<gpxx:rpt lat="32.10427" lon="34.81011"/>
+					<gpxx:rpt lat="32.10385" lon="34.80921"/>
+					<gpxx:rpt lat="32.10282" lon="34.80642"/>
+					<gpxx:rpt lat="32.10228" lon="34.80419"/>
+					<gpxx:rpt lat="32.10201" lon="34.80302"/>
+					<gpxx:rpt lat="32.10126" lon="34.79963"/>
+					<gpxx:rpt lat="32.10053" lon="34.79632"/>
+					<gpxx:rpt lat="32.09956" lon="34.79202"/>
+					<gpxx:rpt lat="32.09907" lon="34.78926"/>
+					<gpxx:rpt lat="32.09872" lon="34.78355"/>
+					<gpxx:rpt lat="32.09852" lon="34.78326"/>
+				</gpxx:RoutePointExtension>
+			</extensions>
+		</rtept>
+		<rtept lat="32.0985205" lon="34.783259">
+			<name>Point B</name>
+			<extensions>
+				<gpxx:RoutePointExtension>
+					<gpxx:rpt lat="32.09852" lon="34.78326"/>
+					<gpxx:rpt lat="32.09809" lon="34.78321"/>
+					<gpxx:rpt lat="32.09692" lon="34.78316"/>
+					<gpxx:rpt lat="32.0958" lon="34.78308"/>
+					<gpxx:rpt lat="32.09563" lon="34.78266"/>
+					<gpxx:rpt lat="32.0956" lon="34.78376"/>
+					<gpxx:rpt lat="32.09546" lon="34.78544"/>
+					<gpxx:rpt lat="32.09604" lon="34.79033"/>
+					<gpxx:rpt lat="32.09599" lon="34.79037"/>
+					<gpxx:rpt lat="32.09598" lon="34.79044"/>
+					<gpxx:rpt lat="32.096" lon="34.79049"/>
+					<gpxx:rpt lat="32.09605" lon="34.7905"/>
+					<gpxx:rpt lat="32.09635" lon="34.79203"/>
+					<gpxx:rpt lat="32.09675" lon="34.7927"/>
+					<gpxx:rpt lat="32.09677" lon="34.79283"/>
+					<gpxx:rpt lat="32.09687" lon="34.79283"/>
+					<gpxx:rpt lat="32.09706" lon="34.79361"/>
+					<gpxx:rpt lat="32.09712" lon="34.794"/>
+					<gpxx:rpt lat="32.09709" lon="34.79475"/>
+					<gpxx:rpt lat="32.09689" lon="34.79433"/>
+					<gpxx:rpt lat="32.09691" lon="34.79411"/>
+					<gpxx:rpt lat="32.09731" lon="34.79393"/>
+					<gpxx:rpt lat="32.09849" lon="34.79374"/>
+					<gpxx:rpt lat="32.09978" lon="34.79353"/>
+					<gpxx:rpt lat="32.10037" lon="34.7934"/>
+					<gpxx:rpt lat="32.10333" lon="34.79272"/>
+					<gpxx:rpt lat="32.10494" lon="34.79242"/>
+					<gpxx:rpt lat="32.10838" lon="34.79202"/>
+					<gpxx:rpt lat="32.11268" lon="34.79262"/>
+					<gpxx:rpt lat="32.11251" lon="34.79038"/>
+					<gpxx:rpt lat="32.11261" lon="34.78973"/>
+					<gpxx:rpt lat="32.11518" lon="34.79015"/>
+					<gpxx:rpt lat="32.11908" lon="34.7909"/>
+					<gpxx:rpt lat="32.12274" lon="34.79159"/>
+					<gpxx:rpt lat="32.12302" lon="34.79188"/>
+				</gpxx:RoutePointExtension>
+			</extensions>
+		</rtept>
+		<rtept lat="32.1230236" lon="34.7918946">
+			<name>Point C</name>
+			<extensions>
+				<gpxx:RoutePointExtension>
+					<gpxx:rpt lat="32.12302" lon="34.79189"/>
+					<gpxx:rpt lat="32.12288" lon="34.79297"/>
+					<gpxx:rpt lat="32.12264" lon="34.79435"/>
+					<gpxx:rpt lat="32.12453" lon="34.79488"/>
+					<gpxx:rpt lat="32.1344" lon="34.79716"/>
+					<gpxx:rpt lat="32.13693" lon="34.79856"/>
+					<gpxx:rpt lat="32.13973" lon="34.80076"/>
+					<gpxx:rpt lat="32.14062" lon="34.80128"/>
+					<gpxx:rpt lat="32.14313" lon="34.80229"/>
+					<gpxx:rpt lat="32.14692" lon="34.80345"/>
+					<gpxx:rpt lat="32.14943" lon="34.80443"/>
+					<gpxx:rpt lat="32.15406" lon="34.80722"/>
+					<gpxx:rpt lat="32.15645" lon="34.80894"/>
+					<gpxx:rpt lat="32.15928" lon="34.8109"/>
+					<gpxx:rpt lat="32.15998" lon="34.81187"/>
+					<gpxx:rpt lat="32.1603" lon="34.8146"/>
+					<gpxx:rpt lat="32.16066" lon="34.8168"/>
+					<gpxx:rpt lat="32.16114" lon="34.8186"/>
+					<gpxx:rpt lat="32.16236" lon="34.82159"/>
+					<gpxx:rpt lat="32.16335" lon="34.82386"/>
+					<gpxx:rpt lat="32.16358" lon="34.82508"/>
+					<gpxx:rpt lat="32.16343" lon="34.82718"/>
+					<gpxx:rpt lat="32.16439" lon="34.82761"/>
+					<gpxx:rpt lat="32.16832" lon="34.82864"/>
+					<gpxx:rpt lat="32.17098" lon="34.82903"/>
+					<gpxx:rpt lat="32.17082" lon="34.83149"/>
+					<gpxx:rpt lat="32.17079" lon="34.83165"/>
+					<gpxx:rpt lat="32.17077" lon="34.83169"/>
+					<gpxx:rpt lat="32.17076" lon="34.83174"/>
+					<gpxx:rpt lat="32.17076" lon="34.83179"/>
+					<gpxx:rpt lat="32.17076" lon="34.83192"/>
+					<gpxx:rpt lat="32.17037" lon="34.83481"/>
+					<gpxx:rpt lat="32.16999" lon="34.83754"/>
+					<gpxx:rpt lat="32.16993" lon="34.83754"/>
+					<gpxx:rpt lat="32.16989" lon="34.8376"/>
+					<gpxx:rpt lat="32.1699" lon="34.83765"/>
+					<gpxx:rpt lat="32.16993" lon="34.83769"/>
+					<gpxx:rpt lat="32.16979" lon="34.83899"/>
+				</gpxx:RoutePointExtension>
+			</extensions>
+		</rtept>
+		<rtept lat="32.1700059" lon="34.8392087">
+			<name>Point D</name>
+			<extensions>
+				<gpxx:RoutePointExtension>
+					<gpxx:rpt lat="32.17001" lon="34.83921"/>
+					<gpxx:rpt lat="32.16916" lon="34.83957"/>
+					<gpxx:rpt lat="32.16799" lon="34.8405"/>
+					<gpxx:rpt lat="32.16723" lon="34.84148"/>
+					<gpxx:rpt lat="32.16672" lon="34.84261"/>
+					<gpxx:rpt lat="32.16564" lon="34.84254"/>
+					<gpxx:rpt lat="32.16395" lon="34.84253"/>
+					<gpxx:rpt lat="32.16138" lon="34.8425"/>
+					<gpxx:rpt lat="32.16051" lon="34.84245"/>
+					<gpxx:rpt lat="32.1577" lon="34.84237"/>
+					<gpxx:rpt lat="32.15588" lon="34.84231"/>
+					<gpxx:rpt lat="32.15374" lon="34.84221"/>
+					<gpxx:rpt lat="32.15205" lon="34.84212"/>
+					<gpxx:rpt lat="32.1515" lon="34.84193"/>
+					<gpxx:rpt lat="32.15004" lon="34.84071"/>
+					<gpxx:rpt lat="32.14893" lon="34.83991"/>
+					<gpxx:rpt lat="32.14758" lon="34.83928"/>
+					<gpxx:rpt lat="32.14585" lon="34.83851"/>
+					<gpxx:rpt lat="32.14298" lon="34.83727"/>
+					<gpxx:rpt lat="32.14128" lon="34.83652"/>
+					<gpxx:rpt lat="32.13849" lon="34.8353"/>
+					<gpxx:rpt lat="32.13797" lon="34.83544"/>
+					<gpxx:rpt lat="32.13728" lon="34.83948"/>
+					<gpxx:rpt lat="32.13685" lon="34.84237"/>
+					<gpxx:rpt lat="32.13677" lon="34.84259"/>
+					<gpxx:rpt lat="32.13673" lon="34.84266"/>
+					<gpxx:rpt lat="32.13673" lon="34.84274"/>
+					<gpxx:rpt lat="32.13676" lon="34.84281"/>
+					<gpxx:rpt lat="32.13683" lon="34.84284"/>
+					<gpxx:rpt lat="32.13676" lon="34.8435"/>
+					<gpxx:rpt lat="32.13622" lon="34.84462"/>
+					<gpxx:rpt lat="32.13575" lon="34.84528"/>
+					<gpxx:rpt lat="32.13486" lon="34.84556"/>
+					<gpxx:rpt lat="32.13462" lon="34.84558"/>
+					<gpxx:rpt lat="32.13449" lon="34.84567"/>
+					<gpxx:rpt lat="32.13454" lon="34.84584"/>
+					<gpxx:rpt lat="32.13473" lon="34.84607"/>
+					<gpxx:rpt lat="32.13541" lon="34.84704"/>
+					<gpxx:rpt lat="32.13583" lon="34.84848"/>
+					<gpxx:rpt lat="32.13569" lon="34.85001"/>
+					<gpxx:rpt lat="32.13529" lon="34.85126"/>
+					<gpxx:rpt lat="32.13527" lon="34.85221"/>
+					<gpxx:rpt lat="32.13577" lon="34.85298"/>
+					<gpxx:rpt lat="32.13588" lon="34.85451"/>
+					<gpxx:rpt lat="32.13566" lon="34.85568"/>
+					<gpxx:rpt lat="32.13513" lon="34.85656"/>
+					<gpxx:rpt lat="32.13438" lon="34.85661"/>
+					<gpxx:rpt lat="32.13387" lon="34.85892"/>
+					<gpxx:rpt lat="32.13443" lon="34.859"/>
+					<gpxx:rpt lat="32.13497" lon="34.85938"/>
+					<gpxx:rpt lat="32.1353" lon="34.8602"/>
+					<gpxx:rpt lat="32.13527" lon="34.86102"/>
+					<gpxx:rpt lat="32.13477" lon="34.86226"/>
+					<gpxx:rpt lat="32.13405" lon="34.8625"/>
+				</gpxx:RoutePointExtension>
+			</extensions>
+		</rtept>
+		<rtept lat="32.1340509" lon="34.8624994">
+			<name>Point E</name>
+			<extensions>
+				<gpxx:RoutePointExtension>
+					<gpxx:rpt lat="32.13405" lon="34.8625"/>
+					<gpxx:rpt lat="32.13219" lon="34.86263"/>
+					<gpxx:rpt lat="32.13197" lon="34.86295"/>
+					<gpxx:rpt lat="32.13168" lon="34.86308"/>
+					<gpxx:rpt lat="32.13048" lon="34.86354"/>
+					<gpxx:rpt lat="32.12997" lon="34.86285"/>
+					<gpxx:rpt lat="32.12934" lon="34.86143"/>
+					<gpxx:rpt lat="32.12942" lon="34.86115"/>
+					<gpxx:rpt lat="32.12921" lon="34.86129"/>
+					<gpxx:rpt lat="32.12944" lon="34.8621"/>
+					<gpxx:rpt lat="32.1295" lon="34.86254"/>
+					<gpxx:rpt lat="32.129" lon="34.86337"/>
+					<gpxx:rpt lat="32.12769" lon="34.86464"/>
+					<gpxx:rpt lat="32.12756" lon="34.86566"/>
+					<gpxx:rpt lat="32.12794" lon="34.86758"/>
+					<gpxx:rpt lat="32.12847" lon="34.86812"/>
+					<gpxx:rpt lat="32.12869" lon="34.86897"/>
+					<gpxx:rpt lat="32.1296" lon="34.86986"/>
+					<gpxx:rpt lat="32.13082" lon="34.87047"/>
+					<gpxx:rpt lat="32.13094" lon="34.87057"/>
+					<gpxx:rpt lat="32.13072" lon="34.87066"/>
+					<gpxx:rpt lat="32.12914" lon="34.8699"/>
+					<gpxx:rpt lat="32.12811" lon="34.86861"/>
+					<gpxx:rpt lat="32.12758" lon="34.86741"/>
+					<gpxx:rpt lat="32.12724" lon="34.86477"/>
+					<gpxx:rpt lat="32.12674" lon="34.86013"/>
+					<gpxx:rpt lat="32.126" lon="34.85799"/>
+					<gpxx:rpt lat="32.12566" lon="34.85719"/>
+					<gpxx:rpt lat="32.12491" lon="34.85596"/>
+					<gpxx:rpt lat="32.12459" lon="34.8556"/>
+					<gpxx:rpt lat="32.12339" lon="34.85453"/>
+					<gpxx:rpt lat="32.12078" lon="34.85277"/>
+					<gpxx:rpt lat="32.11805" lon="34.85172"/>
+					<gpxx:rpt lat="32.10715" lon="34.84918"/>
+					<gpxx:rpt lat="32.10474" lon="34.84859"/>
+					<gpxx:rpt lat="32.10074" lon="34.84767"/>
+					<gpxx:rpt lat="32.09859" lon="34.84689"/>
+					<gpxx:rpt lat="32.09538" lon="34.84587"/>
+					<gpxx:rpt lat="32.09236" lon="34.84576"/>
+					<gpxx:rpt lat="32.08711" lon="34.8457"/>
+					<gpxx:rpt lat="32.08457" lon="34.8455"/>
+					<gpxx:rpt lat="32.0812" lon="34.84483"/>
+					<gpxx:rpt lat="32.07602" lon="34.84385"/>
+					<gpxx:rpt lat="32.07199" lon="34.84283"/>
+					<gpxx:rpt lat="32.07033" lon="34.8419"/>
+					<gpxx:rpt lat="32.0658" lon="34.83861"/>
+					<gpxx:rpt lat="32.06304" lon="34.83712"/>
+					<gpxx:rpt lat="32.0588" lon="34.83527"/>
+					<gpxx:rpt lat="32.05684" lon="34.83488"/>
+					<gpxx:rpt lat="32.05559" lon="34.83462"/>
+					<gpxx:rpt lat="32.05351" lon="34.83318"/>
+					<gpxx:rpt lat="32.05075" lon="34.83155"/>
+					<gpxx:rpt lat="32.04698" lon="34.82995"/>
+					<gpxx:rpt lat="32.04338" lon="34.8295"/>
+					<gpxx:rpt lat="32.04146" lon="34.82944"/>
+					<gpxx:rpt lat="32.03925" lon="34.82965"/>
+					<gpxx:rpt lat="32.03758" lon="34.82959"/>
+					<gpxx:rpt lat="32.03521" lon="34.82922"/>
+					<gpxx:rpt lat="32.03097" lon="34.82892"/>
+					<gpxx:rpt lat="32.02896" lon="34.82846"/>
+					<gpxx:rpt lat="32.02765" lon="34.82767"/>
+					<gpxx:rpt lat="32.02592" lon="34.82634"/>
+					<gpxx:rpt lat="32.02406" lon="34.82485"/>
+					<gpxx:rpt lat="32.02307" lon="34.82339"/>
+					<gpxx:rpt lat="32.02228" lon="34.82079"/>
+					<gpxx:rpt lat="32.02209" lon="34.8179"/>
+					<gpxx:rpt lat="32.02258" lon="34.8161"/>
+					<gpxx:rpt lat="32.02545" lon="34.81181"/>
+					<gpxx:rpt lat="32.03409" lon="34.79983"/>
+					<gpxx:rpt lat="32.03792" lon="34.79446"/>
+					<gpxx:rpt lat="32.03997" lon="34.79159"/>
+					<gpxx:rpt lat="32.04154" lon="34.7905"/>
+					<gpxx:rpt lat="32.04444" lon="34.78906"/>
+					<gpxx:rpt lat="32.04687" lon="34.78761"/>
+					<gpxx:rpt lat="32.0486" lon="34.78628"/>
+					<gpxx:rpt lat="32.05022" lon="34.78545"/>
+					<gpxx:rpt lat="32.05127" lon="34.78527"/>
+					<gpxx:rpt lat="32.05442" lon="34.78538"/>
+					<gpxx:rpt lat="32.05586" lon="34.78566"/>
+					<gpxx:rpt lat="32.05835" lon="34.78652"/>
+					<gpxx:rpt lat="32.05912" lon="34.78697"/>
+					<gpxx:rpt lat="32.05929" lon="34.78772"/>
+					<gpxx:rpt lat="32.05926" lon="34.79066"/>
+					<gpxx:rpt lat="32.05853" lon="34.79193"/>
+					<gpxx:rpt lat="32.05693" lon="34.79186"/>
+					<gpxx:rpt lat="32.05559" lon="34.79178"/>
+					<gpxx:rpt lat="32.05392" lon="34.79181"/>
+				</gpxx:RoutePointExtension>
+			</extensions>
+		</rtept>
+		<rtept lat="32.0535005" lon="34.7920473">
+			<name>Point F</name>
+			<extensions>
+				<gpxx:RoutePointExtension>
+					<gpxx:rpt lat="32.0535" lon="34.79205"/>
+					<gpxx:rpt lat="32.05254" lon="34.79224"/>
+					<gpxx:rpt lat="32.05135" lon="34.79192"/>
+					<gpxx:rpt lat="32.051" lon="34.79166"/>
+					<gpxx:rpt lat="32.04766" lon="34.79103"/>
+					<gpxx:rpt lat="32.04743" lon="34.78987"/>
+					<gpxx:rpt lat="32.04745" lon="34.78915"/>
+					<gpxx:rpt lat="32.04724" lon="34.78857"/>
+					<gpxx:rpt lat="32.0478" lon="34.7873"/>
+					<gpxx:rpt lat="32.04905" lon="34.7861"/>
+					<gpxx:rpt lat="32.05022" lon="34.78545"/>
+					<gpxx:rpt lat="32.05127" lon="34.78527"/>
+					<gpxx:rpt lat="32.05442" lon="34.78538"/>
+					<gpxx:rpt lat="32.05592" lon="34.78556"/>
+					<gpxx:rpt lat="32.058" lon="34.78613"/>
+					<gpxx:rpt lat="32.06036" lon="34.78689"/>
+					<gpxx:rpt lat="32.06219" lon="34.78776"/>
+					<gpxx:rpt lat="32.06456" lon="34.79035"/>
+					<gpxx:rpt lat="32.06626" lon="34.79195"/>
+					<gpxx:rpt lat="32.06894" lon="34.79314"/>
+					<gpxx:rpt lat="32.07266" lon="34.79356"/>
+					<gpxx:rpt lat="32.07463" lon="34.79377"/>
+					<gpxx:rpt lat="32.07624" lon="34.79445"/>
+					<gpxx:rpt lat="32.07932" lon="34.79725"/>
+					<gpxx:rpt lat="32.07989" lon="34.7976"/>
+					<gpxx:rpt lat="32.08066" lon="34.79797"/>
+					<gpxx:rpt lat="32.08338" lon="34.79872"/>
+					<gpxx:rpt lat="32.08507" lon="34.79926"/>
+					<gpxx:rpt lat="32.08967" lon="34.80082"/>
+					<gpxx:rpt lat="32.09462" lon="34.80192"/>
+					<gpxx:rpt lat="32.09897" lon="34.80296"/>
+					<gpxx:rpt lat="32.10012" lon="34.80331"/>
+					<gpxx:rpt lat="32.10059" lon="34.80357"/>
+					<gpxx:rpt lat="32.10096" lon="34.80417"/>
+					<gpxx:rpt lat="32.10115" lon="34.80484"/>
+					<gpxx:rpt lat="32.10147" lon="34.80516"/>
+					<gpxx:rpt lat="32.1021" lon="34.80526"/>
+					<gpxx:rpt lat="32.10236" lon="34.80544"/>
+					<gpxx:rpt lat="32.10268" lon="34.80647"/>
+					<gpxx:rpt lat="32.10338" lon="34.80852"/>
+					<gpxx:rpt lat="32.10489" lon="34.8116"/>
+					<gpxx:rpt lat="32.10621" lon="34.81337"/>
+					<gpxx:rpt lat="32.10738" lon="34.81489"/>
+					<gpxx:rpt lat="32.1069" lon="34.81588"/>
+					<gpxx:rpt lat="32.1063" lon="34.81677"/>
+					<gpxx:rpt lat="32.10597" lon="34.8184"/>
+					<gpxx:rpt lat="32.10592" lon="34.82021"/>
+					<gpxx:rpt lat="32.10622" lon="34.82266"/>
+					<gpxx:rpt lat="32.10687" lon="34.82603"/>
+					<gpxx:rpt lat="32.10717" lon="34.82752"/>
+					<gpxx:rpt lat="32.10715" lon="34.82806"/>
+					<gpxx:rpt lat="32.10687" lon="34.82984"/>
+					<gpxx:rpt lat="32.10663" lon="34.83193"/>
+					<gpxx:rpt lat="32.10672" lon="34.83279"/>
+					<gpxx:rpt lat="32.10701" lon="34.83363"/>
+					<gpxx:rpt lat="32.10789" lon="34.83502"/>
+					<gpxx:rpt lat="32.10915" lon="34.83648"/>
+					<gpxx:rpt lat="32.11084" lon="34.83826"/>
+					<gpxx:rpt lat="32.11203" lon="34.83916"/>
+					<gpxx:rpt lat="32.11343" lon="34.84"/>
+					<gpxx:rpt lat="32.11436" lon="34.84076"/>
+					<gpxx:rpt lat="32.11429" lon="34.84102"/>
+				</gpxx:RoutePointExtension>
+			</extensions>
+		</rtept>
+		<rtept lat="32.113745" lon="34.841802">
+			<name>Point G</name>
+		</rtept>
+	</rte>
+</gpx>
