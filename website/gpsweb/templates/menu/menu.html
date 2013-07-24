@@ -8,7 +8,7 @@
 			<!-- Everything you want hidden at 940px or less, place within here -->
 			<div class="nav-collapse collapse">
 				<ul class="nav">
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<li id="cars" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						Cars<b class="caret"></b></a>
 						<ul class="dropdown-menu">
 						{% for car in menuParams.cars %} 
@@ -16,18 +16,17 @@
 						{% endfor %}
 						</ul>
 					</li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Drivers<b class="caret"></b></a>
+					<li id="drivers" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Drivers<b class="caret"></b></a>
 						<ul class="dropdown-menu">
 						{% for driver in menuParams.drivers %} 
 							<li><a href="/driver_history/{{driver.id}}">{{ driver }}</a>
 						{% endfor %}
 						</ul>
 					</li>
-					<li><a href="/alerts">Alerts</a></li>
-					<li><a>  Settings  </a></li>
-					<li><a href="/perimeter">  Perimeter  </a></li>
-					<li><a href="/schedule">  Schedule  </a></li>
-					<li><a href="/fuel">  Fuel Consumption  </a></li>
+					<li id="alerts"><a href="/alerts">Alerts</a></li>
+					<li id="perimeter"><a href="/perimeter" >  Perimeter  </a></li>
+					<li id="schedule"><a href="/schedule">  Schedule  </a></li>
+					<li id="fuel"><a href="/fuel">  Fuel Consumption  </a></li>
 				</ul>
 				<ul class="nav pull-right">
 					<li><a>Logged in as <b>{{user}}</b></a></li>
@@ -39,3 +38,13 @@
 	</div>
 </div>
 
+<script>
+{% if activeMenu %}
+	var itemId = '{{ activeMenu }}';
+	var element = document.getElementById(itemId);
+	if(element != undefined){
+		element.className = element.className + ' active';
+	}
+	
+{% endif %}
+</script>

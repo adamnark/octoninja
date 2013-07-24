@@ -1,30 +1,34 @@
 {% extends "base_map_split.html" %}
-{% block span_size_left %}4{% endblock %}
-{% block span_size_right %}8{% endblock %}
+{% block span_size_left %}5{% endblock %}
+{% block span_size_right %}7{% endblock %}
 {% block details %} 
                     <div class="row">
                         <div class="span12" style="padding-left: 10px;">
-                            <h2>Define Perimeter</h2>
+                            <h2>Perimeter</h2>
                         </div>
                     </div>
-
-                    <p>Mark the desired cars to set a perimeter for, draw some circles on the map and click 'Set'.</p>
-                    <p>You can reset the circles by pressing 'Clear'.</p>
-					<p>When setting a perimeter, the previous perimeter will be overridden.</p>
+                    
                     <form action="/perimeter" method="post"><div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='XPRta2dWyDrw5FNW8uUp5GLJqUXsxJtU' /></div>
                         <div id="gps-table">
-							<select onchange="drawAreaCircles(this.options[this.selectedIndex].value)" id="userAreas">
-								<option></option>
-							{% for area in areaCircles %} 
-								<option value="{{area.area.id}}">{{area.area.name}}</option>
-							{% endfor %}
-							</select>
-							<input onClick="ajaxUpdateExistingArea()" value='Update Area' class='btn' type='button'>	
-							
-							<input type="text" id="NewAreaName" placeholder="Type new area name">
-							<p></p>
+							<div class="well">
+							<p>Create new Perimeter - Draw some circles on the map type area name and click 'Create New Perimeter'.</p>
+							<p>You can reset the circles by pressing 'Clear'.</p>
+							<div style="display:block">
+								<select onchange="drawAreaCircles(this.options[this.selectedIndex].value)" id="userAreas">
+									<option></option>
+								{% for area in areaCircles %} 
+									<option value="{{area.area.id}}">{{area.area.name}}</option>
+								{% endfor %}
+								</select>
+								<input onClick="ajaxUpdateExistingArea()" value='Update Area' class='btn' type='button'>	
+							</div>
+							<div>
+								<input type="text" id="NewAreaName" placeholder="Type new area name">
+							</div>
 							<input onClick="ajaxSetNewArea()" value='Create New Perimeter' class='btn' type='button'>	
 							<input onClick="clearCircles()" value='Clear Circles' class='btn' type='button'>	
+							</div>
+							<div class="well">
 							<p>Mark the desired cars to set a perimeter for, choose area and click set perimeter.</p>
                             <table class="table table-striped table-hover">
                                 <thead>
@@ -33,6 +37,7 @@
                                         <th>Car</th>
                                         <th>Driver</th>
                                         <th>Area</th>
+                                        <th>Schedule</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -46,18 +51,33 @@
 										{% else %}
                                         <td>None</td>
                                         {% endif %}
+										
+										{% if carDriver.geoAlert.0.schedule_profile %}
+												<td>{{carDriver.geoAlert.0.schedule_profile}}</td>
+										{% else %}
+											<td>None</td>
+										{% endif %}
                                     </tr>	
 									{% endfor %}
                                     
                                 </tbody>
                             </table>
+							<p>Perimeter</p>
 							<select id="carsArea">
 								<option></option>
 							{% for area in areaCircles %} 
 								<option value="{{area.area.id}}">{{area.area.name}}</option>
 							{% endfor %}
 							</select>
+							<p>Schedule profile (optional)</p>
+							<select id="scheduleProfiles">
+								<option></option>
+								{% for profile in userScheduleProfiles %} 
+								<option value="{{profile.id}}">{{profile.name}}</option>
+								{% endfor %}
+							</select>
 							<input onClick="ajaxSetCarsArea()" value='Set Perimeter' class='btn' type='button'>	
+							</div>
                         </div>
                     </form>
 					<div id='message' class='alert hidden'></div>
@@ -155,8 +175,10 @@ function ajaxSetCarsArea(){
 	var csrftoken = getCookie('csrftoken');
 	var selectedCars = getSelectedCars();
 	var areaOptions = document.getElementById("carsArea");
-	var areaId = areaOptions.options[areaOptions.selectedIndex].value;
-	var data = [selectedCars,areaId];
+	var areaId = areaOptions.options[areaOptions.selectedIndex].value;	
+	var scheduleOptions = document.getElementById("scheduleProfiles");
+	var scheduleProfile = scheduleOptions.options[scheduleOptions.selectedIndex].value;
+	var data = [selectedCars,areaId,scheduleProfile];
 	
 	$.ajax({
 		url:"set_cars_area",

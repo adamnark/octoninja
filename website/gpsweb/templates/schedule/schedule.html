@@ -62,11 +62,14 @@
 			<td> <input type="checkbox" class = "cbCar" value="{{carDriver.car.id}}"/></td>
 			<td>{{carDriver.car}}</td>
 			<td>{{carDriver.driver}}</td>
+			
+			<td id="carProfile{{carDriver.car.id}}">
 			{% if carDriver.schedule %}
-			<td>{{carDriver.schedule}}</td>
+				{{carDriver.schedule}}
 			{% else %}
-			<td>None</td>
+				None
 			{% endif %}
+			</td>
 		</tr>	
 		{% endfor %}
 		
@@ -103,6 +106,11 @@ function getScheduleJSON(){
 	}
 	return scheduleBitField;
 }
+
+updateCarsProfileLabel() //TBD - change label of selected car to the right profile
+{
+}
+
 function ajaxSetCarsSchedule(){
 	var csrftoken = getCookie('csrftoken');
 	var profilesOptions = document.getElementById("userProfiles");
@@ -115,8 +123,10 @@ function ajaxSetCarsSchedule(){
 		data:JSON.stringify(data),
 		
 		success: function(data, textStatus, xhr) {
+			
 			$('#message').html(data);
 			$('#message').show(1.5); 
+			updateCarsProfileLabel();
 		},
 		error: function(xhr, textStatus, errorThrown) {
 			$('#message').html('Connection error...');

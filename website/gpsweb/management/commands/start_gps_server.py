@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from gpsweb.models import *
 from gps_server import Server
 
-default_port = 9900
+default_port = 9000
 
 class Command(BaseCommand):
     args = '<port>'

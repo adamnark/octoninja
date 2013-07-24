@@ -1,5 +1,5 @@
 import csv
-from gpsweb.models import FuelConsumption, Car
+from gpsweb.models import FuelConsumptionLog, Car
 import datetime
 from django.utils.timezone import utc
 
@@ -17,17 +17,20 @@ def validate_file(reader):
     
 def update_or_create_row(row):
     car_name = row['car number'].replace('-','')
-    month = int(row['month'])
-    year = int(row['year'])
+    timestamp = row['timestamp']
+    price_per_liter = float(row['price_per_liter'])
+    station_id = int(row['station_id'])
+    kilometrage = int(row['kilometrage'])
+    print '*'*10 + timestamp
     liters = int(row['liters'])
     
-    date = datetime.datetime(year, month, 1).replace(tzinfo=utc)
-    fuel_row = FuelConsumption.objects.filter(car__name=car_name, month=date)
+    date = datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S").replace(tzinfo=utc)
+    fuel_row = FuelConsumptionLog.objects.filter(car__name=car_name, timestamp=date)
     
     if fuel_row:
         update_existing_row(fuel_row, liters)
     else: 
-        create_new_row(car_name, liters, date)
+        create_new_row(car_name, liters, date, price_per_liter, station_id, kilometrage)
 
 
 def update_existing_row(fuel_row, liters):
@@ -35,12 +38,18 @@ def update_existing_row(fuel_row, liters):
     fuel_row[0].save()
 
         
-def create_new_row(car_name, liters, date):
+def create_new_row(car_name, liters, date, price_per_liter, station_id, kilometrage):
     car = Car.objects.filter(name=car_name)
     if car:
-        new_row = FuelConsumption()
+        new_row = FuelConsumptionLog()
         new_row.car = car[0]
         new_row.liters = liters
-        new_row.month = date
+        new_row.timestamp = date
+        new_row.price_per_liter = price_per_liter
+        new_row.station_id = station_id
+        new_row.kilometrage = kilometrage
         
         new_row.save()
+        
+        
+        
