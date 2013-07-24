@@ -27,11 +27,6 @@ def writeLocationLog(imei , data):
     locationLog.car = getCarByImei(imei)
     locationLog.driver = locationLog.car.getDriverByDate(locationLog.timestamp)
 
-    print "writeLocationLog"
-    print "lat=%s" % locationLog.lat
-    print "long=%s" % locationLog.long
-    print
-
     locationLog.save()
 
     checkAlerts(locationLog)
@@ -71,7 +66,7 @@ def checkForTriggers(locationLog, alert):
         if PacketParser.is_in_time_slot(locationLog.timestamp, alert.schedule_profile.schedule_bit_field):
             alert_exist = True
 
-    print "checkForTriggers returned " + str(alert_exist)
+    # print "checkForTriggers returned " + str(alert_exist)
             
     return alert_exist
 

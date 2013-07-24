@@ -93,25 +93,22 @@ def is_out_of_area(locationLog, alert):
     ret = True
     lat, long = locationLog.lat, locationLog.long
     circles = AlertCircle.objects.filter(area=alert.geo_area)
-
+    
+    if alert.schedule_profile: #check area just if in 
+        if not is_in_time_slot(locationLog.timestamp, alert.schedule_profile.schedule_bit_field):#don't check circles
+            return False
+            
     for circle in circles:
-        pprint(circle)
         if is_in_circle(circle, lat, long):
             ret = False
             break
     if not circles:
         ret = False
     
-    print 'is_out_of_area returned ' + str(ret)
     
     return ret
     
 def is_in_circle(circle, lat, long):
-    # print '*'*10
-    # print 'is_in_circle: '
-    # print 'calc_dist()=' + str(utils.calc_dist(lat, long, circle.center_lat, circle.center_long))
-    # print 'circle.radius=' + str(circle.radius)
-    # print '*'*10
     dist_in_km = utils.calc_dist(lat, long, circle.center_lat, circle.center_long)
     dist = dist_in_km * 1000
     return dist <= circle.radius
@@ -133,18 +130,17 @@ def main():
             "imei:863070011991451,tracker,1301111556,,F,075604.000,A,3205.4805,N,03447.3385,E,0.00,,;863070011991451;"]
 
     print 'analyzing %s packets:' % str(len(packets))
-    print '~' * 15
+    # print '~' * 15
     for packet in packets:
         print packet
         msg_type = get_msg_type(packet)
-        print "type = " + msg_type
+        # print "type = " + msg_type
         imei = get_imei(packet)
         print "imei = " + imei
         if msg_type in signal_types:
             if is_valid_gps_signal(packet):
                 utm = get_utm(packet)
-                print "utm ", utm
-        print '*' * 15
+                # print "utm ", utm
 
 if __name__ == '__main__':
     main()

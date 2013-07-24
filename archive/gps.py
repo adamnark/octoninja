@@ -37,7 +37,7 @@ def main():
 	count = 0;
 	while (count < 100000):
 		count = count + 1
-		print "====" + str(count) + "====" 
+		# print "====" + str(count) + "====" 
 		data = myrecv(clientsocket)
 		if (data == (imei + ';')):
 			mysendall(clientsocket,'ON')

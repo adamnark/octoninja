@@ -19,13 +19,14 @@ from pprint import pprint
 
 def get_fuel_data(request,fromDate,toDate):
     user = request.user
-    message = "aa"
+    message = ""
     if request.is_ajax():
         if request.method == 'POST':
             all_details = generateCarsRouteContext(request,fromDate,toDate) 
             car_names = []
             km_per_liter = []
             liter = []
+            km = []
             for carRoutes in all_details['carsRoutes']:
                 if carRoutes.locationList:
                     car = carRoutes.locationList[0].car
@@ -33,18 +34,21 @@ def get_fuel_data(request,fromDate,toDate):
                     datestr = utils.formatDateStr(fromDate)
                     fromDateTime = utils.makeDateFromDateStr(datestr)
                     
-                    fuel = FuelConsumption.objects.filter(month__year = fromDateTime.year).filter(month__month = fromDateTime.month).filter(car = car)
-
+                    fuel_logs = FuelConsumptionLog.objects.filter(timestamp__year = fromDateTime.year).filter(timestamp__month = fromDateTime.month).filter(car = car)
+                    
                     usage = 0
                     liters = 0
-                    if fuel:
-                        liters = fuel[0].liters
+                    if fuel_logs:
+                        for log_line in fuel_logs:
+                            liters += log_line.liters
                         usage = round(carRoutes.length() / liters, 3)
-                    car_names.append(str(car)) #,carRoutes.length(), liters))
+                    
+                    km.append(carRoutes.length())    
+                    car_names.append(str(car))
                     km_per_liter.append(usage)
                     liter.append(liters)
                         
-            message = json.dumps([car_names, km_per_liter, liter,])
+            message = json.dumps([car_names, km_per_liter, liter, ])
     return HttpResponse(message) 
     
     
@@ -63,7 +67,8 @@ def fuel(request):
         form = FuelConsupmtionForm() # An unbound form
 
     return render(request, 'fuel.html', {'form': form,
-                                         'menuParams' : utils.initMenuParameters(user)})
+                                         'menuParams' : utils.initMenuParameters(user),
+                                         'activeMenu' : 'fuel',})
 
 
 
@@ -142,7 +147,7 @@ def mainView(request):
 def carHistory(request, car_id, fromDate=None, toDate=None):
     user = request.user
     user_id = user.id
-    car = Car.objects.filter(owner_id=user_id).filter(id__in=car_id)
+    car = Car.objects.filter(owner_id=user_id).filter(id=car_id)
     if not car:
         return HttpResponseRedirect('/')
 
@@ -163,6 +168,7 @@ def carHistory(request, car_id, fromDate=None, toDate=None):
         'temporary_drivers' : car[0].getTemporaryDriversByDateRange(fromDateStr,toDateStr),
         'map_center_lat' : '32.047818',
         'map_center_long' : '34.761265',
+        'activeMenu' : 'cars',
     }
 
     return render(request, 'carHistory/carHistory.html', context)         
@@ -171,7 +177,7 @@ def carHistory(request, car_id, fromDate=None, toDate=None):
 
 def generateDriverContext(user, driver_id, fromDate=None, toDate=None):
     user_id = user.id
-    driver = Driver.objects.filter(owner_id=user_id).filter(id__in=driver_id)
+    driver = Driver.objects.filter(owner_id=user_id).filter(id=driver_id)
     if not driver:
         return HttpResponseRedirect('/')
     fromDateStr = utils.formatDateStr(fromDate)
@@ -202,6 +208,7 @@ def generateDriverContext(user, driver_id, fromDate=None, toDate=None):
         'driver' : driver[0],
         'map_center_lat' : '32.047818',
         'map_center_long' : '34.761265',
+        'activeMenu' : 'drivers',
     }
     
     return context
@@ -266,6 +273,8 @@ def generateAlertsContext(request):
             group.append(alert_log)
         if group:
             groups.append(group)    
+            
+    groups = sorted(groups, key=lambda group: str(group[0].location_log.driver))
     
     context = {
         'menuParams' : utils.initMenuParameters(user),
@@ -273,6 +282,7 @@ def generateAlertsContext(request):
         'map_center_lat' : '32.047818',
         'map_center_long' : '34.761265',
         'alertsArrays':groups,
+        'activeMenu' : 'alerts',
     }
     return context
 
@@ -360,7 +370,9 @@ def perimeter(request):
         'carsDrivers' : utils.userCarDriverArea(user),
         'areaCircles' : utils.userAreaCircles(user),
         'map_center_lat': '32.047818',
-        'map_center_long': '34.761265'
+        'map_center_long': '34.761265',
+        'userScheduleProfiles' : AlertScheduleProfile.objects.filter(owner=user),
+        'activeMenu' : 'perimeter',
         }
     return render(request, 'perimeter/perimeter.html', context)
  
@@ -382,6 +394,8 @@ def setNewArea(request):
             area = AlertArea.objects.filter(name=areaName).filter(owner=user)
             if area:
                 message = 'This area name already in use'
+            elif areaName =='':
+                message = 'Profile name can not be empty.'
             else:
                 area = AlertArea(  name=areaName,
                                    owner=user,
@@ -439,30 +453,47 @@ def setCarsArea(request):
             data = json.loads(request.raw_post_data)
             carsId = [int(id) for id in data[0]]
             areaId = data[1]
+            scheduleProfileId = data[2]
+
+            if scheduleProfileId == '':
+                scheduleProfile = None
+            else:
+                scheduleProfile = AlertScheduleProfile.objects.get(id=scheduleProfileId)
+            
+            
             if areaId:
                 area = AlertArea.objects.get(id=areaId)
+                
             if not carsId:
                 message += "<p>No cars were selected.</p>"
             for id in carsId:
                 car = Car.objects.get(id=id)
                 alert = Alert.objects.filter(car=car).filter(type=Alert.GEOFENCE_ALERT)
                 if alert:
-                    alert = alert[0]
-                    alert.geo_area = area
-                    alert.save()
-                else:
+                    if area:
+                        alert = alert[0]
+                        alert.geo_area = area
+                        alert.schedule_profile = scheduleProfile
+                        alert.save()
+                        message += "<p>Perimeter updated successfully.</p>"
+                    else:
+                        alert.delete()
+                        message += "<p>Perimeter cleared successfully.</p>"
+                elif area:
+                    
                     alert = Alert(  name="Geo "+str(car),
                                     car=car,
                                     state=datetime.datetime.now(),
                                     cutoff=20,
                                     type=Alert.GEOFENCE_ALERT,
                                     max_speed=0,
-                                    schedule_profile=None,
+                                    schedule_profile=scheduleProfile,
                                     geo_area = area,
                                     )
                     alert.save()
                     alert.recipients.add(person)
                     alert.save()
+                    message += "<p>Perimeter updated successfully.</p>"
    
     return HttpResponse(message) 
 
@@ -480,6 +511,7 @@ def schedule(request):
         'user' : user,
         'carsDrivers' : utils.userCarDriverSchedule(user),
         'userScheduleProfiles' : AlertScheduleProfile.objects.filter(owner=user),
+        'activeMenu' : 'schedule',
     }
     return render(request, 'schedule/schedule.html', context)
 
@@ -495,10 +527,12 @@ def setNewScheduleProfile(request):
             data = json.loads(request.raw_post_data)
             schedule_profile_name = data[0]
             schedule_bit_field = data[1]
-          
+            
             schedule_profile = AlertScheduleProfile.objects.filter(name=schedule_profile_name).filter(owner=user)
             if schedule_profile:
                 message = 'This profile name already in use'
+            elif schedule_profile_name=='':
+                message = 'Profile name can not be empty.'
             else: #Create new profile
                 schedule_profile = AlertScheduleProfile(name=schedule_profile_name,
                                             owner=user,
@@ -521,7 +555,7 @@ def updateScheduleProfile(request):
             schedule_bit_field = data[1]
             
             if profileId == '':
-                message += "<p>No profile were selected.</p>"  
+                message += "<p>No profile was selected.</p>"  
             else:
                 scheduleProfile = AlertScheduleProfile.objects.get(id=profileId)
                 scheduleProfile.schedule_bit_field = schedule_bit_field
@@ -546,7 +580,7 @@ def setCarsSchedule(request):
                 message += "<p>No cars were selected.</p>"
                 
             if profileId == '':
-                message += "<p>No profile were selected.</p>"    
+                message += "<p>No profile was selected.</p>"   
             else:
                 scheduleProfile = AlertScheduleProfile.objects.get(id=profileId)
                 for id in carsId:
@@ -570,6 +604,5 @@ def setCarsSchedule(request):
                         alert.save()
                         
                     message += '<p>'+str(car)+' - Schedule was set successfully.</p>'
-                    
     return HttpResponse(message) 
  

@@ -7,6 +7,7 @@ def calc_dist(lat_a, long_a, lat_b, long_b):
     lat_b = float(lat_b)
     long_b = float(long_b)
     
+    #print ' lat_a = '+lat_a+' long_a = '+long_a+' lat_b = '+lat_b+'long_b = '+long_b
     multiplier = 6371 # for kilometers
     #multiplier = 3959 # for miles
     return ( multiplier *
@@ -164,7 +165,7 @@ def getLocationsOfPeriod(fromDate,toDate,driverPeriods ,isTemporaryDriver=False)
         else:
             endDate = toDate
         
-        list_of_locations = LocationLog.objects.filter(car=period.car).filter(driver = period.driver).filter(Q(timestamp__gte = startDate) & Q(timestamp__lte = endDate)).order_by('-timestamp')
+        list_of_locations = LocationLog.objects.filter(car=period.car).filter(driver = period.driver).filter(Q(timestamp__gte = startDate) & Q(timestamp__lte = endDate)).order_by('timestamp')
         if list_of_locations:
             val = driverLocations(period,RouteDetails(list_of_locations),isTemporaryDriver)
             driverLocation.append(val)

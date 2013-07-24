@@ -30,15 +30,24 @@
 
 {% block map %}  
 
-<div id="charts">
-	<div id="chart1">
-	</div>
-	<div id="chart2">
-	</div>
-	<div id="chart3">
-	</div>
-</div>
 
+<ul class="nav nav-tabs" id="myTab">
+  <li><a href="#chart1tab" data-toggle="tab">Distance(km) per Liter</a></li>
+  <li><a href="#chart2tab" data-toggle="tab">Fuel Consumption</a></li>
+  <li><a href="#chart3tab" data-toggle="tab">KM Traveled</a></li>
+</ul>
+ 
+<div class="tab-content">
+  <div class="tab-pane active" id="chart1tab"> 
+	<div id="chart1"></div>
+  </div>
+  <div class="tab-pane" id="chart2tab">
+	<div id="chart2"></div>
+  </div>
+  <div class="tab-pane" id="chart3tab">
+	<div id="chart3"></div>
+  </div>
+</div>
 
 {% endblock %}
 
@@ -49,13 +58,13 @@
 
 {% block extendedFunction %}
 
-
 var currentDate;
 function extendedFunction()
 {
 	setupDatePicker();
 	setupShowButton();	
 	$('#message').hide()
+	$("#myTab").children().first().addClass("active");
 }
 
 
