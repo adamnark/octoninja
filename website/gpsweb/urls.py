@@ -40,4 +40,8 @@ urlpatterns = patterns('',
     url(r'^get_fuel_data/(\d+)/(\d+)$', views.get_fuel_data),
 # Cars Form    
     url(r'^carsForm$', views.fuel),
+#REST
+    url(r'^carlocation/(\d{7})/$', views.carLocation),
+    # url(r'^/export', admin.export_as_json),
+    
 )

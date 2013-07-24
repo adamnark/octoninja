@@ -606,3 +606,18 @@ def setCarsSchedule(request):
                     message += '<p>'+str(car)+' - Schedule was set successfully.</p>'
     return HttpResponse(message) 
  
+#REST
+def carLocation(request,carName): 
+    cars = Car.objects.filter(name=carName).filter(is_active=True)
+    last_location = None
+    if cars:
+        last_location = LocationLog.objects.filter(car=cars[0]).latest('timestamp')
+    if last_location:
+        return render(request, 'rest/carLocation.html', {'location':last_location})
+    else:
+        return HttpResponseNotFound('<h1>Page not found</h1>')
+
+    
+
+
+
