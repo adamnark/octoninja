@@ -4,7 +4,7 @@ import random
 import time
 import sys
 
-SLEEP_INTERVAL = 4
+SLEEP_INTERVAL = 1
 PORT = 9000
 
 imei_pool = [ x * 15 for x in '123456789']
