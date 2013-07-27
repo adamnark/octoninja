@@ -59,7 +59,7 @@ function extendedFunction()
 				new google.maps.LatLng({{ alertLog.location_log.lat }},{{ alertLog.location_log.long }}),
 				'{{ alertLog.location_log.timestamp }} <br> {{ alertLog.location_log.speed }} kph',
 				'{{ alertLog.location_log.timestamp }}',
-				"{{ STATIC_URL }}img/spot.png",
+				"{{ STATIC_URL }}img/spot2.png",
 				{{ forloop.counter }},{{forloop.parentloop.counter}}-1);
 				markerArray[{{forloop.parentloop.counter}}-1][{{forloop.counter}}] = marker;
 				latlngbounds.extend( marker.getPosition() );
