@@ -2,22 +2,27 @@ from math import sin, cos, radians, degrees, acos
 from gpsweb.models import *
 import datetime
 def calc_dist(lat_a, long_a, lat_b, long_b):
+    if (lat_a == lat_b) and (long_a == long_b):
+        return 0
     lat_a = float(lat_a)
     long_a = float(long_a)
     lat_b = float(lat_b)
     long_b = float(long_b)
     
-    #print ' lat_a = '+lat_a+' long_a = '+long_a+' lat_b = '+lat_b+'long_b = '+long_b
+    lat_a = radians(lat_a)
+    lat_b = radians(lat_b)
+    delta_long = radians(long_a - long_b)
+    cos_x = (
+        sin(lat_a) * sin(lat_b) +
+        cos(lat_a) * cos(lat_b) * cos(delta_long)
+        )
     multiplier = 6371 # for kilometers
     #multiplier = 3959 # for miles
-    return ( multiplier *
-    acos(
-        cos( radians(lat_a) ) *
-        cos( radians(lat_b) ) *
-        cos( radians(long_b) - radians(long_a) ) +
-        sin( radians(lat_a) ) * sin( radians(lat_b) )
-        )
-    )
+
+    return acos(cos_x) * multiplier
+ 
+
+  
     
 class RouteDetails:    
     def __init__(self, locationList):

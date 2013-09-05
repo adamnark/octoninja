@@ -35,21 +35,31 @@ class AlertAdmin(admin.ModelAdmin):
 class FuelConsumptionLogAdmin(admin.ModelAdmin):
     list_filter = ('car', 'timestamp', 'station_id', ) 
 
+class ManualLogAdmin(admin.ModelAdmin):
+    list_filter = ('car', 'driver', 'timestamp', 'log_type', )     
+
 
 
 admin.site.register(Unit)
 admin.site.register(Person)
 admin.site.register(Car)
 admin.site.register(Driver)
+admin.site.register(PrimaryDriver)
 admin.site.register(TemporaryDriver)
 admin.site.register(Alert, AlertAdmin)
-admin.site.register(LocationLog, LocationLogAdmin)
 admin.site.register(AlertLog, AlertLogAdmin)
-admin.site.register(PrimaryDriver)
+admin.site.register(LocationLog, LocationLogAdmin)
 admin.site.register(FuelConsumptionLog, FuelConsumptionLogAdmin)
+admin.site.register(ManualLog, ManualLogAdmin)
 
 
-admin.site.register(AlertArea)
-admin.site.register(AlertCircle)
-admin.site.register(AlertScheduleProfile)
+#admin.site.register(AlertArea)
+#admin.site.register(AlertCircle)
+#admin.site.register(AlertScheduleProfile)
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.contrib.auth.models import Group
 
+admin.site.unregister(User)
+admin.site.unregister(Group)
+admin.site.unregister(Site)

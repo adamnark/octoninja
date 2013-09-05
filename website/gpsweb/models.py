@@ -163,6 +163,23 @@ class FuelConsumptionLog(models.Model):
     
     def __unicode__(self):
         return '%s @%s' % (str(self.car), str(self.timestamp))
+        
+class ManualLog(models.Model):     
+    car = models.ForeignKey(Car)
+    driver =     models.ForeignKey(Driver)
+    timestamp = models.DateTimeField()
+    text = models.CharField(max_length=1000)
+    ACCIDENT_LOG = 1
+    TICKET_LOG = 2
+    GENERAL_LOG = 1
+    LOGS_TYPE = (
+        (ACCIDENT_LOG, 'Accident'),
+        (TICKET_LOG, 'Ticket'),
+        (GENERAL_LOG, 'General'))
+    log_type =      models.IntegerField(max_length=1, choices=LOGS_TYPE)
+    def __unicode__(self):
+        return self.text
+
 
 
 
